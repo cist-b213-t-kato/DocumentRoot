@@ -10,6 +10,10 @@
   </style>
   <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
   <script>
+
+
+    // https://qiita.com/uto-usui/items/14a39c6981282bb62a0a
+
     window.addEventListener("load", init);
     function init() {
       // Stageオブジェクトを作成。表示リストのルートになります。
@@ -40,8 +44,8 @@
 
       var p = new createjs.Shape();
       p.graphics.beginStroke("#888888");
-      // circle.graphics.beginFill("DarkRed");
-      p.graphics.drawCircle(startX, startY, 10);
+      // p.graphics.beginFill("#888888");
+      p.graphics.drawCircle(startX, startY, 5);
       stage.addChild(p);
 
       // vertical line
@@ -59,15 +63,30 @@
       stage.addChild(hl);
 
       var sinWave = new createjs.Shape();
-      sinWave.graphics.beginStroke("#FF8888");
-      sinWave.graphics.moveTo(startX, startY);
+      sinWave.graphics.beginStroke("#FF8888")
+        .setStrokeStyle(2)
+        .moveTo(startX, startY);
       stage.addChild(sinWave);
 
+      // var sinWave2 = new createjs.Shape();
+      // sinWave2.graphics.beginStroke("#FF8888")
+      //   .moveTo(startX, startY);
+      // stage.addChild(sinWave2);
+
       var cosWave = new createjs.Shape();
-      cosWave.graphics.beginStroke("#8888FF");
-      cosWave.graphics.moveTo(startX+r, startY);
+      cosWave.graphics.beginStroke("#8888FF")
+        .setStrokeStyle(2)
+        .moveTo(startX+r, startY);
       stage.addChild(cosWave);
 
+      var xl = new createjs.Shape();
+      xl.graphics.beginStroke("#8888FF");
+
+      var yl = new createjs.Shape();
+      xl.graphics.beginStroke("#FF8888");
+
+      var rl = new createjs.Shape();
+      rl.graphics.beginStroke("#888888");
 
       var i = 0;
       var fps = 60;
@@ -77,10 +96,34 @@
         // circle.y = startY;
         sinWave.graphics.lineTo(startX-i, startY-r*Math.sin(i * Math.PI / 180));
         sinWave.x = i;
+        // sinWave2.graphics.lineTo(startX-i, startY-r*Math.sin(i * 2 * Math.PI / 180));
+        // sinWave2.x = i;
         cosWave.graphics.lineTo(startX+r*Math.cos(i * Math.PI / 180), startY-i);
         cosWave.y = i;
         p.x = r * Math.cos(i * Math.PI / 180);
         p.y = - r * Math.sin(i * Math.PI / 180);
+
+        stage.removeChild(xl);
+        xl = new createjs.Shape();
+        xl.graphics.beginStroke("#8888FF");
+        stage.addChild(xl);
+        xl.graphics.moveTo(startX+p.x, startY+0)
+          .lineTo(startX+p.x, startY+p.y);
+
+        stage.removeChild(yl);
+        yl = new createjs.Shape();
+        yl.graphics.beginStroke("#FF8888");
+        stage.addChild(yl);
+        yl.graphics.moveTo(startX+0, startY+p.y)
+          .lineTo(startX+p.x, startY+p.y);
+
+        stage.removeChild(rl);
+        rl = new createjs.Shape();
+        rl.graphics.beginStroke("#888888");
+        stage.addChild(rl);
+        rl.graphics.moveTo(startX+0, startY+0)
+          .lineTo(startX+p.x, startY+p.y);
+
         stage.update();
         i++;
       });
