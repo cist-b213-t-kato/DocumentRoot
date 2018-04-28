@@ -47,9 +47,16 @@
       // vertical line
       var vl = new createjs.Shape();
       vl.graphics.beginStroke("#888888");
-      vl.graphics.moveTo(startX, startY-150);
-      vl.graphics.lineTo(startX, startY+150);
+      vl.graphics.moveTo(startX, startY-150)
+          .lineTo(startX, startY+150);
       stage.addChild(vl);
+
+      // horizontal line
+      var hl = new createjs.Shape();
+      hl.graphics.beginStroke("#888888");
+      hl.graphics.moveTo(startX-150, startY)
+          .lineTo(startX+150, startY);
+      stage.addChild(hl);
 
       var sinWave = new createjs.Shape();
       sinWave.graphics.beginStroke("#FF8888");
