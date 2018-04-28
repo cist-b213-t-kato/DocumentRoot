@@ -1,0 +1,90 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="css/base.css" />
+  <style>
+    /* canvas タグの背景にルーラーを指定 */
+    #myCanvas {
+      background: url(imgs/bg_ruler.png) no-repeat;
+    }
+  </style>
+  <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+  <script>
+    window.addEventListener("load", init);
+    function init() {
+      // Stageオブジェクトを作成。表示リストのルートになります。
+      var stage = new createjs.Stage("myCanvas");
+      // 描画をするためのシェイプを作成
+      // var shape = new createjs.Shape();
+      // // シェイプをステージに配置
+      // stage.addChild(shape);
+      // // 線のスタイルを設定
+      // shape.graphics
+      //         .beginStroke("DarkRed"); // 赤色で線の描画を開始
+      // // 線の曲線を指定
+      // shape.graphics
+      //         .moveTo(100, 100) // 描画開始位置を指定
+      //         .lineTo(300, 400) // 線の終了位置を指定
+      //         .lineTo(700, 200);
+
+      var startX = 200;
+      var startY = 200;
+
+      var r = 100;
+
+      var circle = new createjs.Shape();
+      circle.graphics.beginStroke("#888888");
+      // circle.graphics.beginFill("DarkRed");
+      circle.graphics.drawCircle(startX, startY, r);
+      stage.addChild(circle);
+
+      var p = new createjs.Shape();
+      p.graphics.beginStroke("#888888");
+      // circle.graphics.beginFill("DarkRed");
+      p.graphics.drawCircle(startX, startY, 10);
+      stage.addChild(p);
+
+      // vertical line
+      var vl = new createjs.Shape();
+      vl.graphics.beginStroke("#888888");
+      vl.graphics.moveTo(startX, startY-150);
+      vl.graphics.lineTo(startX, startY+150);
+      stage.addChild(vl);
+
+      var sinWave = new createjs.Shape();
+      sinWave.graphics.beginStroke("#FF8888");
+      sinWave.graphics.moveTo(startX, startY);
+      stage.addChild(sinWave);
+
+      var cosWave = new createjs.Shape();
+      cosWave.graphics.beginStroke("#8888FF");
+      cosWave.graphics.moveTo(startX+r, startY);
+      stage.addChild(cosWave);
+
+
+      var i = 0;
+      var fps = 60;
+      createjs.Ticker.setFPS(fps);
+      createjs.Ticker.addEventListener('tick', function() {
+        // circle.x = startX + i;
+        // circle.y = startY;
+        sinWave.graphics.lineTo(startX-i, startY-r*Math.sin(i * Math.PI / 180));
+        sinWave.x = i;
+        cosWave.graphics.lineTo(startX+r*Math.cos(i * Math.PI / 180), startY-i);
+        cosWave.y = i;
+        p.x = r * Math.cos(i * Math.PI / 180);
+        p.y = - r * Math.sin(i * Math.PI / 180);
+        stage.update();
+        i++;
+      });
+
+
+
+    }
+
+  </script>
+</head>
+<body>
+  <canvas id="myCanvas" width="960" height="540"></canvas>
+</body>
+</html>
