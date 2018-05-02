@@ -101,11 +101,12 @@
 	<script type="text/javascript">
 		
 		function toDate( tStr ) {
+			// TODO やはり文字<-->日時変換のライブラリ必要と実感。。。
 			var crt = new Date();
 			var dateStr = crt.getFullYear() + "-" + ("00"+(crt.getMonth()+1)).substr(-2)
 									+ "-" + ( "00" + crt.getDate() ).substr(-2)
-									+ "T" + tStr + ":00";
-			console.log(dateStr);
+									+ "T" + ( "00" + tStr).substr(-5)
+									+ ":00";
 			var ret = new Date(dateStr);
 			return ret;
 		}
@@ -160,10 +161,9 @@
 				var first = toDate(getFirst(times));
 				var last = toDate(getLast(times));
 
-				console.log(crt);
+				// console.log(crt);
 
 				if ( late && crt <= first ) {
-					console.log("highlight & large");
 					tr.addClass("highlight");
 					tr.addClass("large");
 					late = false;
@@ -309,8 +309,6 @@
 				"1",
 			]
 		}
-
-		console.log("display!!!");
 
 		display("#ouro", ouro);
 		display("#fukuro", fukuro);
