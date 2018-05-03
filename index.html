@@ -103,9 +103,9 @@
 		function toDate( tStr ) {
 			// TODO やはり文字<-->日時変換のライブラリ必要と実感。。。
 			var crt = new Date();
-			var dateStr = crt.getFullYear() + "-" + ("00"+(crt.getMonth()+1)).substr(-2)
-									+ "-" + ( "00" + crt.getDate() ).substr(-2)
-									+ "T" + ( "00" + tStr).substr(-5)
+			var dateStr = crt.getFullYear() + "/" + ("00"+(crt.getMonth()+1)).substr(-2)
+									+ "/" + ( "00" + crt.getDate() ).substr(-2)
+									+ " " + ( "00" + tStr).substr(-5)
 									+ ":00";
 			var ret = new Date(dateStr);
 			return ret;
@@ -134,6 +134,9 @@
 
 			// var crt = toDate("12:03");
 			var crt = new Date();
+
+			console.log(crt);
+			console.log(toDate("12:03"));
 
 			// var stopDate = toDate(json.array[1][3]);
 
