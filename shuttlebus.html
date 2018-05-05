@@ -1,0 +1,157 @@
+<html>
+
+<head>
+
+	<meta charset="UTF-8"/>
+
+	<title>CIST非公式サイト - シャトルバスダイヤ</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="common.css" rel="stylesheet" />
+
+</head>
+
+<body>
+
+    <div class="col-sm-12">
+	    <div class="col-sm-6" id="ouro">
+		    <h3>往路</h3>
+		    <table>
+		      <thead>
+		      	<tr><th>千歳駅発</th><th>南千歳駅発</th><th>研究実験棟発</th><th>本部棟着</th></tr>
+		      </thead>
+		      <tbody>
+		      </tbody>
+		    </table>
+		    <span class="message">今日はもう走りません</span>
+		  </div>
+
+	    <div class="col-sm-6" id="fukuro">
+		    <h3>復路</h3>
+		    <table>
+		      <thead>
+		      	<tr><th>本部棟発</th><th>研究実験棟発</th><th>南千歳駅発</th><th>千歳駅着</th></tr>
+		      </thead>
+		      <tbody>
+		      </tbody>
+		    </table>
+		    <span class="message">今日はもう走りません</span>
+	  	</div>
+
+  	</div>
+
+	<script type="text/javascript">
+
+		// https://www.sejuku.net/blog/25316#Ajax
+		
+		function toDate( tStr ) {
+			// TODO やはり文字<-->日時変換のライブラリ必要と実感。。。
+			var crt = new Date();
+			var dateStr = crt.getFullYear() + "/" + ("00"+(crt.getMonth()+1)).substr(-2)
+									+ "/" + ( "00" + crt.getDate() ).substr(-2)
+									+ " " + ( "00" + tStr).substr(-5)
+									+ ":00";
+			var ret = new Date(dateStr);
+			return ret;
+		}
+
+		function getFirst( times ) {
+			for ( var i=0; i<times.length; i++ ) {
+				if ( times[i] && times[i] != "" ) {
+					return times[i];
+				}
+			}
+			return ""; 
+		}
+
+		function getLast( times ) {
+			for ( var i=times.length-1; i>=0; i-- ) {
+				if ( times[i] && times[i] != "" ) {
+					return times[i];
+				}
+			}
+			return "";
+		}
+
+		function display( id , json ) {
+
+			var crt = new Date();
+
+			var tbody = $(id).find('tbody');
+			tbody.empty();
+
+			var list = json.array;
+
+			var late = true;
+
+			$(id).find('table').hide();
+
+			for ( var j in list ) {
+        
+				var tr = $("<tr>");
+
+				var times = list[j];
+
+				var first = toDate(getFirst(times));
+				var last = toDate(getLast(times));
+
+				var latestFlag = ( late && crt <= first );
+				var betweenFlag = ( crt >= first && crt <= last );
+
+				if ( latestFlag || betweenFlag ) {
+					$(id).find('table').show();
+					$(id).show();
+					$(id).find('.message').hide();
+					tr.addClass("highlight");
+					tr.addClass("large");
+					if ( latestFlag ) {
+						late = false;
+					}
+					for ( var i in times ) {
+	          var td = $("<td>");
+						var t = times[i];
+						if ( !t || t == "" ) {
+	            td.text("-");
+						} else {
+							td.text(t);
+						}
+						tr.append(td);
+					}
+					tbody.append(tr);
+				}
+			}
+
+		}
+
+		// var dateStr = crt.getFullYear() + "-" + (crt.getMonth()+1) + "-" +crt.getDate()
+		// 							+ " 16:10" + ":00"
+
+		$.ajax({
+	    "url": "./shuttlebus.json",
+	    "dataType": "json"
+		}).done(function(json) {
+			var ouro = json["ouro"];
+			var fukuro = json["fukuro"];
+
+			display("#ouro", ouro);
+			display("#fukuro", fukuro);
+
+			setInterval(function() {
+				display("#ouro", ouro);
+				display("#fukuro", fukuro);
+	            console.log("updated");
+			}, 1000*60);
+		}).fail(function(data) {
+	    alert('error!!!');
+		});
+
+
+	</script>
+
+</body>
+
+</html>
