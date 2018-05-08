@@ -26,13 +26,17 @@ FlashではAction Scriptと呼ばれるプログラミング言語を使うこ�
 
 ## Create.jsの使い方
 
+### ソースコードの編集
+Create.jsが書かれたhtmlを、BracketやMeryなどのエディタで開けばよい（開き方が分からない人は、聞いてください）。
+
+
+
 ### 基本
 
 loadイベント（画面読み込み）発生時に行う操作を、addEventListener()を使って登録する。このinit関数に、Create.jsを記述していく。
 
 
 ```
-
 <body>
   <canvas id="myCanvas" width="960" height="480"></canvas>
 
@@ -50,11 +54,15 @@ loadイベント（画面読み込み）発生時に行う操作を、addEventLi
 
   </script>
 </body>
-
 ```
 以後のJavaScriptは、すべてinit関数の中に処理を書くこと。
 
 また、**createjs.Stage()**は、引数に与えられたidと一致するcanvasに描画を行うためのオブジェクトを生成する。今回は、myCanvasに対して描画を行うようにする。
+
+
+
+### ソースコードの実行
+Create.jsが書かれたhtmlファイルをブラウザで開くと動く（開き方が分からない人は、聞いてください）。
 
 
 
@@ -109,7 +117,6 @@ loadイベント（画面読み込み）発生時に行う操作を、addEventLi
   hl.graphics.moveTo(startX-150, startY)
       .lineTo(startX+150, startY);
   stage.addChild(hl);
-  
 ```
 これにより、hlのシェイプを使い、moveTo(x, y)とlineTo(x, y)をそれぞれ始点と終点とした線を描画することができる。
 

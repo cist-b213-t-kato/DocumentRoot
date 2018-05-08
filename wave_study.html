@@ -1,0 +1,96 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <style>
+  </style>
+  <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+</head>
+<body>
+  <canvas id="myCanvas" width="960" height="480"></canvas>
+
+  <script>
+
+    // loadイベント（画面読み込み）発生時に動作させる関数として、init関数を指定する。
+    window.addEventListener("load", init);
+
+    function init() {
+
+      // Stageオブジェクトを作成。表示リストのルートになる。myCanvasと一致するidのcanvasに描かれる。
+      var stage = new createjs.Stage("myCanvas");
+
+      // startX, startY にそれぞれ 120, 200 を代入
+      var startX = 120;
+      var startY = 200;
+
+      // rに100を代入
+      var r = 100;
+
+      // 円のためのシェイプを作る
+      var circle = new createjs.Shape();
+      // 線の色を設定する（灰色）
+      circle.graphics.beginStroke("#888888");
+      // 中心の座標が(startX,startY)で半径rの円を描く
+      circle.graphics.drawCircle(startX, startY, r);
+      // stageに円を置く
+      stage.addChild(circle);
+
+
+      /* 
+       * 課題1 では、半径5の円を上の円の中心に描画するにはどうすればいいか？
+       */
+
+
+      // 水平線( horizontal line )のためのシェイプを作る
+      var hl = new createjs.Shape();
+      hl.graphics.beginStroke("#888888");
+      hl.graphics.moveTo(startX-150, startY)
+          .lineTo(startX+150, startY);
+      stage.addChild(hl);
+
+
+      /* 
+       * 課題2 では、垂線(vertical line)を引くためにはどうすればいいか？ 
+       */
+
+
+      // サイン波のためのシェイプ
+      var sinWave = new createjs.Shape();
+      sinWave.graphics.beginStroke("#FF8888")
+        .setStrokeStyle(2) //線の太さを設定
+        .moveTo(startX, startY); //始点
+      stage.addChild(sinWave);
+
+      // サイン波を引く（静的）
+      for ( var i=0; i<360; i++ ) {
+        sinWave.graphics.lineTo(startX+i, startY-r*Math.sin(i * Math.PI / 180));
+      }
+
+
+      var i = 0;
+      var fps = 60;
+      createjs.Ticker.setFPS(fps);
+      createjs.Ticker.addEventListener('tick', function() {
+        // sinWave.graphics.lineTo(startX-i, startY-r*Math.sin(i * Math.PI / 180));
+        // sinWave.x = i;
+        hl.graphics.lineTo(startX+150+i, startY);
+        hl.y = i/5;
+
+        stage.update();
+        i++;
+      });
+
+
+    }
+
+  </script>
+</body>
+</html>
+
+
+
+
