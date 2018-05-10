@@ -1,0 +1,100 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>quantization</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="common.css" />
+  <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+  <script>
+
+
+    // https://qiita.com/uto-usui/items/14a39c6981282bb62a0a
+
+    window.addEventListener("load", init);
+    function init() {
+      // Stageオブジェクトを作成。表示リストのルートになります。
+      var stage = new createjs.Stage("myCanvas");
+      // 描画をするためのシェイプを作成
+      // var shape = new createjs.Shape();
+      // // シェイプをステージに配置
+      // stage.addChild(shape);
+      // // 線のスタイルを設定
+      // shape.graphics
+      //         .beginStroke("DarkRed"); // 赤色で線の描画を開始
+      // // 線の曲線を指定
+      // shape.graphics
+      //         .moveTo(100, 100) // 描画開始位置を指定
+      //         .lineTo(300, 400) // 線の終了位置を指定
+      //         .lineTo(700, 200);
+
+      var startX = 120;
+      var startY = 200;
+
+      var r = 100;
+
+      // vertical line
+      var vl = new createjs.Shape();
+      vl.graphics.beginStroke("#888888");
+      vl.graphics.moveTo(startX, startY-150)
+          .lineTo(startX, startY+150);
+      stage.addChild(vl);
+
+      // horizontal line
+      var hl = new createjs.Shape();
+      hl.graphics.beginStroke("#888888");
+      hl.graphics.moveTo(startX-150, startY)
+          .lineTo(960, startY);
+      stage.addChild(hl);
+
+      var sinWave = new createjs.Shape();
+      sinWave.graphics.beginStroke("#FF8888")
+        .setStrokeStyle(2)
+        .moveTo(startX, startY);
+      stage.addChild(sinWave);
+
+      // var sinWave2 = new createjs.Shape();
+      // sinWave2.graphics.beginStroke("#FF8888")
+      //   .moveTo(startX, startY);
+      // stage.addChild(sinWave2);
+
+      var i = 0;
+      var fps = 60;
+      createjs.Ticker.setFPS(fps);
+      createjs.Ticker.addEventListener('tick', function() {
+        var t = Math.sin(3.5 * i * Math.PI / 180) + Math.sin(i * 2.7 * Math.PI / 180);
+        sinWave.graphics.lineTo(startX+i, startY-r*t/2);
+
+        stage.update();
+        i++;
+      });
+
+
+
+    }
+
+  </script>
+</head>
+<body>
+  <div class="col-sm-12">
+    <canvas id="myCanvas" width="960" height="480"></canvas>
+    <h2>下書き</h2>
+    <img src="./wave.jpg" width="480"/>
+    <h2>参考</h2>
+    <ul>
+      <li>http://jsfiddle.net/mellun0610/9mLggrv7/</li>
+      <li>https://ics.media/tutorial-createjs/displayobject_remove.html</li>
+      <li>https://qiita.com/maxima/items/d57d3e09632927739215</li>
+      <li>https://qiita.com/uto-usui/items/14a39c6981282bb62a0a</li>
+    </ul>
+  </div>
+</body>
+</html>
+
+
+
+
