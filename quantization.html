@@ -66,8 +66,16 @@
       var fps = 60;
       createjs.Ticker.setFPS(fps);
       createjs.Ticker.addEventListener('tick', function() {
-        var t = Math.sin(3.5 * i * Math.PI / 180) + Math.sin(i * 2.7 * Math.PI / 180);
-        sinWave.graphics.lineTo(startX+i, startY-r*t/2);
+        var v = r * ( Math.sin(3.5 * i * Math.PI / 180) + Math.sin(i * 2.7 * Math.PI / 180) ) / 2;
+        sinWave.graphics.lineTo(startX+i, startY-v);
+
+        if ( i % 10 == 0 ) {
+          var vl2 = new createjs.Shape();
+          vl2.graphics.beginStroke("#888888")
+              .moveTo(startX+i, startY)
+              .lineTo(startX+i, startY-v);
+          stage.addChild(vl2);
+        }
 
         stage.update();
         i++;
