@@ -63,20 +63,27 @@
       // stage.addChild(sinWave2);
 
       var i = 0;
-      const delay = 700;
+      const delay = 900;
+      var flag = 0;
       createjs.Ticker.setFPS(60);
       createjs.Ticker.addEventListener('tick', function() {
         var v = r * ( Math.sin(3.5 * i * Math.PI / 180) + Math.sin(2.7 * i * Math.PI / 180) ) / 2;
         sinWave.graphics.lineTo(startX+i, startY-v);
 
-        if ( i % 10 == 0 && i > delay) {
+        if ( i % 20 == 0 && i > delay) {
           var j = i - delay;
           var w = r * ( Math.sin(3.5 * j * Math.PI / 180) + Math.sin(2.7 * j * Math.PI / 180) ) / 2;
           var vl2 = new createjs.Shape();
           vl2.graphics.beginStroke("#888888")
+              .setStrokeStyle(5)
               .moveTo(startX+j, startY)
-              .lineTo(startX+j, startY-w);
+              .lineTo(startX+j, startY-Math.round(w/5)*5);
           stage.addChild(vl2);
+        }
+
+        if ( flag == 0 && i > delay * 2 ) {
+          stage.removeChild(sinWave);
+          flag = 1;
         }
 
         stage.update();

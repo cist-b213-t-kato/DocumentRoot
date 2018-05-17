@@ -46,11 +46,11 @@
 
 
       // 水平線( horizontal line )のためのシェイプを作る
-      var hl = new createjs.Shape();
-      hl.graphics.beginStroke("#888888");
-      hl.graphics.moveTo(startX-150, startY)
-          .lineTo(startX+150, startY);
-      stage.addChild(hl);
+      // var hl = new createjs.Shape();
+      // hl.graphics.beginStroke("#888888");
+      // hl.graphics.moveTo(startX-150, startY)
+      //     .lineTo(startX+150, startY);
+      // stage.addChild(hl);
 
 
       /* 
@@ -74,11 +74,21 @@
       var i = 0;
       var fps = 60;
       createjs.Ticker.setFPS(fps);
+
+      var xl = new createjs.Shape();
+
       createjs.Ticker.addEventListener('tick', function() {
         // sinWave.graphics.lineTo(startX-i, startY-r*Math.sin(i * Math.PI / 180));
         // sinWave.x = i;
-        hl.graphics.lineTo(startX+150+i, startY);
-        hl.y = i/5;
+        // hl.graphics.lineTo(startX+150+i, startY);
+        // hl.y = i/5;
+
+        stage.removeChild(xl);
+        xl = new createjs.Shape();
+        xl.graphics.beginStroke("#888888");
+        xl.graphics.moveTo(startX, startY+i)
+            .lineTo(startX+300-i, startY+i);
+        stage.addChild(xl);
 
         stage.update();
         i++;
