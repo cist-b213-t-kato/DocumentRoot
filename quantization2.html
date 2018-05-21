@@ -1,0 +1,119 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>quantization</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="common.css" />
+  <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+</head>
+<body>
+  <div class="col-sm-12">
+    <div class="col-sm-12">
+      <canvas id="myCanvas" width="960" height="360"></canvas>
+    </div>
+
+    <div class="col-sm-12">
+      <button id="sinButton" class="btn btn-default">sin波の表示・非表示</button>
+    </div>
+
+    <div class="col-sm-12">
+      <h2>参考</h2>
+      <ul>
+        <li>http://jsfiddle.net/mellun0610/9mLggrv7/</li>
+        <li>https://ics.media/tutorial-createjs/displayobject_remove.html</li>
+        <li>https://qiita.com/maxima/items/d57d3e09632927739215</li>
+        <li>https://qiita.com/uto-usui/items/14a39c6981282bb62a0a</li>
+      </ul>
+    </div>
+
+  </div>
+  <script>
+
+    // https://qiita.com/uto-usui/items/14a39c6981282bb62a0a
+
+    window.addEventListener("load", init);
+    function init() {
+      // Stageオブジェクトを作成。表示リストのルートになります。
+      var stage = new createjs.Stage("myCanvas");
+
+      var startX = 20;
+      var startY = 200;
+
+      var r = 100;
+
+      // vertical line
+      var vl = new createjs.Shape();
+      vl.graphics.beginStroke("#888888");
+      vl.graphics.moveTo(0, -150)
+          .lineTo(0, +150);
+      vl.x = startX;
+      vl.y = startY;
+      stage.addChild(vl);
+
+      // horizontal line
+      var hl = new createjs.Shape();
+      hl.graphics.beginStroke("#888888");
+      hl.graphics.moveTo(startX-150, startY)
+          .lineTo(600, startY);
+      stage.addChild(hl);
+
+      var sinWave = new createjs.Shape();
+      sinWave.graphics.beginStroke("#FF8888")
+        .setStrokeStyle(2)
+        .moveTo(startX, startY);
+      stage.addChild(sinWave);
+
+      var t = new createjs.Text("sin(3.5t) + sin(2.7t)", "24px serif", "#DD4444");
+      t.x = 200;
+      t.y = 50;
+      stage.addChild(t);
+
+
+      function f( i ) {
+        return r * ( Math.sin(3.5 * i * Math.PI / 180) + Math.sin(2.7 * i * Math.PI / 180) ) / 2;
+      }
+
+      var i = 0;
+      const delay = 500;
+      var flag = 0;
+      createjs.Ticker.setFPS(60);
+      createjs.Ticker.addEventListener('tick', function() {
+        if ( i < delay ) {
+          var v = f(i);
+          sinWave.graphics.lineTo(startX+i, startY-v);
+        } else if ( i % 20 == 0 && i < delay*2 && i >= delay ) {
+          var j = i - delay;
+          var w = f(j);
+          var vl2 = new createjs.Shape();
+          vl2.graphics.beginStroke("#888888")
+              .setStrokeStyle(5)
+              .moveTo(startX+j, startY)
+              .lineTo(startX+j, startY-Math.round(w/20)*20);
+          stage.addChild(vl2);
+        }
+
+        vl.rotation += .5;
+
+        stage.update();
+        i++;
+      });
+
+      document.getElementById('sinButton').addEventListener('click', function() {
+        sinWave.visible = !sinWave.visible;
+      });
+
+
+    }
+
+  </script>
+</body>
+</html>
+
+
+
+
