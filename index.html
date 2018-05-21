@@ -87,7 +87,9 @@
 	  	</div>
 
 	  	<div class="col-sm-12">
-	    	<p style="font-size:40px; font-weight:bold;"><a href="https://twitter.com/kagichan_kyun">カギちゃん</a>なんか必要ねえんだよ（宣戦布告）</p>
+	    	<!-- <p style="font-size:40px; font-weight:bold;"><a href="https://twitter.com/kagichan_kyun">カギちゃん</a>なんか必要ねえんだよ（宣戦布告）</p> -->
+	    	<p><span class="noriba2">朱色</span>は乗り場②</p>
+	    	<p>5/21 乗り場勘違いしてたせいで乗り遅れて30分くらい無駄にした・・・</p>
 	  	</div>
   	</div>
 
@@ -153,6 +155,7 @@
 			// 		list.push(json.array[j]);
 			// 	}
 			// }
+
 			var list = json.array;
 
 			var late = true;
@@ -175,7 +178,7 @@
 				}
 
 				if ( crt >= first && crt <= last ) {
-					console.log("highlight");
+					// console.log("highlight");
 					tr.addClass("highlight");
 				}
 
@@ -204,6 +207,11 @@
 					} else {
 						td.text(t);
 					}
+
+					if ( i == 0 && json["noriba"] && json["noriba"][j] == "2" ) {
+						td.addClass("noriba2");
+					}
+
 					tr.append(td);
 				}
 				$(id).append(tr);
