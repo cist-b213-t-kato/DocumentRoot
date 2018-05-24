@@ -9,6 +9,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://momentjs.com/downloads/moment.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link href="common.css" rel="stylesheet" />
@@ -26,6 +27,11 @@
     <h2>シャトルバス</h2>
     <p>元のpdfは<a href="./shuttlebus.pdf">こちら</a>。以下のバス時刻表に間違いを見つけた人には飴ちゃんあげます。</p>
     <p>小型版は<a href="./shuttlebus.html">こちら</a>。</p>
+
+    <div class="col-sm-12">
+    	<span class="large highlight">現在時刻: <span id="crt"></span></span>
+    </div>
+
     <div class="col-sm-6">
 	    <h3>往路</h3>
 	    <table>
@@ -147,6 +153,9 @@
 
 			var crt = new Date();
 
+			var crtDisplay = moment(crt);
+			$('#crt').text(crtDisplay.format('HH:mm'));
+
 			$(id).empty();
 
 			var list = json.array;
@@ -205,8 +214,8 @@
 			setInterval(function() {
 				display("#ouro", ouro);
 				display("#fukuro", fukuro);
-	            console.log("updated");
-			}, 1000*60);
+        console.log("updated");
+			}, 1000*10);
 		}).fail(function(data) {
 	    console.log('ajax submit error!!!');
 		});
