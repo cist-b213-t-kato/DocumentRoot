@@ -28,6 +28,16 @@
 init関数の中のどこかで、以下のように書く。sinWaveはsin波を表現するシェイプとする。
 
 ```
+  document.getElementById('sinButton').addEventListener('click', function() {
+    sinWave.visible = !sinWave.visible;
+  });
+```
+
+
+### sin波の色を変える
+
+
+```
   var colorType = 0;
   document.getElementById('colorButton').addEventListener('click', function() {
     colorType = ( colorType + 1 ) % 2;
