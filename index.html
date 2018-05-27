@@ -122,12 +122,15 @@
 		
 		function toDate( tStr ) {
 			// TODO やはり文字<->日時変換のライブラリ必要と実感。。。
-			var crt = new Date();
-			var dateStr = crt.getFullYear() + "/" + ("00"+(crt.getMonth()+1)).substr(-2)
-									+ "/" + ( "00" + crt.getDate() ).substr(-2)
-									+ " " + ( "00" + tStr).substr(-5)
-									+ ":00";
-			var ret = new Date(dateStr);
+			var ret = moment();
+
+			var h = Number(tStr.split(":")[0]); //( "00" + tStr ).substr(-5, 2);
+			var m = Number(tStr.split(":")[1]); //( "00" + tStr ).substr(-2);
+
+			ret.hours(h);
+			ret.minute(m);
+			ret.second(0);
+
 			return ret;
 		}
 
@@ -151,10 +154,7 @@
 
 		function display( id , json ) {
 
-			var crt = new Date();
-
-			var crtDisplay = moment(crt);
-			$('#crt').text(crtDisplay.format('HH:mm'));
+			var crt = new moment();
 
 			$(id).empty();
 
@@ -208,13 +208,15 @@
 			var ouro = json["ouro"];
 			var fukuro = json["fukuro"];
 
-			display("#ouro", ouro);
-			display("#fukuro", fukuro);
+			function updates() {
+				$('#crt').text(new moment().format('HH:mm'));
+				display("#ouro", ouro);
+				display("#fukuro", fukuro);				
+			}
+			updates();
 
 			setInterval(function() {
-				display("#ouro", ouro);
-				display("#fukuro", fukuro);
-        console.log("updated");
+				updates();
 			}, 1000*10);
 		}).fail(function(data) {
 	    console.log('ajax submit error!!!');
