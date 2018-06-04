@@ -81,7 +81,7 @@
   <div class="col-sm-12">
   	<h2>チャット</h2>
   	<p>調整中なので突然チャットが消えるかも。その時はすいません。自動更新もついてないので手動で更新してください。</p>
-	  <form>
+	  <form onsubmit="return false;">
 		  <ul id="message"></ul>
 	  	<div class="form-group" style="width:28%; margin-bottom:5px; display:inline-block;">
 	  		名前: <input type="text" id="name" class="form-control">
@@ -260,18 +260,18 @@
 
 		$('#outButton').click(function() {
 			$.ajax({
-		        type: 'POST',
-		        url: 'http://54.92.8.231:3000/insert',
-		        data : {
-		        	"name": $("#name").val(),
-		        	"body": $("#body").val()
-		        }
+				type: 'POST',
+				url: 'http://54.92.8.231:3000/insert',
+				data : {
+					"name": $("#name").val(),
+					"body": $("#body").val()
+				}
 	    }).done(function(result) {
-			    console.log('成功');
+			    console.log('送信成功');
 			}).fail(function(result) {
 			    console.log('失敗');
 			});
-			console.log('送信');
+			$("#body").val('yeaaaah');
 			viewMessage();
 		});
 
