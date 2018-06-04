@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:wicket="http://www.w3.org/1999/xhtml">
+<html >
 <head>
 <meta charset="UTF-8">
 <title>Title</title>
 </head>
-<wicket:head>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</wicket:head>
 <body>
 
 	<button id="outButton">値をWicketへ送信する</button>
@@ -19,40 +17,41 @@
         
         $.ajax({
             type: 'GET',
-            url: './index.json',
+            url: 'http://54.92.8.231:3000/api',
             dataType: "json",
         }).done(function(data, dataType) {
             for ( var i in data ) {
-                alert(data[i]);
+                console.log(data[i]);
             }
         }).fail(function(result) {
-            alert('失敗');
+            console.log('失敗');
         });
         
-		$('#outButton').click(function() {
+	$('#outButton').click(function() {
 
-			$.ajax({
-		        type: 'POST',
-		        url: '/JSAcceptPage',
-		        data : { "message" : "hogehoge" }
-		    }).done(function(result) {
-			    alert('成功');
-			}).fail(function(result) {
-			    alert('失敗');
-			});
+		$.ajax({
+	        type: 'POST',
+	        url: 'http://54.92.8.231:3000/insert',
+	//	dataType: "json",
+	        data : {"name": "","message":"hogehoge"}
+	    }).done(function(result) {
+		    console.log('成功');
+		}).fail(function(result) {
+		    console.log('失敗');
 		});
+	});
 
-		$('#inButton').click(function() {
-			$.ajax({
-		        type: 'GET',
-		        url: '/JSRefusePage',
-		    }).done(function(data, dataType) {
-		    	for ( var i in data ) {
-				    alert(data[i]);
-		    	}
-			}).fail(function(result) {
-			    alert('失敗');
-			});
+	$('#inButton').click(function() {
+		$.ajax({
+	        type: 'GET',
+	        url: 'http://54.92.8.231:3000/api',
+	    }).done(function(data, dataType) {
+	    	for ( var i in data ) {
+			    console.log(data[i]);
+	    	}
+		}).fail(function(result) {
+		    console.log('失敗');
+		});
 		});
 
 	</script>
