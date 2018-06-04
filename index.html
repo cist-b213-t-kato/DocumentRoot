@@ -82,10 +82,14 @@
   	<h2>チャット</h2>
   	<p>調整中なので突然チャットが消えるかも。その時はすいません。自動更新もついてないので手動で更新してください。</p>
 	  <form>
-	  <ul id="message"></ul>
-	  	名前: <input type="text" id="name">
-	  	本文: <input type="text" id="body">
-			<button id="outButton">送信</button>
+		  <ul id="message"></ul>
+	  	<div class="form-group" style="width:28%; margin-bottom:5px; display:inline-block;">
+	  		名前: <input type="text" id="name" class="form-control">
+	  	</div>
+	  	<div class="form-group" style="width:55%; margin-bottom:5px; display:inline-block;">
+		  	本文: <input type="text" id="body" class="form-control">
+		  </div>
+			<button id="outButton" class="text-center center-block btn btn-primary">送信</button>
 		</form>
 	</div>
 
