@@ -62,7 +62,7 @@
   	</div>
 	</div>
 
-  <div class="col-sm-12">
+  <!--div class="col-sm-12">
   	<h2>お知らせ</h2>
 
   	<h3>企画？ (2018.05.22)</h3>
@@ -76,7 +76,18 @@
 	  	<p>先日PM2.5の濃度が上がってたらしいのでこれで常時観察したい。。。配信元は<a href="http://www.tenki.jp/particulate_matter/1/">tenki.jp</a>。</p>
 	  	<p>（追記）どうやら、<a href="https://www.sankei.com/life/news/180427/lif1804270035-n1.html">4/27にロシアで大規模な森林火災があり</a>、その際の煙が北海道まで舞ってきたらしい。</p>
   	</span>
-  </div>
+  </div-->
+
+  <div class="col-sm-12">
+  	<h2>チャット</h2>
+  	<p>調整中なので突然チャットが消えるかも。その時はすいません。自動更新もついてないので手動で更新してください。</p>
+	  <form>
+	  <ul id="message"></ul>
+	  	名前: <input type="text" id="name">
+	  	本文: <input type="text" id="body">
+			<button id="outButton">送信</button>
+		</form>
+	</div>
 
   <div class="col-sm-6">
     <h2>プロメン成果物</h2>
@@ -223,6 +234,42 @@
 	    console.log('ajax submit error!!!');
 		});
 
+		function viewMessage() {
+			$.ajax({
+		        type: 'GET',
+		        url: 'http://54.92.8.231:3000/api',
+		    }).done(function(data, dataType) {
+					var message = $("#message");
+					message.empty();
+		    	for ( var i in data ) {
+		      	var li = $("<li>");
+		      	console.log(data[i].name + ": " + data[i].body);
+				    li.text(data[i].name + ": " + data[i].body);
+				    message.append(li);
+		    	}
+			    console.log('受信成功');
+			}).fail(function(result) {
+			    console.log('失敗');
+			});
+		}
+		viewMessage();
+
+		$('#outButton').click(function() {
+			$.ajax({
+		        type: 'POST',
+		        url: 'http://54.92.8.231:3000/insert',
+		        data : {
+		        	"name": $("#name").val(),
+		        	"body": $("#body").val()
+		        }
+	    }).done(function(result) {
+			    console.log('成功');
+			}).fail(function(result) {
+			    console.log('失敗');
+			});
+			console.log('送信');
+			viewMessage();
+		});
 
 	</script>
 
