@@ -254,7 +254,7 @@
 			viewMessage();
 		});
 
-		function updates() {
+		function updates(json) {
 			$('#crt').text(new moment().format('HH:mm'));
 			var ouro = json["ouro"];
 			var fukuro = json["fukuro"];
@@ -267,10 +267,10 @@
 	    "url": "./shuttlebus.json",
 	    "dataType": "json"
 		}).done(function(json) {
-			updates();
+			updates(json);
 
 			setInterval(function() {
-				updates();
+				updates(json);
 			}, 1000*10);
 		}).fail(function(data) {
 	    console.log('ajax submit error!!!');
