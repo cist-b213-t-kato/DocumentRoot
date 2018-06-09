@@ -20,8 +20,8 @@
 	
   <div class="col-sm-12">
       <h1>CIST非公式サイト</h1>
-      <p>裏サイトだと暗いイメージがあるので改名</p>
-	<img src="dream/dream.cgi?id=index">
+      <!--p>裏サイトだと暗いイメージがあるので改名</p-->
+	<p>アクセス数: <span id="counter"></span></p>
   </div>
 
   <div class="col-sm-12">
@@ -272,6 +272,15 @@
 			setInterval(function() {
 				updates(json);
 			}, 1000*10);
+		}).fail(function(data) {
+	    console.log('ajax submit error!!!');
+		});
+
+		$.ajax({
+	    "url": "http://54.92.8.231:3000/counter",
+	    "dataType": "json"
+		}).done(function(json) {
+			$('#counter').text(json.count);
 		}).fail(function(data) {
 	    console.log('ajax submit error!!!');
 		});
