@@ -84,10 +84,10 @@
 	  <form onsubmit="return false;">
 		  <ul id="message"></ul>
 	  	<div class="form-group" style="width:28%; margin-bottom:5px; display:inline-block;">
-	  		名前: <input type="text" id="name" class="form-control">
+	  		名前: <input type="text" id="name" class="form-control" autocomplete="off">
 	  	</div>
 	  	<div class="form-group" style="width:55%; margin-bottom:5px; display:inline-block;">
-		  	本文: <input type="text" id="body" class="form-control">
+		  	本文: <input type="text" id="body" class="form-control" autocomplete="off">
 		  </div>
 			<button id="outButton" class="text-center center-block btn btn-primary">送信</button>
 		</form>
@@ -217,27 +217,6 @@
 			}
 		}
 
-		$.ajax({
-	    "url": "./shuttlebus.json",
-	    "dataType": "json"
-		}).done(function(json) {
-			var ouro = json["ouro"];
-			var fukuro = json["fukuro"];
-
-			function updates() {
-				$('#crt').text(new moment().format('HH:mm'));
-				display("#ouro", ouro);
-				display("#fukuro", fukuro);				
-			}
-			updates();
-
-			setInterval(function() {
-				updates();
-			}, 1000*10);
-		}).fail(function(data) {
-	    console.log('ajax submit error!!!');
-		});
-
 		function viewMessage() {
 			$.ajax({
 		        type: 'GET',
@@ -271,8 +250,30 @@
 			}).fail(function(result) {
 			    console.log('失敗');
 			});
-			$("#body").val('yeaaaah');
+			$("#body").val('');
 			viewMessage();
+		});
+
+		function updates() {
+			$('#crt').text(new moment().format('HH:mm'));
+			var ouro = json["ouro"];
+			var fukuro = json["fukuro"];
+			display("#ouro", ouro);
+			display("#fukuro", fukuro);
+			viewMessage();			
+		}
+
+		$.ajax({
+	    "url": "./shuttlebus.json",
+	    "dataType": "json"
+		}).done(function(json) {
+			updates();
+
+			setInterval(function() {
+				updates();
+			}, 1000*10);
+		}).fail(function(data) {
+	    console.log('ajax submit error!!!');
 		});
 
 	</script>
