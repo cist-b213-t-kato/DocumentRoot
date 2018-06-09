@@ -219,18 +219,18 @@
 
 		function viewMessage() {
 			$.ajax({
-		        type: 'GET',
-		        url: 'http://54.92.8.231:3000/api',
-		    }).done(function(data, dataType) {
-					var message = $("#message");
-					message.empty();
-		    	for ( var i in data ) {
-		      	var li = $("<li>");
-		      	console.log(data[i].name + ": " + data[i].body);
-				    li.text(data[i].name + ": " + data[i].body);
-				    message.append(li);
-		    	}
-			    console.log('受信成功');
+        type: 'GET',
+        url: 'http://54.92.8.231:3000/api',
+	    }).done(function(data, dataType) {
+				var message = $("#message");
+				message.empty();
+	    	for ( var i in data ) {
+	      	var li = $("<li>");
+	      	console.log(data[i].name + ": " + data[i].body);
+			    li.text(data[i].name + ": " + data[i].body);
+			    message.append(li);
+	    	}
+		    console.log('受信成功');
 			}).fail(function(result) {
 			    console.log('失敗');
 			});
@@ -264,7 +264,7 @@
 		}
 
 		$.ajax({
-	    "url": "./shuttlebus.json",
+	    "url": "http://54.92.8.231:3000/shuttlebus",
 	    "dataType": "json"
 		}).done(function(json) {
 			updates(json);
