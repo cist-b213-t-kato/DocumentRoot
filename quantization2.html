@@ -10,11 +10,25 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="common.css" />
   <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
+
+  <style>
+    td {
+      width: 50px;
+    }
+    th {
+      width: 100px;
+      padding: 10px 0px;
+    }
+  </style>
+
 </head>
 <body>
   <div class="col-sm-12">
     <div class="col-sm-12">
       <canvas id="myCanvas" width="960" height="360"></canvas>
+      <table border="1">
+        <tr id="value1"><th>value1</th></tr>
+      </table>
     </div>
 
     <div class="col-sm-12">
@@ -75,11 +89,24 @@
       stage.addChild(t);
 
 
+      var tdArray = []; //<td>要素をオブジェクトとして格納する配列を作る
+      var tr = $("#value1"); //idがvalue1の要素をオブジェクトとして、変数trに格納する
+      for ( var i=0; i<10; i++ ) { //今回は、とりあえず10個
+        var td = $("<td>"); //<td>要素を作成する
+        tdArray.push(td); //td要素を配列に追加する
+        tr.append(td); //同様にtd要素をtrに追加する
+      }
+
+
+
+
+
       function f( i ) {
         return r * ( Math.sin(3.5 * i * Math.PI / 180) + Math.sin(2.7 * i * Math.PI / 180) ) / 2;
       }
 
       var i = 0;
+      var k = 0;
       const delay = 500;
       var flag = 0;
       createjs.Ticker.setFPS(60);
@@ -96,9 +123,16 @@
               .moveTo(startX+j, startY)
               .lineTo(startX+j, startY-Math.round(w/20)*20);
           stage.addChild(vl2);
+
+          //10個分表示する
+          if ( k < 10 ) {
+            tdArray[k].text(Math.round(w/20)*20);
+            k++; 
+          }
+
         }
 
-        vl.rotation += .5;
+        // vl.rotation += .5;
 
         stage.update();
         i++;
