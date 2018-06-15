@@ -318,14 +318,14 @@
 	    console.log('ajax submit error!!!');
 		});
 
-		// $.ajax({
-	 //    "url": "http://54.92.8.231/counter",
-	 //    "dataType": "json"
-		// }).done(function(json) {
-		// 	$('#counter').text(json.count);
-		// }).fail(function(data) {
-	 //    console.log('ajax submit error!!!');
-		// });
+		$.ajax({
+	    "url": "http://54.92.8.231/counter",
+	    "dataType": "json"
+		}).done(function(json) {
+			$('#counter').text(json.count);
+		}).fail(function(data) {
+	    console.log('ajax submit error!!!');
+		});
 
 	</script>
 
