@@ -23,7 +23,8 @@ var io = require('socket.io')(app);
 var fs = require('fs');
 
 // HTTP サーバのポートを指定する
-app.listen(3001);
+app.listen(3000);
+
 
 function handler (req, res) {
   fs.readFile('../websocket.html',
