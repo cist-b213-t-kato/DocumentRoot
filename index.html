@@ -10,6 +10,7 @@
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="https://momentjs.com/downloads/moment.min.js"></script>
+	<script src="socket.io.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link href="common.css" rel="stylesheet" />
@@ -256,6 +257,7 @@
 		}
 
 		function viewMessage() {
+			console.log('called viewMessage().');
 			$.ajax({
         type : 'GET',
         url : 'http://54.92.8.231/get-message',
@@ -267,7 +269,7 @@
 				message.empty();
 	    	for ( var i in data ) {
 	      	var li = $("<li>");
-	      	console.log(data[i].name + ": " + data[i].body);
+	      	//console.log(data[i].name + ": " + data[i].body);
 			    li.text(data[i].name + ": " + data[i].body);
 			    message.append(li);
 	    	}
@@ -302,7 +304,7 @@
 			var fukuro = json["fukuro"];
 			display("#ouro", ouro);
 			display("#fukuro", fukuro);
-			viewMessage();			
+			//viewMessage();			
 		}
 
 		$.ajax({
@@ -325,6 +327,20 @@
 			$('#counter').text(json.count);
 		}).fail(function(data) {
 	    console.log('ajax submit error!!!');
+		});
+
+
+	var socket = io('http://54.92.8.231:3001');
+	socket.on('news', function (data) {
+
+		console.log('server to client');
+
+		console.log('server: ' + data.message);
+		viewMessage();
+
+		// サーバへデータ送信
+		// emit を使うとイベント名を指定できる
+		socket.emit('my other event', { my: 'client to server' });
 		});
 
 	</script>

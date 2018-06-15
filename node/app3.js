@@ -80,7 +80,7 @@ MongoClient.connect(url, (error, client) => {
 								res.json(docs);
 								});
 						});
-				io.on('connection', function (socket) {
+		io.on('connection', function (socket) {
 						console.log('socket connected.');
 						// クライアントへデータ送信
 						// emit を使うとイベント名を指定できる
@@ -92,17 +92,19 @@ MongoClient.connect(url, (error, client) => {
 										"name": req.body.name,
 										"body": req.body.body,
 										"thread": req.body.thread
-										});
-								socket.emit('news', {message:'hello'});
-								console.log('client to server!!!!');
-								socket.on('my other event', function (data) {
-										// クライアントから受け取ったデータを出力する
-										console.log(data);
-										});
-
 								});
-						});
+								socket.emit('news', {message:'hello'});
+								socket.emit('news', {message:'world'});
+								console.log('socket.emit()');
 
+						});
+				socket.on('my other event', function (data) {
+					// クライアントから受け取ったデータを出力する
+					console.log(data);
+				});
+		});
+
+				
 				});
 
 		db.collection('counter', (err, collection) => {
