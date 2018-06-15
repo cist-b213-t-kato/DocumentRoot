@@ -82,7 +82,39 @@
   	<h2>チャット</h2>
   	<p>調整中なので突然チャットが消えるかも。その時はすいません。自動更新つけました。</p>
 	  <form onsubmit="viewMessage(); return false;">
-		  <ul id="message"></ul>
+
+	  	<!-- <div class="btn-group" data-toggle="buttons" style="margin-bottom:10px;"> -->
+	  	<div class="" data-toggle="buttons" style="margin-bottom:10px;">
+
+				<label class="btn btn-default active" onclick="checkThread('');" >
+					<input type="radio" autocomplete="off" checked> 未分類
+				</label>
+				<label class="btn btn-default" onclick="checkThread('アニメ');" >
+					<input type="radio" autocomplete="off"> アニメ
+				</label>
+				<label class="btn btn-default" onclick="checkThread('ゲーム');" >
+					<input type="radio" autocomplete="off"> ゲーム
+				</label>
+				<label class="btn btn-default" onclick="checkThread('お知らせ');" >
+					<input type="radio" autocomplete="off"> お知らせ
+				</label>
+
+				<!-- <label id="" class="btn btn-default" onclick="checkRadio();" >
+					未分類
+				</label>
+				<label id="" class="btn btn-default" onclick="checkRadio();" >
+					thread2
+				</label>
+				<label id="" class="btn btn-default" onclick="checkRadio();" >
+					thread3
+				</label> -->
+
+			</div>
+
+		  <!--div style="height:300px; overflow:scroll;"-->
+		  <div style="">
+		  	<ul id="message"></ul>
+		  </div>
 	  	<div class="form-group" style="width:28%; margin-bottom:5px; display:inline-block;">
 	  		名前: <input type="text" id="name" class="form-control" autocomplete="off">
 	  	</div>
@@ -216,10 +248,20 @@
 			}
 		}
 
+		var crtThread = '';
+		function checkThread( threadId ) {
+			crtThread = threadId;
+			console.log('checked: ' + crtThread);
+			viewMessage();
+		}
+
 		function viewMessage() {
 			$.ajax({
-        type: 'GET',
-        url: 'http://54.92.8.231/get-message',
+        type : 'GET',
+        url : 'http://54.92.8.231/get-message',
+        data : { 
+        	thread: crtThread 
+        }
 	    }).done(function(data, dataType) {
 				var message = $("#message");
 				message.empty();
@@ -241,8 +283,9 @@
 				type: 'POST',
 				url: 'http://54.92.8.231/add-message',
 				data : {
-					"name": $("#name").val(),
-					"body": $("#body").val()
+					name : $("#name").val(),
+					body : $("#body").val(),
+					thread : crtThread
 				}
 	    }).done(function(result) {
 			    console.log('送信成功');
@@ -275,14 +318,14 @@
 	    console.log('ajax submit error!!!');
 		});
 
-		$.ajax({
-	    "url": "http://54.92.8.231/counter",
-	    "dataType": "json"
-		}).done(function(json) {
-			$('#counter').text(json.count);
-		}).fail(function(data) {
-	    console.log('ajax submit error!!!');
-		});
+		// $.ajax({
+	 //    "url": "http://54.92.8.231/counter",
+	 //    "dataType": "json"
+		// }).done(function(json) {
+		// 	$('#counter').text(json.count);
+		// }).fail(function(data) {
+	 //    console.log('ajax submit error!!!');
+		// });
 
 	</script>
 
