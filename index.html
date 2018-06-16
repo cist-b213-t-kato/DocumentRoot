@@ -15,6 +15,12 @@
 
 	<link href="common.css" rel="stylesheet" />
 
+	<style>
+		.thread-button {
+			margin: 0px 2px;
+		}
+	</style>
+
 </head>
 
 <body>
@@ -81,27 +87,31 @@
 
   <div class="col-sm-12">
   	<h2>チャット</h2>
-  	<p>調整中なので突然チャットが消えるかも。その時はすいません。自動更新つけました。</p>
 
   	<!-- <div class="btn-group" data-toggle="buttons" style="margin-bottom:10px;"> -->
-  	<div id="threadList" data-toggle="buttons" style="margin-bottom:10px;">
+  	<div style="margin-bottom:10px;">
 
-			<label class="btn btn-default active" onclick="checkThread('');" >
-				<input type="radio" autocomplete="off" checked> 未分類
-			</label>
-			<label class="btn btn-default" onclick="checkThread('アニメ');" >
-				<input type="radio" autocomplete="off"> アニメ
-			</label>
-			<label class="btn btn-default" onclick="checkThread('ゲーム');" >
-				<input type="radio" autocomplete="off"> ゲーム
-			</label>
-			<label class="btn btn-default" onclick="checkThread('お知らせ');" >
-				<input type="radio" autocomplete="off"> お知らせ
-			</label>
+  		<span id="threadList" data-toggle="buttons">
+				<label class="btn btn-default active" onclick="checkThread('');" >
+					<input type="radio" autocomplete="off" checked> 未分類
+				</label>
+				<!-- <label class="btn btn-default" onclick="checkThread('アニメ');" >
+					<input type="radio" autocomplete="off"> アニメ
+				</label>
+				<label class="btn btn-default" onclick="checkThread('ゲーム');" >
+					<input type="radio" autocomplete="off"> ゲーム
+				</label>
+				<label class="btn btn-default" onclick="checkThread('お知らせ');" >
+					<input type="radio" autocomplete="off"> お知らせ
+				</label> -->
+			</span>
+
 			<label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label>
-			<form onsubmit="console.log('hogehoge');">
+			<form onsubmit="enterThreadSubmit(); return false;">
 				<input id="addThreadInput" type="text" class="form-control" onblur="returnAddThread();">
 			</form>
+
+		</div>
 
 			<!-- <label id="" class="btn btn-default" onclick="checkRadio();" >
 				未分類
@@ -113,30 +123,10 @@
 				thread3
 			</label> -->
 
-  		<script type="text/javascript">
+		<script type="text/javascript">
 
-  			$('#addThreadInput').hide();
 
-  			function addThread() {
-  				$('#threadList').append('a');
-  			}
-
-  			function popAddThread() {
-  				// var input = $('<input>');
-  				// input.on('click', addThread);
-  				// $('#addThread').html(input);
-  				$('#addThread').hide();
-  				$('#addThreadInput').show();
-  			}
-
-  			function returnAddThread() {
-  				$('#addThreadInput').hide();
-  				$('#addThread').show();
-  			}
-
-  		</script>
-
-		</div>
+		</script>
 
 	  <form onsubmit="viewMessage(); return false;">
 
@@ -332,6 +322,79 @@
 			viewMessage();
 		});
 
+		/**
+		 * thread 機能
+		 */
+
+		$('#addThreadInput').hide();
+
+		function popAddThread() {
+			// var input = $('<input>');
+			// input.on('click', addThread);
+			// $('#addThread').html(input);
+			$('#addThread').hide();
+			$('#addThreadInput').show();
+		}
+
+		function returnAddThread() {
+			$('#addThreadInput').hide();
+			$('#addThread').show();
+		}
+
+		function enterThreadSubmit() {
+			var val = $('#addThreadInput').val();
+			$('#addThreadInput').val('')
+			console.log(val);
+			addThread(val);
+  		appendThread('#threadList', val);
+  		checkThread(val);
+			returnAddThread();
+		}
+
+		function addThread(threadName) {
+			console.log('add-thread:');
+			$.ajax({
+				type: 'POST',
+				url: 'http://54.92.8.231:3000/add-thread',
+				data : { name: threadName }
+	    }).done(function(json) {
+	    	console.log("success");
+			}).fail(function(json) {
+		    console.log('failure');
+			});
+		}
+
+		function appendThread(id, threadName) {
+  		var label = $('<label>');
+  		label.addClass('btn btn-default thread-button');
+  		label.attr('onclick', 'checkThread(\'' + threadName + '\');');
+  		//label.html();
+  		var input = $('<input>');
+  		input.attr('type', 'radio');
+  		input.attr('autocomplete', 'off');
+  		label.append(input);
+  		label.append(threadName);
+  		$(id).append(label);
+		}
+
+		console.log('get-thread:');
+		$.ajax({
+			type: 'GET',
+			url: 'http://54.92.8.231:3000/get-thread',
+			data : { }
+    }).done(function(json) {
+    	console.log("success");
+    	for ( var i in json ) {
+    		var threadName = json[i].name;
+    		console.log(threadName);
+    		appendThread('#threadList', threadName);
+    	}
+		}).fail(function(json) {
+		    console.log('失敗');
+		});
+
+		
+
 		function updates(json) {
 			$('#crt').text(new moment().format('HH:mm'));
 			var ouro = json["ouro"];
@@ -363,16 +426,16 @@
 	    console.log('ajax submit error!!!');
 		});
 
-	socket.on('message', function (data) {
+		socket.on('message', function (data) {
 
-		console.log('server to client');
+			console.log('server to client');
 
-		console.log('server: ' + data.message);
-		viewMessage();
+			console.log('server: ' + data.message);
+			viewMessage();
 
-		// サーバへデータ送信
-		// emit を使うとイベント名を指定できる
-		//socket.emit('clientToServer', { my: 'client socket.emit()' });
+			// サーバへデータ送信
+			// emit を使うとイベント名を指定できる
+			//socket.emit('clientToServer', { my: 'client socket.emit()' });
 		});
 
 
