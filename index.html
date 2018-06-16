@@ -256,6 +256,10 @@
 			viewMessage();
 		}
 
+
+	var socket = io('http://54.92.8.231:3001');
+
+
 		function viewMessage() {
 			console.log('called viewMessage().');
 			$.ajax({
@@ -295,6 +299,7 @@
 			    console.log('失敗');
 			});
 			$("#body").val('');
+			socket.emit('clientToServer', { my: 'client socket.emit()' });
 			viewMessage();
 		});
 
@@ -329,9 +334,7 @@
 	    console.log('ajax submit error!!!');
 		});
 
-
-	var socket = io('http://54.92.8.231:3001');
-	socket.on('news', function (data) {
+	socket.on('message', function (data) {
 
 		console.log('server to client');
 
@@ -340,8 +343,9 @@
 
 		// サーバへデータ送信
 		// emit を使うとイベント名を指定できる
-		socket.emit('my other event', { my: 'client to server' });
+		//socket.emit('clientToServer', { my: 'client socket.emit()' });
 		});
+
 
 	</script>
 

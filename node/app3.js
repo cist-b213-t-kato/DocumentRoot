@@ -37,7 +37,7 @@ app.get("/shuttlebus", function(req, res, next){
 
 app2.listen(3001);
 function handler (req, res) {
-  fs.readFile('../websocket.html',
+  fs.readFile('../index.html',
     function (err, data) {
       if (err) {
         res.writeHead(500);
@@ -49,18 +49,18 @@ function handler (req, res) {
     });
 }
 
-/*
 io.on('connection', function (socket) {
-  // クライアントへデータ送信
-  // emit を使うとイベント名を指定できる
-			socket.emit('news', { hello: 'world' });
-			socket.on('my other event', function (data) {
-				// クライアントから受け取ったデータを出力する
-				console.log(data);
-				});
+		//socket.emit('message', {message:'hello'});
+		//socket.broadcast.emit('message', {message:'world'});
+		//console.log('socket.emit()');
+		socket.on('clientToServer', function (data) {
+			// クライアントから受け取ったデータを出力する
+			console.log('client: '+data);
+			socket.emit('message', {message:'hello'});
+			socket.broadcast.emit('message', {message:'world'});
+			console.log('socket.emit()');
+		});
 });
-*/
-
 
 
 // 接続文字列
@@ -71,17 +71,16 @@ MongoClient.connect(url, (error, client) => {
 
 		const db = client.db('test');
 
-		// コレクションの取得
-		db.collection('message', (err, collection) => {
-				app.get("/get-message", function(req, res, next){
-						// console.log(req.query);
-						collection.find({thread:req.query.thread}).toArray((err, docs) => {
-								// console.log(docs);
-								res.json(docs);
+				console.log('socket connected.');
+				// コレクションの取得
+				db.collection('message', (err, collection) => {
+						app.get("/get-message", function(req, res, next){
+								// console.log(req.query);
+								collection.find({thread:req.query.thread}).toArray((err, docs) => {
+										// console.log(docs);
+										res.json(docs);
+										});
 								});
-						});
-		io.on('connection', function (socket) {
-						console.log('socket connected.');
 						// クライアントへデータ送信
 						// emit を使うとイベント名を指定できる
 						app.post("/add-message", function(req, res){
@@ -92,17 +91,9 @@ MongoClient.connect(url, (error, client) => {
 										"name": req.body.name,
 										"body": req.body.body,
 										"thread": req.body.thread
-								});
-								socket.emit('news', {message:'hello'});
-								socket.emit('news', {message:'world'});
-								console.log('socket.emit()');
+										});
 
 						});
-				socket.on('my other event', function (data) {
-					// クライアントから受け取ったデータを出力する
-					console.log(data);
-				});
-		});
 
 				
 				});
