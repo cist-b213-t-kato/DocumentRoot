@@ -82,35 +82,64 @@
   <div class="col-sm-12">
   	<h2>チャット</h2>
   	<p>調整中なので突然チャットが消えるかも。その時はすいません。自動更新つけました。</p>
+
+  	<!-- <div class="btn-group" data-toggle="buttons" style="margin-bottom:10px;"> -->
+  	<div id="threadList" data-toggle="buttons" style="margin-bottom:10px;">
+
+			<label class="btn btn-default active" onclick="checkThread('');" >
+				<input type="radio" autocomplete="off" checked> 未分類
+			</label>
+			<label class="btn btn-default" onclick="checkThread('アニメ');" >
+				<input type="radio" autocomplete="off"> アニメ
+			</label>
+			<label class="btn btn-default" onclick="checkThread('ゲーム');" >
+				<input type="radio" autocomplete="off"> ゲーム
+			</label>
+			<label class="btn btn-default" onclick="checkThread('お知らせ');" >
+				<input type="radio" autocomplete="off"> お知らせ
+			</label>
+			<label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label>
+			<form onsubmit="console.log('hogehoge');">
+				<input id="addThreadInput" type="text" class="form-control" onblur="returnAddThread();">
+			</form>
+
+			<!-- <label id="" class="btn btn-default" onclick="checkRadio();" >
+				未分類
+			</label>
+			<label id="" class="btn btn-default" onclick="checkRadio();" >
+				thread2
+			</label>
+			<label id="" class="btn btn-default" onclick="checkRadio();" >
+				thread3
+			</label> -->
+
+  		<script type="text/javascript">
+
+  			$('#addThreadInput').hide();
+
+  			function addThread() {
+  				$('#threadList').append('a');
+  			}
+
+  			function popAddThread() {
+  				// var input = $('<input>');
+  				// input.on('click', addThread);
+  				// $('#addThread').html(input);
+  				$('#addThread').hide();
+  				$('#addThreadInput').show();
+  			}
+
+  			function returnAddThread() {
+  				$('#addThreadInput').hide();
+  				$('#addThread').show();
+  			}
+
+  		</script>
+
+		</div>
+
 	  <form onsubmit="viewMessage(); return false;">
 
-	  	<!-- <div class="btn-group" data-toggle="buttons" style="margin-bottom:10px;"> -->
-	  	<div class="" data-toggle="buttons" style="margin-bottom:10px;">
-
-				<label class="btn btn-default active" onclick="checkThread('');" >
-					<input type="radio" autocomplete="off" checked> 未分類
-				</label>
-				<label class="btn btn-default" onclick="checkThread('アニメ');" >
-					<input type="radio" autocomplete="off"> アニメ
-				</label>
-				<label class="btn btn-default" onclick="checkThread('ゲーム');" >
-					<input type="radio" autocomplete="off"> ゲーム
-				</label>
-				<label class="btn btn-default" onclick="checkThread('お知らせ');" >
-					<input type="radio" autocomplete="off"> お知らせ
-				</label>
-
-				<!-- <label id="" class="btn btn-default" onclick="checkRadio();" >
-					未分類
-				</label>
-				<label id="" class="btn btn-default" onclick="checkRadio();" >
-					thread2
-				</label>
-				<label id="" class="btn btn-default" onclick="checkRadio();" >
-					thread3
-				</label> -->
-
-			</div>
 
 		  <!--div style="height:300px; overflow:scroll;"-->
 		  <div style="">
