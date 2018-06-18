@@ -1,13 +1,15 @@
 /* 1. expressモジュールをロードし、インスタンス化してappに代入。*/
 var express = require("express");
 var app = express();
-var app2 = require('http').createServer(handler);
-var io = require('socket.io')(app2);
+//var app2 = require('http').createServer(handler);
+var http = require('http').createServer(app);
+var io = require('socket.io');
+io.listen(http);
 var fs = require('fs');
 var MongoClient = require("mongodb").MongoClient;
 var bodyParser = require("body-parser");
 
-
+http.listen(3001);
 
 /* 2. listen()メソッドを実行して3000番ポートで待ち受け。*/
 var server = app.listen(3000, function(){
@@ -33,7 +35,7 @@ app.get("/shuttlebus", function(req, res, next){
 		res.json(json);
 	});
 
-
+/*
 app2.listen(3001);
 function handler (req, res) {
   fs.readFile('../index.html',
@@ -47,6 +49,8 @@ function handler (req, res) {
       res.end(data);
     });
 }
+*/
+
 
 io.on('connection', function (socket) {
 		//socket.emit('message', {message:'hello'});
