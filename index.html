@@ -17,7 +17,7 @@
 
 	<style>
 		.thread-button {
-			margin: 0px 2px;
+			margin: 2px;
 		}
 	</style>
 
@@ -92,7 +92,7 @@
   	<div style="margin-bottom:10px;">
 
   		<span id="threadList" data-toggle="buttons">
-				<label class="btn btn-default active" onclick="checkThread('');" >
+				<label class="btn btn-default active thread-button" onclick="checkThread('');" >
 					<input type="radio" autocomplete="off" checked> 未分類
 				</label>
 				<!-- <label class="btn btn-default" onclick="checkThread('アニメ');" >
@@ -276,7 +276,7 @@
 		}
 
 
-	var socket = io('http://54.92.8.231:3001');
+		var socket = io('http://54.92.8.231:3001');
 
 
 		function viewMessage() {
@@ -355,7 +355,7 @@
 			console.log('add-thread:');
 			$.ajax({
 				type: 'POST',
-				url: 'http://54.92.8.231:3000/add-thread',
+				url: 'http://54.92.8.231/add-thread',
 				data : { name: threadName }
 	    }).done(function(json) {
 	    	console.log("success");
@@ -380,7 +380,7 @@
 		console.log('get-thread:');
 		$.ajax({
 			type: 'GET',
-			url: 'http://54.92.8.231:3000/get-thread',
+			url: 'http://54.92.8.231/get-thread',
 			data : { }
     }).done(function(json) {
     	console.log("success");
@@ -393,7 +393,7 @@
 		    console.log('失敗');
 		});
 
-		
+
 
 		function updates(json) {
 			$('#crt').text(new moment().format('HH:mm'));
