@@ -51,11 +51,7 @@ function handler (req, res) {
 }
 */
 
-<<<<<<< HEAD
 
-=======
-/*
->>>>>>> merge
 io.on('connection', function (socket) {
 		//socket.emit('message', {message:'hello'});
 		//socket.broadcast.emit('message', {message:'world'});
@@ -68,11 +64,7 @@ io.on('connection', function (socket) {
 			console.log('socket.emit()');
 		});
 });
-<<<<<<< HEAD
 
-=======
-*/
->>>>>>> merge
 
 // 接続文字列
 var url = "mongodb://localhost:27017/sampledb";
