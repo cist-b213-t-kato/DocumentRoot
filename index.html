@@ -283,7 +283,6 @@
 		//var socket = io('http://54.92.8.231/websocket');
 		var socket = io('http://54.92.8.231');
 
-
 		function viewMessage() {
 			console.log('called viewMessage().');
 			$.ajax({
@@ -325,6 +324,7 @@
 			$("#body").val('');
 
 			socket.emit('clientToServer', { my: 'client socket.emit()' });
+
 
 			viewMessage();
 		});
@@ -433,7 +433,6 @@
 	    console.log('ajax submit error!!!');
 		});
 
-
 		socket.on('message', function (data) {
 
 			console.log('server to client');
@@ -445,7 +444,6 @@
 			// emit を使うとイベント名を指定できる
 			//socket.emit('clientToServer', { my: 'client socket.emit()' });
 		});
-
 
 	</script>
 
