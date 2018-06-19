@@ -10,7 +10,10 @@
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 	<script src="https://momentjs.com/downloads/moment.min.js"></script>
-	<script src="socket.io.js"></script>
+
+	<!--script src="socket.io.js"></script-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link href="common.css" rel="stylesheet" />
@@ -275,8 +278,10 @@
 			viewMessage();
 		}
 
-
-		var socket = io('http://54.92.8.231:3001');
+		//var socket = io('http://54.92.8.231:3001');
+		//var socket = io('http://54.92.8.231/socket');
+		//var socket = io('http://54.92.8.231/websocket');
+		var socket = io('http://54.92.8.231');
 
 
 		function viewMessage() {
@@ -318,7 +323,9 @@
 			    console.log('失敗');
 			});
 			$("#body").val('');
+
 			socket.emit('clientToServer', { my: 'client socket.emit()' });
+
 			viewMessage();
 		});
 
@@ -425,6 +432,7 @@
 		}).fail(function(data) {
 	    console.log('ajax submit error!!!');
 		});
+
 
 		socket.on('message', function (data) {
 
