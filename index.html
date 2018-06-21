@@ -22,6 +22,29 @@
 		.thread-button {
 			margin: 2px;
 		}
+
+		.blind-top {
+		    background: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0)), color-stop(90%, #fefefe));
+		    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, #fefefe 90%);
+		    background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, #fefefe 90%);
+		    background: linear-gradient(to top, rgba(255,255,255,0) 0%, #fefefe 90%);
+		    height: 50px;
+		    margin: 0 0 -50px;
+		    position: relative;
+		    pointer-events: none;
+		}
+
+		.message-top {
+			height:50px;
+			font-size:40px;
+			background-color:#AADDFF;
+			color:white;
+			width:100%;
+			text-align:center;
+			margin-bottom:10px;
+			margin-top:20px;
+		}
+
 	</style>
 
 </head>
@@ -108,7 +131,6 @@
 					<input type="radio" autocomplete="off"> お知らせ
 				</label> -->
 			</span>
-
 			<label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label>
 			<form onsubmit="enterThreadSubmit(); return false;">
 				<input id="addThreadInput" type="text" class="form-control" onblur="returnAddThread();">
@@ -126,16 +148,14 @@
 				thread3
 			</label> -->
 
-		<script type="text/javascript">
-
-
-		</script>
-
 	  <form onsubmit="viewMessage(); return false;">
 
 
 		  <!--div style="height:300px; overflow:scroll;"-->
-		  <div style="">
+
+  		<div class="blind-top" ></div>
+		  <div id="message-box" style="height:300px;width:100%;overflow:scroll;">
+		  	<div class="message-top">☁️☁️☁️☁️☁️☁</div>
 		  	<ul id="message"></ul>
 		  </div>
 	  	<div class="form-group" style="width:28%; margin-bottom:5px; display:inline-block;">
@@ -297,6 +317,7 @@
         	thread: crtThread 
         }
 	    }).done(function(data, dataType) {
+		    console.log('受信成功');
 				var message = $("#message");
 				message.empty();
 	    	for ( var i in data ) {
@@ -305,7 +326,7 @@
 			    li.text(data[i].name + ": " + data[i].body);
 			    message.append(li);
 	    	}
-		    console.log('受信成功');
+		    $('#message-box').animate({scrollTop: $('#message-box')[0].scrollHeight}, 'slow');
 			}).fail(function(result) {
 			    console.log('失敗');
 			});
