@@ -599,7 +599,7 @@
         //マウス継続値によって場合分け、直線の moveTo（スタート地点）を決定
         //継続値が初期値ではない場合は、前回のゴール位置を次のスタート位置とする
         //lineTo（ゴール地点）の決定、現在のマウス位置をゴール地点とする
-        console.log(drawData.startX, drawData.startY);
+        // console.log(drawData.startX, drawData.startY);
         ctx.moveTo(drawData.startX, drawData.startY);
         ctx.lineTo(drawData.endX, drawData.endY);
         //直線の角を「丸」、サイズと色を決める
@@ -639,7 +639,7 @@
 
 		socket.on('drawEmit', function (data) {
 
-			draw(drawData);
+			draw(data);
 
 		});
 
