@@ -553,30 +553,42 @@
  
     //マウス動いていて、かつ左クリック時に発火。
     function onMove(e) {
-        if (e.buttons === 1 || e.witch === 1) {
-            var rect = e.target.getBoundingClientRect();
-            var X = ~~(e.clientX - rect.left);
-            var Y = ~~(e.clientY - rect.top);
-            //draw 関数にマウスの位置を渡す
-            draw(mouseX, mouseY, X, Y);
-        		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
-		        mouseX = X;
-		        mouseY = Y;
-        };
+      if (e.buttons === 1 || e.witch === 1) {
+          var rect = e.target.getBoundingClientRect();
+          var X = ~~(e.clientX - rect.left);
+          var Y = ~~(e.clientY - rect.top);
+          //draw 関数にマウスの位置を渡す
+          draw(mouseX, mouseY, X, Y);
+					socket.emit('draw', { 
+						startX : mouseX,
+						startY : mouseY,
+						endX : X,
+						endY : Y
+					});
+      		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
+	        mouseX = X;
+	        mouseY = Y;
+      };
     };
  
     //マウスが左クリックされると発火。
     function onClick(e) {
-        if (e.button === 0) {
-            var rect = e.target.getBoundingClientRect();
-            var X = ~~(e.clientX - rect.left);
-            var Y = ~~(e.clientY - rect.top);
-            //draw 関数にマウスの位置を渡す
-            draw(X, Y, X, Y);
-        		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
-		        mouseX = X;
-		        mouseY = Y;
-        }
+      if (e.button === 0) {
+          var rect = e.target.getBoundingClientRect();
+          var X = ~~(e.clientX - rect.left);
+          var Y = ~~(e.clientY - rect.top);
+          //draw 関数にマウスの位置を渡す
+          draw(X, Y, X, Y);
+					socket.emit('draw', { 
+						startX : X,
+						startY : Y,
+						endX : X,
+						endY : Y
+					});
+      		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
+	        mouseX = X;
+	        mouseY = Y;
+      }
     };
  
     //渡されたマウス位置を元に直線を描く関数
@@ -588,12 +600,6 @@
         //lineTo（ゴール地点）の決定、現在のマウス位置をゴール地点とする
         ctx.moveTo(startX, startY);
         ctx.lineTo(endX, endY);
-				socket.emit('draw', { 
-					startX : startX,
-					startY : startY,
-					endX : endX,
-					endY : endY
-				});
         //直線の角を「丸」、サイズと色を決める
         ctx.lineCap = "round";
         ctx.lineWidth = size * 2;
