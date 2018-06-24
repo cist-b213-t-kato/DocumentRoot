@@ -174,7 +174,7 @@
 
 
   <div class="col-sm-12">
-		<canvas id="myCanvas" width="700" height="400" style="margin-bottom:5px"></canvas>
+		<canvas id="myCanvas" width="600" height="600" style="margin-bottom:5px"></canvas>
 		<div data-toggle="buttons">
 			<button id="btn-black" class="btn btn-default active">
 				<input type="radio" autocomplete="off" checked> black
@@ -525,16 +525,16 @@
     var canvas = document.getElementById('myCanvas');
  
     //レスポンシブ対応 画面サイズでキャンバスサイズを調整します
-    if (screen.width < 860) {
-        canvas.width = 700 * screen.width / 860;
-        canvas.height = 400 * screen.width / 860;
-    }
+    // if (screen.width < 768) {
+    // canvas.width = screen.width; //1200 * screen.width / 768;
+    // canvas.height = screen.width; // 1200 * screen.width / 768;
+    // }
  
     //キャンバスの背景カラーを決定。 fillRectは長方形に塗るメソッド
     var ctx = canvas.getContext('2d');
     ctx.beginPath();
     ctx.fillStyle = "#f5f5f5";
-    ctx.fillRect(0, 0, 700, 400);
+    ctx.fillRect(0, 0, 600, 600);
  
     //初期値（サイズ、色、アルファ値）の決定
     var size = 2;
@@ -571,6 +571,7 @@
           //draw 関数にマウスの位置を渡す
           draw(drawData);
 					socket.emit('draw', drawData);
+					addDraw(drawData);
       		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
 	        mouseX = drawData.endX;
 	        mouseY = drawData.endY;
@@ -586,6 +587,7 @@
           //draw 関数にマウスの位置を渡す
           draw(drawData);
 					socket.emit('draw', drawData);
+					addDraw(drawData);
       		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
 	        mouseX = drawData.endX;
 	        mouseY = drawData.endY;
@@ -604,7 +606,7 @@
         ctx.lineTo(drawData.endX, drawData.endY);
         //直線の角を「丸」、サイズと色を決める
         ctx.lineCap = "round";
-        ctx.lineWidth = drawData.size * 2;
+        ctx.lineWidth = drawData.size;
         ctx.strokeStyle = drawData.color;
         ctx.stroke();
     };
@@ -624,17 +626,17 @@
     $('#btn-white').on('click', function() {
     	// console.log('white');
     	drawData.color = '#f5f5f5';
-    	drawData.size = 10;
+    	drawData.size = 20;
     });
 
-    var ctx = canvas.getContext('2d');
+    // var ctx = canvas.getContext('2d');
 	  /* Imageオブジェクトを生成 */
-	  var img = new Image();
-	  img.src = "./canvas.png";
+	  // var img = new Image();
+	  // img.src = "./canvas.png";
     /* 画像が読み込まれるのを待ってから処理を続行 */
-	  img.onload = function() {
-	    ctx.drawImage(img, 0, 0);
-	  }
+	  // img.onload = function() {
+	  //  ctx.drawImage(img, 0, 0);
+	  // }
 
 
 		socket.on('drawEmit', function (data) {
@@ -643,7 +645,32 @@
 
 		});
 
+		function addDraw( drawData ) {
 
+			$.ajax({
+				type: 'POST',
+				url: 'http://54.92.8.231/add-draw',
+				data : drawData
+	    }).done(function(json) {
+	    	console.log("success");
+			}).fail(function(json) {
+		    console.log('failure');
+			});
+
+		}
+
+
+		// キャンバスの初期化
+		$.ajax({
+			type: 'GET',
+			url: 'http://54.92.8.231/get-draw'
+    }).done(function(datas) {
+    	for ( var i in datas ) {
+    		draw(datas[i]);
+    	}
+		}).fail(function(json) {
+	    console.log('get-draw failure');
+		});
 
 
 
