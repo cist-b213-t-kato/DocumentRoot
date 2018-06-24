@@ -1,0 +1,266 @@
+<html>
+
+<head>
+
+	<meta charset="UTF-8"/>
+
+	<title>drawchat</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://momentjs.com/downloads/moment.min.js"></script>
+
+	<!--script src="socket.io.js"></script-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="./common.css" rel="stylesheet" />
+
+	<style>
+		.thread-button {
+			margin: 2px;
+		}
+
+		.blind-top {
+		    background: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0)), color-stop(90%, #fefefe));
+		    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, #fefefe 90%);
+		    background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, #fefefe 90%);
+		    background: linear-gradient(to top, rgba(255,255,255,0) 0%, #fefefe 90%);
+		    height: 50px;
+		    margin: 0 0 -50px;
+		    position: relative;
+		    pointer-events: none;
+		}
+
+		.message-top {
+			height:50px;
+			font-size:20px;
+			color:gray;
+			width:100%;
+			text-align:center;
+			margin-bottom:10px;
+			padding-top:20px;
+			font-family:cursive;
+			border-bottom: 1px solid lightgray;
+			vertical-align: text-bottom;
+		}
+
+	</style>
+
+</head>
+
+<body>
+
+	<div class="col-sm-12" style="margin-bottom:10px;">
+		<h2>お絵かきツール</h2>
+		バグ多し
+	</div>
+
+  <div class="col-sm-12">
+		<canvas id="myCanvas" width="1200" height="600" style="margin-bottom:5px"></canvas>
+		<div data-toggle="buttons">
+			<button id="btn-black" class="btn btn-default active">
+				<input type="radio" autocomplete="off" checked> black
+			</button>
+			<button id="btn-white" class="btn btn-default">
+				<input type="radio" autocomplete="off" checked> white
+			</button>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	<script type="text/javascript">
+
+		var socket = io('http://54.92.8.231');
+
+    //HTML上の canvas タグを取得
+    var canvas = document.getElementById('myCanvas');
+ 
+    //レスポンシブ対応 画面サイズでキャンバスサイズを調整します
+    // if (screen.width < 768) {
+    // canvas.width = screen.width; //1200 * screen.width / 768;
+    // canvas.height = screen.width; // 1200 * screen.width / 768;
+    // }
+ 
+    //キャンバスの背景カラーを決定。 fillRectは長方形に塗るメソッド
+    var ctx = canvas.getContext('2d');
+    ctx.beginPath();
+    ctx.fillStyle = "#f5f5f5";
+    ctx.fillRect(0, 0, 1200, 600);
+ 
+    //初期値（サイズ、色、アルファ値）の決定
+    var size = 2;
+    var color = "#555555";
+    var defoalpha = 1.0;
+ 
+    //マウス継続値の初期値、ここがポイント
+    var mouseX = "";
+    var mouseY = "";
+
+    var drawData = {
+    	startX : 0,
+    	startY : 0,
+    	endX : 0,
+    	endY : 0,
+    	color : "#555555",
+    	size : 2
+    };
+ 
+    //各イベントに紐づけ
+    canvas.addEventListener('mousemove', onMove, false);
+    canvas.addEventListener('mousedown', onClick, false);
+    canvas.addEventListener('mouseup', drawEnd, false);
+    canvas.addEventListener('mouseout', drawEnd, false);
+ 
+    //マウス動いていて、かつ左クリック時に発火。
+    function onMove(e) {
+      if (e.buttons === 1 || e.witch === 1) {
+          var rect = e.target.getBoundingClientRect();
+          drawData.startX = mouseX;
+          drawData.startY = mouseY;
+          drawData.endX = ~~(e.clientX - rect.left);
+          drawData.endY = ~~(e.clientY - rect.top);
+          //draw 関数にマウスの位置を渡す
+          draw(drawData);
+					socket.emit('draw', drawData);
+					addDraw(drawData);
+      		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
+	        mouseX = drawData.endX;
+	        mouseY = drawData.endY;
+      };
+    };
+ 
+    //マウスが左クリックされると発火。
+    function onClick(e) {
+      if (e.button === 0) {
+          var rect = e.target.getBoundingClientRect();
+          drawData.startX = drawData.endX = ~~(e.clientX - rect.left);
+          drawData.startY = drawData.endY = ~~(e.clientY - rect.top);
+          //draw 関数にマウスの位置を渡す
+          draw(drawData);
+					socket.emit('draw', drawData);
+					addDraw(drawData);
+      		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
+	        mouseX = drawData.endX;
+	        mouseY = drawData.endY;
+      }
+    };
+ 
+    //渡されたマウス位置を元に直線を描く関数
+    function draw(drawData) {
+        ctx.beginPath();
+        ctx.globalAlpha = defoalpha;
+        //マウス継続値によって場合分け、直線の moveTo（スタート地点）を決定
+        //継続値が初期値ではない場合は、前回のゴール位置を次のスタート位置とする
+        //lineTo（ゴール地点）の決定、現在のマウス位置をゴール地点とする
+        // console.log(drawData.startX, drawData.startY);
+        ctx.moveTo(drawData.startX, drawData.startY);
+        ctx.lineTo(drawData.endX, drawData.endY);
+        //直線の角を「丸」、サイズと色を決める
+        ctx.lineCap = "round";
+        ctx.lineWidth = drawData.size;
+        ctx.strokeStyle = drawData.color;
+        ctx.stroke();
+    };
+ 
+    //左クリック終了、またはマウスが領域から外れた際、継続値を初期値に戻す
+    function drawEnd() {
+        mouseX = "";
+        mouseY = "";
+    }
+
+    $('#btn-black').on('click', function() {
+    	// console.log('black');
+    	drawData.color = '#555555';
+    	drawData.size = 2;
+    });
+
+    $('#btn-white').on('click', function() {
+    	// console.log('white');
+    	drawData.color = '#f5f5f5';
+    	drawData.size = 20;
+    });
+
+    // var ctx = canvas.getContext('2d');
+	  /* Imageオブジェクトを生成 */
+	  // var img = new Image();
+	  // img.src = "./canvas.png";
+    /* 画像が読み込まれるのを待ってから処理を続行 */
+	  // img.onload = function() {
+	  //  ctx.drawImage(img, 0, 0);
+	  // }
+
+
+		socket.on('drawEmit', function (data) {
+
+			draw(data);
+
+		});
+
+		function addDraw( drawData ) {
+
+			$.ajax({
+				type: 'POST',
+				url: 'http://54.92.8.231/add-draw',
+				data : drawData
+	    }).done(function(json) {
+	    	console.log("success");
+			}).fail(function(json) {
+		    console.log('failure');
+			});
+
+		}
+
+
+		// キャンバスの初期化
+		$.ajax({
+			type: 'GET',
+			url: 'http://54.92.8.231/get-draw'
+    }).done(function(datas) {
+    	for ( var i in datas ) {
+    		draw(datas[i]);
+    	}
+		}).fail(function(json) {
+	    console.log('get-draw failure');
+		});
+
+
+
+
+
+
+
+
+
+
+
+
+
+	</script>
+
+	<div class="col-sm-12" style="margin-bottom:100px;"></div>
+
+</body>
+
+</html>
