@@ -544,6 +544,15 @@
     //マウス継続値の初期値、ここがポイント
     var mouseX = "";
     var mouseY = "";
+
+    var drawData = {
+    	startX : 0,
+    	startY : 0,
+    	endX : 0,
+    	endY : 0,
+    	color : "#555555",
+    	size : 2
+    };
  
     //各イベントに紐づけ
     canvas.addEventListener('mousemove', onMove, false);
@@ -555,19 +564,16 @@
     function onMove(e) {
       if (e.buttons === 1 || e.witch === 1) {
           var rect = e.target.getBoundingClientRect();
-          var X = ~~(e.clientX - rect.left);
-          var Y = ~~(e.clientY - rect.top);
+          drawData.startX = mouseX;
+          drawData.startY = mouseY;
+          drawData.endX = ~~(e.clientX - rect.left);
+          drawData.endY = ~~(e.clientY - rect.top);
           //draw 関数にマウスの位置を渡す
-          draw(mouseX, mouseY, X, Y);
-					socket.emit('draw', { 
-						startX : mouseX,
-						startY : mouseY,
-						endX : X,
-						endY : Y
-					});
+          draw(drawData);
+					socket.emit('draw', drawData);
       		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
-	        mouseX = X;
-	        mouseY = Y;
+	        mouseX = drawData.endX;
+	        mouseY = drawData.endY;
       };
     };
  
@@ -575,35 +581,31 @@
     function onClick(e) {
       if (e.button === 0) {
           var rect = e.target.getBoundingClientRect();
-          var X = ~~(e.clientX - rect.left);
-          var Y = ~~(e.clientY - rect.top);
+          drawData.startX = drawData.endX = ~~(e.clientX - rect.left);
+          drawData.startY = drawData.endY = ~~(e.clientY - rect.top);
           //draw 関数にマウスの位置を渡す
-          draw(X, Y, X, Y);
-					socket.emit('draw', { 
-						startX : X,
-						startY : Y,
-						endX : X,
-						endY : Y
-					});
+          draw(drawData);
+					socket.emit('draw', drawData);
       		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
-	        mouseX = X;
-	        mouseY = Y;
+	        mouseX = drawData.endX;
+	        mouseY = drawData.endY;
       }
     };
  
     //渡されたマウス位置を元に直線を描く関数
-    function draw(startX, startY, endX, endY) {
+    function draw(drawData) {
         ctx.beginPath();
         ctx.globalAlpha = defoalpha;
         //マウス継続値によって場合分け、直線の moveTo（スタート地点）を決定
         //継続値が初期値ではない場合は、前回のゴール位置を次のスタート位置とする
         //lineTo（ゴール地点）の決定、現在のマウス位置をゴール地点とする
-        ctx.moveTo(startX, startY);
-        ctx.lineTo(endX, endY);
+        console.log(drawData.startX, drawData.startY);
+        ctx.moveTo(drawData.startX, drawData.startY);
+        ctx.lineTo(drawData.endX, drawData.endY);
         //直線の角を「丸」、サイズと色を決める
         ctx.lineCap = "round";
-        ctx.lineWidth = size * 2;
-        ctx.strokeStyle = color;
+        ctx.lineWidth = drawData.size * 2;
+        ctx.strokeStyle = drawData.color;
         ctx.stroke();
     };
  
@@ -614,15 +616,15 @@
     }
 
     $('#btn-black').on('click', function() {
-    	console.log('black');
-    	color = '#555555';
-    	size = 2;
+    	// console.log('black');
+    	drawData.color = '#555555';
+    	drawData.size = 2;
     });
 
     $('#btn-white').on('click', function() {
-    	console.log('white');
-    	color = '#f5f5f5';
-    	size = 10;
+    	// console.log('white');
+    	drawData.color = '#f5f5f5';
+    	drawData.size = 10;
     });
 
     var ctx = canvas.getContext('2d');
@@ -637,16 +639,8 @@
 
 		socket.on('drawEmit', function (data) {
 
-			// console.log('server to client');
+			draw(drawData);
 
-			// console.log('server: ' + data.startX);
-			// viewMessage();
-
-			draw(data.startX, data.startY, data.endX, data.endY);
-
-			// サーバへデータ送信
-			// emit を使うとイベント名を指定できる
-			//socket.emit('clientToServer', { my: 'client socket.emit()' });
 		});
 
 
