@@ -88,22 +88,46 @@ MongoClient.connect(url, (error, client) => {
 										res.json(docs);
 										});
 								});
-						// クライアントへデータ送信
-						// emit を使うとイベント名を指定できる
+						
 						app.post("/add-message", function(req, res){
 								// console.log(req.body);
 								res.send();
 
+								collection.insertOne(req.body);
+								/*
 								collection.insertOne({
 										"name": req.body.name,
 										"body": req.body.body,
 										"thread": req.body.thread
 										});
+								*/
 
 						});
 
 				
 				});
+
+		db.collection('draw', (err, collection) => {
+			app.post("/add-draw", function(req, res, next) {
+				collection.insertOne(req.body);
+				res.send();
+			});
+			app.get("/get-draw", function(req, res, next){
+				// collection.find({}, {sort:{_id:-1}, limit:10000}).toArray((err, docs) => {
+				collection.find().sort({_id:-1}).limit(30000).toArray((err, docs) => {
+					docs.sort( ( a, b )=>{
+						if ( a._id < b._id ) return -1;
+						else if ( a._id > b._id ) return +1;
+						else return 0;
+					});
+					for ( var i in docs ) {
+						delete docs[i]._id;
+						delete docs[i].time;
+					}
+					res.json(docs);
+				});
+			});
+		});
 
 		db.collection('counter', (err, collection) => {
 			app.get("/counter", function(req, res, next){
