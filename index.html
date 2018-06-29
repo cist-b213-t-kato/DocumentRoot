@@ -347,7 +347,12 @@
 	    	for ( var i in data ) {
 	      	var li = $("<li>");
 	      	//console.log(data[i].name + ": " + data[i].body);
-			    li.text(data[i].name + ": " + data[i].body);
+	      	var messageText = data[i].name + ": " + data[i].body;
+	      	var date = data[i].date;
+	      	if ( date ) {
+	      		messageText += " (" + date + ")";
+	      	}
+			    li.text(messageText);
 			    message.append(li);
 	    	}
 		    $('#message-box').animate({scrollTop: $('#message-box')[0].scrollHeight}, 'slow');
@@ -358,13 +363,15 @@
 		viewMessage();
 
 		$('#outButton').click(function() {
+			var crtDate = new moment().format('YYYY/MM/DD HH:mm');
 			$.ajax({
 				type: 'POST',
 				url: 'http://54.92.8.231/add-message',
 				data : {
 					name : $("#name").val(),
 					body : $("#body").val(),
-					thread : crtThread
+					thread : crtThread,
+					date : crtDate
 				}
 	    }).done(function(result) {
 			    console.log('送信成功');
