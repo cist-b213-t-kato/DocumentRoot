@@ -146,7 +146,7 @@
 				type: 'POST',
 				url: 'http://54.92.8.231/add-img',
 				dataType: 'JSON',
-				data : { dat : png }
+				data : { "dat" : png }
 	    }).done(function(json) {
 	    	// console.log("success");
 			}).fail(function(json) {
@@ -154,38 +154,41 @@
 			});
 
     }, false);
+
+    var isClicked = false;
  
     //マウス動いていて、かつ左クリック時に発火。
     function onMove(e) {
-      if (e.buttons === 1 || e.witch === 1) {
-          var rect = e.target.getBoundingClientRect();
-          drawData.startX = mouseX;
-          drawData.startY = mouseY;
-          drawData.endX = ~~(e.clientX - rect.left);
-          drawData.endY = ~~(e.clientY - rect.top);
-          //draw 関数にマウスの位置を渡す
-          draw(drawData);
-					socket.emit('draw', drawData);
-					addDraw(drawData);
-      		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
-	        mouseX = drawData.endX;
-	        mouseY = drawData.endY;
+      if ( isClicked && e.buttons === 1 || e.witch === 1) {
+        var rect = e.target.getBoundingClientRect();
+        drawData.startX = mouseX;
+        drawData.startY = mouseY;
+        drawData.endX = ~~(e.clientX - rect.left);
+        drawData.endY = ~~(e.clientY - rect.top);
+        //draw 関数にマウスの位置を渡す
+        draw(drawData);
+				socket.emit('draw', drawData);
+				addDraw(drawData);
+    		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
+        mouseX = drawData.endX;
+        mouseY = drawData.endY;
       };
     };
  
     //マウスが左クリックされると発火。
     function onClick(e) {
       if (e.button === 0) {
-          var rect = e.target.getBoundingClientRect();
-          drawData.startX = drawData.endX = ~~(e.clientX - rect.left);
-          drawData.startY = drawData.endY = ~~(e.clientY - rect.top);
-          //draw 関数にマウスの位置を渡す
-          draw(drawData);
-					socket.emit('draw', drawData);
-					addDraw(drawData);
-      		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
-	        mouseX = drawData.endX;
-	        mouseY = drawData.endY;
+      	isClicked = true;
+        var rect = e.target.getBoundingClientRect();
+        mouseX = drawData.startX = drawData.endX = ~~(e.clientX - rect.left);
+        mouseY = drawData.startY = drawData.endY = ~~(e.clientY - rect.top);
+        //draw 関数にマウスの位置を渡す
+        draw(drawData);
+				socket.emit('draw', drawData);
+				addDraw(drawData);
+    		//マウス継続値に現在のマウス位置、つまりゴール位置を代入
+        //drawData.endX;
+        //drawData.endY;
       }
     };
  
@@ -208,8 +211,9 @@
  
     //左クリック終了、またはマウスが領域から外れた際、継続値を初期値に戻す
     function drawEnd() {
-        mouseX = "";
-        mouseY = "";
+    	isClicked = false;
+      // mouseX = "";
+      // mouseY = "";
     }
 
     $('#btn-black').on('click', function() {
