@@ -68,6 +68,9 @@
 				<input type="radio" autocomplete="off" checked> white
 			</button>
 		</div>
+    <div>
+      <input type="text" id="pen-size" class="form-control" value="2">
+    </div>
 	</div>
 
 
@@ -132,6 +135,25 @@
     canvas.addEventListener('mousedown', onClick, false);
     canvas.addEventListener('mouseup', drawEnd, false);
     canvas.addEventListener('mouseout', drawEnd, false);
+
+
+    canvas.addEventListener('mouseup', function(){
+      var png = canvas.toDataURL("image/png");
+      // console.log(png);
+      // document.getElementById("newImg").src = png;
+
+			$.ajax({
+				type: 'POST',
+				url: 'http://54.92.8.231/add-img',
+				dataType: 'JSON',
+				data : { dat : png }
+	    }).done(function(json) {
+	    	// console.log("success");
+			}).fail(function(json) {
+		    console.log('failure');
+			});
+
+    }, false);
  
     //マウス動いていて、かつ左クリック時に発火。
     function onMove(e) {
@@ -191,25 +213,25 @@
     }
 
     $('#btn-black').on('click', function() {
-    	// console.log('black');
     	drawData.color = '#555555';
-    	drawData.size = 2;
     });
 
     $('#btn-white').on('click', function() {
-    	// console.log('white');
     	drawData.color = '#f5f5f5';
-    	drawData.size = 20;
     });
 
-    // var ctx = canvas.getContext('2d');
-	  /* Imageオブジェクトを生成 */
-	  // var img = new Image();
-	  // img.src = "./canvas.png";
-    /* 画像が読み込まれるのを待ってから処理を続行 */
-	  // img.onload = function() {
-	  //  ctx.drawImage(img, 0, 0);
-	  // }
+    $('#pen-size').on('keyup', function() {
+      var penSize = $('#pen-size').val();
+      if (penSize!=='' && !isNaN(penSize)) {
+        drawData.size = penSize;
+      }
+    });
+
+
+
+
+
+
 
 
 		socket.on('drawEmit', function (data) {
@@ -220,27 +242,49 @@
 
 		function addDraw( drawData ) {
 
-			$.ajax({
-				type: 'POST',
-				url: 'http://54.92.8.231/add-draw',
-				data : drawData
-	    }).done(function(json) {
-	    	console.log("success");
-			}).fail(function(json) {
-		    console.log('failure');
-			});
+			// $.ajax({
+			// 	type: 'POST',
+			// 	url: 'http://54.92.8.231/add-draw',
+			// 	data : drawData
+	  //   }).done(function(json) {
+	  //   	// console.log("success");
+			// }).fail(function(json) {
+		 //    console.log('failure');
+			// });
 
 		}
 
 
 		// キャンバスの初期化
+		// $.ajax({
+		// 	type: 'GET',
+		// 	url: 'http://54.92.8.231/get-draw'
+  //   }).done(function(datas) {
+  //   	for ( var i in datas ) {
+  //   		// draw(datas[i]);
+  //   	}
+		// }).fail(function(json) {
+	 //    console.log('get-draw failure');
+		// });
+
+
+
 		$.ajax({
 			type: 'GET',
-			url: 'http://54.92.8.231/get-draw'
+			dataType: 'JSON',
+			url: 'http://54.92.8.231/get-img'
     }).done(function(datas) {
-    	for ( var i in datas ) {
-    		draw(datas[i]);
-    	}
+    	var data = datas[0];
+    	// console.log(data);
+	    var ctx = canvas.getContext('2d');
+	    /* Imageオブジェクトを生成 */
+	    var img = new Image();
+	    img.crossOrigin = "Anonymous";
+	    img.src = data.dat;
+	    /* 画像が読み込まれるのを待ってから処理を続行 */
+	    img.onload = function() {
+	     ctx.drawImage(img, 0, 0);
+	    }
 		}).fail(function(json) {
 	    console.log('get-draw failure');
 		});
@@ -249,6 +293,18 @@
 
 
 
+    // $.getJSON("image.json", function(data) {
+    //   console.log(data);
+    //   var ctx = canvas.getContext('2d');
+    //   /* Imageオブジェクトを生成 */
+    //   var img = new Image();
+    //   img.crossOrigin = "Anonymous";
+    //   img.src = data.dat;
+    //   /* 画像が読み込まれるのを待ってから処理を続行 */
+    //   img.onload = function() {
+    //    ctx.drawImage(img, 0, 0);
+    //   }
+    // });
 
 
 
