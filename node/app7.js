@@ -24,8 +24,9 @@ app.use(function(req, res, next) {
 });
 
 
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+app.use(bodyParser.urlencoded({ limit:'5mb',extended: true }));
 
 
 app.get("/shuttlebus", function(req, res, next){
@@ -127,6 +128,20 @@ MongoClient.connect(url, (error, client) => {
 					res.json(docs);
 				});
 			});
+		});
+
+		db.collection('img', (err, collection) => {
+			app.post("/add-img", function(req, res, next) {
+				res.send();
+				collection.updateOne({}, {$set:req.body}, {upsert:true});
+			});
+
+			app.get("/get-img", function(req, res, next) {
+				collection.find().sort({_id:-1}).limit(1).toArray((err, docs) => {
+					res.json(docs);
+				})
+			});
+
 		});
 
 		db.collection('counter', (err, collection) => {
