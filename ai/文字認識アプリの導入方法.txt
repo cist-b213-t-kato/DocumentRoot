@@ -1,5 +1,0 @@
-文字認識アプリの導入方法
-Documents の中の NetBeansProjects に、AILecture.zip の中身を展開する
-NetBeansを起動する
-ファイル → プロジェクトを開く でAILectureを選択し、「プロジェクトを開く」ボタンをクリックする
-AILectureプロジェクト内の ai_advanceパッケージ内のSoftmaxNeuralNetwork.javaを実行すると文字認識アプリが起動する

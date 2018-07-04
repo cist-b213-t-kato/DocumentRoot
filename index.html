@@ -274,6 +274,7 @@
 		function display( id , json ) {
 
 			var crt = new moment();
+			//var crt = toDate('16:55');
 
 			$(id).empty();
 
@@ -460,7 +461,9 @@
 
 
 		function updates(json) {
-			$('#crt').text(new moment().format('HH:mm'));
+			//var crt = toDate('16:55').format('HH:mm');
+			var crt = new moment().format('HH:mm');
+			$('#crt').text(crt);
 			var ouro = json["ouro"];
 			var fukuro = json["fukuro"];
 			display("#ouro", ouro);
