@@ -1,0 +1,213 @@
+<html>
+
+<head>
+
+	<meta charset="UTF-8"/>
+
+	<title>中央バスダイヤ</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://momentjs.com/downloads/moment.min.js"></script>
+
+	<!--script src="socket.io.js"></script-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="./common.css" rel="stylesheet" />
+
+	<style>
+		.thread-button {
+			margin: 2px;
+		}
+
+		.blind-top {
+		    background: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0)), color-stop(90%, #fefefe));
+		    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, #fefefe 90%);
+		    background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, #fefefe 90%);
+		    background: linear-gradient(to top, rgba(255,255,255,0) 0%, #fefefe 90%);
+		    height: 50px;
+		    margin: 0 0 -50px;
+		    position: relative;
+		    pointer-events: none;
+		}
+
+		.message-top {
+			height:50px;
+			font-size:20px;
+			color:gray;
+			width:100%;
+			text-align:center;
+			margin-bottom:10px;
+			padding-top:20px;
+			font-family:cursive;
+			border-bottom: 1px solid lightgray;
+			vertical-align: text-bottom;
+		}
+
+		td {
+			width:14%;
+		}
+
+	</style>
+
+</head>
+
+<body>
+	
+  <div class="col-sm-12">
+    <h1>中央バスダイヤ</h1>
+  </div>
+
+  <div class="col-sm-12">
+    <h2>中央バスダイヤ</h2>
+
+    <div class="col-sm-12">
+    	<span class="large highlight">現在時刻: <span id="crt"></span></span>
+    </div>
+
+    <div class="col-md-6">
+	    <h3>往路</h3>
+	    <table>
+	      <thead>
+	      	<tr><th>支笏湖</th><th>新星</th><th>本町2丁目</th><th>千歳駅前</th><th>南千歳駅</th><th>新千歳空港28番</th><th>国際線（タ）</th></tr>
+	      </thead>
+	      <tbody id="ouro">
+	      </tbody>
+	    </table>
+	  </div>
+
+    <div class="col-md-6">
+	    <h3>復路</h3>
+	    <table>
+	      <thead>
+	      	<tr><th>国際線（タ）</th><th>新千歳空港28番</th><th>南千歳駅</th><th>千歳駅前</th><th>本町2丁目</th><th>新星</th><th>支笏湖</th></tr>
+	      </thead>
+	      <tbody id="fukuro">
+	      </tbody>
+	    </table>
+  	</div>
+
+	</div>
+
+
+
+
+
+
+	<script type="text/javascript">
+
+		// https://www.sejuku.net/blog/25316#Ajax
+		
+		function toDate( tStr ) {
+			var ret = moment();
+
+			var h = Number(tStr.split(":")[0]); //( "00" + tStr ).substr(-5, 2);
+			var m = Number(tStr.split(":")[1]); //( "00" + tStr ).substr(-2);
+
+			ret.hours(h);
+			ret.minute(m);
+			ret.second(0);
+
+			return ret;
+		}
+
+		function getFirst( times ) {
+			for ( var i=0; i<times.length; i++ ) {
+				if ( times[i] && times[i] != "" ) {
+					return times[i];
+				}
+			}
+			return ""; 
+		}
+
+		function getLast( times ) {
+			for ( var i=times.length-1; i>=0; i-- ) {
+				if ( times[i] && times[i] != "" ) {
+					return times[i];
+				}
+			}
+			return "";
+		}
+
+		function display( id , json ) {
+
+			// var crt = new moment();
+			var crt = toDate('15:00');
+
+			$(id).empty();
+
+			var list = json.array;
+
+			var late = true;
+
+			for ( var j in list ) {
+        
+				var tr = $("<tr>");
+
+				var times = list[j];
+
+				var first = toDate(getFirst(times));
+				var last = toDate(getLast(times));
+
+				if ( late && crt <= first ) {
+					tr.addClass("highlight");
+					tr.addClass("large");
+					late = false;
+				}
+
+				if ( crt >= first && crt <= last ) {
+					tr.addClass("highlight");
+				}
+
+				for ( var i in times ) {
+
+          var td = $("<td>");
+					var t = times[i];
+					if ( !t || t == "" ) {
+            td.text("-");
+					} else {
+						td.text(t);
+					}
+
+					if ( i == 0 && json["noriba"] && json["noriba"][j] == "2" ) {
+						td.addClass("noriba2");
+					}
+
+					tr.append(td);
+				}
+				$(id).append(tr);
+			}
+		}
+
+		function updates(json) {
+			$('#crt').text(new moment().format('HH:mm'));
+			var ouro = json["toAirport"];
+			var fukuro = json["fromAirport"];
+			display("#ouro", ouro);
+			display("#fukuro", fukuro);
+		}
+
+		$.ajax({
+	    "url": "http://54.92.8.231/shuttlebus",
+	    "dataType": "json"
+		}).done(function(json) {
+			updates(json);
+
+			setInterval(function() {
+				updates(json);
+			}, 1000*10);
+		}).fail(function(data) {
+	    console.log('ajax submit error!!!');
+		});
+
+
+	</script>
+
+	<div class="col-sm-12" style="margin-bottom:100px;"></div>
+
+</body>
+
+</html>
