@@ -94,28 +94,11 @@
   	<div class="col-sm-12">
     	<!-- <p style="font-size:40px; font-weight:bold;"><a href="https://twitter.com/kagichan_kyun">カギちゃん</a>なんか必要ねえんだよ（宣戦布告）</p> -->
     	<p><span class="noriba2">朱色</span>は乗り場②</p>
-    	<!-- <p>5/21 乗り場勘違いしてたせいで乗り遅れて30分くらい無駄にした・・・</p> -->
 
   		<img src="./kagichan.png" />
   	</div>
 
 	</div>
-
-  <!--div class="col-sm-12">
-  	<h2>お知らせ</h2>
-
-  	<h3>企画？ (2018.05.22)</h3>
-  	<p>このサイトを使って「CISTわらしべ長者」をやりたい……勘のいい人はこの言葉だけでどんな企画か分かりそう</p>
-
-  	<h3>スズメバチ (2018.05.21)</h3>
-  	<p>3週間前くらいにスズメバチの女王を見ました。そろそろ増えてくる時期なので気をつけてください。</p>
-
-  	<span class="old">
-	  	<h3>PM2.5 (2018.04.28)</h3>
-	  	<p>先日PM2.5の濃度が上がってたらしいのでこれで常時観察したい。。。配信元は<a href="http://www.tenki.jp/particulate_matter/1/">tenki.jp</a>。</p>
-	  	<p>（追記）どうやら、<a href="https://www.sankei.com/life/news/180427/lif1804270035-n1.html">4/27にロシアで大規模な森林火災があり</a>、その際の煙が北海道まで舞ってきたらしい。</p>
-  	</span>
-  </div-->
 
   <div class="col-sm-12">
   	<h2>チャット</h2>
@@ -144,20 +127,8 @@
 
 		</div>
 
-			<!-- <label id="" class="btn btn-default" onclick="checkRadio();" >
-				未分類
-			</label>
-			<label id="" class="btn btn-default" onclick="checkRadio();" >
-				thread2
-			</label>
-			<label id="" class="btn btn-default" onclick="checkRadio();" >
-				thread3
-			</label> -->
 
 	  <form onsubmit="viewMessage(); return false;">
-
-
-		  <!--div style="height:300px; overflow:scroll;"-->
 
   		<div class="blind-top" ></div>
 		  <div id="message-box" style="height:300px;width:100%;overflow:scroll;">
@@ -335,9 +306,6 @@
 			viewMessage();
 		}
 
-		//var socket = io('http://54.92.8.231:3001');
-		//var socket = io('http://54.92.8.231/socket');
-		//var socket = io('http://54.92.8.231/websocket');
 		var socket = io('http://54.92.8.231');
 
 		function viewMessage() {
