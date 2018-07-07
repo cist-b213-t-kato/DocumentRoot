@@ -142,16 +142,16 @@
       // console.log(png);
       // document.getElementById("newImg").src = png;
 
-			$.ajax({
-				type: 'POST',
-				url: 'http://54.92.8.231/add-img',
-				dataType: 'JSON',
-				data : { "dat" : png }
-	    }).done(function(json) {
-	    	// console.log("success");
-			}).fail(function(json) {
-		    console.log('failure');
-			});
+			// $.ajax({
+			// 	type: 'POST',
+			// 	url: 'http://54.92.8.231/add-img',
+			// 	dataType: 'JSON',
+			// 	data : { "dat" : png }
+	  //   }).done(function(json) {
+	  //   	// console.log("success");
+			// }).fail(function(json) {
+		 //    console.log('failure');
+			// });
 
     }, false);
 
@@ -278,13 +278,12 @@
 			dataType: 'JSON',
 			url: 'http://54.92.8.231/get-img'
     }).done(function(datas) {
-    	var data = datas[0];
     	// console.log(data);
 	    var ctx = canvas.getContext('2d');
 	    /* Imageオブジェクトを生成 */
 	    var img = new Image();
 	    img.crossOrigin = "Anonymous";
-	    img.src = data.dat;
+	    img.src = datas[0].dat;
 	    /* 画像が読み込まれるのを待ってから処理を続行 */
 	    img.onload = function() {
 	     ctx.drawImage(img, 0, 0);
