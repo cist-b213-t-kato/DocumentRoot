@@ -129,29 +129,32 @@
     	color : "#555555",
     	size : 2
     };
+
+    var drawList = [];
  
     //各イベントに紐づけ
     canvas.addEventListener('mousemove', onMove, false);
     canvas.addEventListener('mousedown', onClick, false);
     canvas.addEventListener('mouseup', drawEnd, false);
-    canvas.addEventListener('mouseout', drawEnd, false);
+    //canvas.addEventListener('mouseout', drawEnd, false);
 
 
     canvas.addEventListener('mouseup', function(){
       var png = canvas.toDataURL("image/png");
       // console.log(png);
-      // document.getElementById("newImg").src = png;
-
-			// $.ajax({
-			// 	type: 'POST',
-			// 	url: 'http://54.92.8.231/add-img',
-			// 	dataType: 'JSON',
-			// 	data : { "dat" : png }
-	  //   }).done(function(json) {
-	  //   	// console.log("success");
-			// }).fail(function(json) {
-		 //    console.log('failure');
-			// });
+      //document.getElementById("newImg").src = png;
+	/*
+	$.ajax({
+		type: 'POST',
+		url: 'http://54.92.8.231/add-img',
+		dataType: 'JSON',
+		data : { "dat" : png }
+	}).done(function(json) {
+		console.log("success");
+	}).fail(function(json) {
+		console.log('failure');
+	});
+	*/
 
     }, false);
 
@@ -161,6 +164,7 @@
     function onMove(e) {
       if ( isClicked && e.buttons === 1 || e.witch === 1) {
         var rect = e.target.getBoundingClientRect();
+	drawData = {};
         drawData.startX = mouseX;
         drawData.startY = mouseY;
         drawData.endX = ~~(e.clientX - rect.left);
@@ -180,6 +184,7 @@
       if (e.button === 0) {
       	isClicked = true;
         var rect = e.target.getBoundingClientRect();
+	drawData = {};
         mouseX = drawData.startX = drawData.endX = ~~(e.clientX - rect.left);
         mouseY = drawData.startY = drawData.endY = ~~(e.clientY - rect.top);
         //draw 関数にマウスの位置を渡す
@@ -193,25 +198,30 @@
     };
  
     //渡されたマウス位置を元に直線を描く関数
-    function draw(drawData) {
+    function draw(d) {
+	//console.log(d);
+	drawList.push(d);
         ctx.beginPath();
         ctx.globalAlpha = defoalpha;
         //マウス継続値によって場合分け、直線の moveTo（スタート地点）を決定
         //継続値が初期値ではない場合は、前回のゴール位置を次のスタート位置とする
         //lineTo（ゴール地点）の決定、現在のマウス位置をゴール地点とする
-        // console.log(drawData.startX, drawData.startY);
-        ctx.moveTo(drawData.startX, drawData.startY);
-        ctx.lineTo(drawData.endX, drawData.endY);
+        // console.log(d.startX, d.startY);
+        ctx.moveTo(d.startX, d.startY);
+        ctx.lineTo(d.endX, d.endY);
         //直線の角を「丸」、サイズと色を決める
         ctx.lineCap = "round";
-        ctx.lineWidth = drawData.size;
-        ctx.strokeStyle = drawData.color;
+        ctx.lineWidth = d.size;
+        ctx.strokeStyle = d.color;
         ctx.stroke();
     };
  
     //左クリック終了、またはマウスが領域から外れた際、継続値を初期値に戻す
     function drawEnd() {
+	//console.log(drawList);
     	isClicked = false;
+	socket.emit('drawListToServer', drawList);
+	drawList = [];
       // mouseX = "";
       // mouseY = "";
     }
@@ -246,15 +256,15 @@
 
 		function addDraw( drawData ) {
 
-			// $.ajax({
-			// 	type: 'POST',
-			// 	url: 'http://54.92.8.231/add-draw',
-			// 	data : drawData
-	  //   }).done(function(json) {
-	  //   	// console.log("success");
-			// }).fail(function(json) {
-		 //    console.log('failure');
-			// });
+			 $.ajax({
+			 	type: 'POST',
+			 	url: 'http://54.92.8.231/add-draw',
+			 	data : drawData
+	  		}).done(function(json) {
+	  	   	// console.log("success");
+			}).fail(function(json) {
+		 	//    console.log('failure');
+			});
 
 		}
 
