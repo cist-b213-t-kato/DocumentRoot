@@ -164,7 +164,7 @@
     function onMove(e) {
       if ( isClicked && e.buttons === 1 || e.witch === 1) {
         var rect = e.target.getBoundingClientRect();
-	drawData = {};
+        drawData = {};
         drawData.startX = mouseX;
         drawData.startY = mouseY;
         drawData.endX = ~~(e.clientX - rect.left);
@@ -184,7 +184,7 @@
       if (e.button === 0) {
       	isClicked = true;
         var rect = e.target.getBoundingClientRect();
-	drawData = {};
+        drawData = {};
         mouseX = drawData.startX = drawData.endX = ~~(e.clientX - rect.left);
         mouseY = drawData.startY = drawData.endY = ~~(e.clientY - rect.top);
         //draw 関数にマウスの位置を渡す
@@ -283,25 +283,50 @@
 
 
 
-		$.ajax({
-			type: 'GET',
-			dataType: 'JSON',
-			url: 'http://54.92.8.231/get-img'
-    }).done(function(datas) {
-    	// console.log(data);
-	    var ctx = canvas.getContext('2d');
-	    /* Imageオブジェクトを生成 */
-	    var img = new Image();
-	    img.crossOrigin = "Anonymous";
-	    img.src = datas[0].dat;
-	    /* 画像が読み込まれるのを待ってから処理を続行 */
-	    img.onload = function() {
-	     ctx.drawImage(img, 0, 0);
-	    }
-		}).fail(function(json) {
-	    console.log('get-draw failure');
-		});
+		// $.ajax({
+		// 	type: 'GET',
+		// 	dataType: 'JSON',
+		// 	url: 'http://54.92.8.231/get-img'
+  //   }).done(function(datas) {
+  //   	// console.log(data);
+	 //    var ctx = canvas.getContext('2d');
+	 //    /* Imageオブジェクトを生成 */
+	 //    var img = new Image();
+	 //    img.crossOrigin = "Anonymous";
+	 //    img.src = datas[0].dat;
+	 //    /* 画像が読み込まれるのを待ってから処理を続行 */
+	 //    img.onload = function() {
+	 //     ctx.drawImage(img, 0, 0);
+	 //    }
+		// }).fail(function(json) {
+	 //    console.log('get-draw failure');
+		// });
 
+
+    function init() {
+      // console.log(data);
+      var ctx = canvas.getContext('2d');
+      /* Imageオブジェクトを生成 */
+      var img = new Image();
+      img.crossOrigin = "Anonymous";
+      img.src = "./img.png";
+      /* 画像が読み込まれるのを待ってから処理を続行 */
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0);
+        var png = canvas.toDataURL("image/png");
+
+        $.ajax({
+          type: 'POST',
+          url: 'http://54.92.8.231/add-img',
+          dataType: 'JSON',
+          data : { "dat" : png }
+        }).done(function(json) {
+          console.log("success");
+        }).fail(function(json) {
+          console.log('failure');
+        });
+      };
+    }
 
 
 
