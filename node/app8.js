@@ -166,6 +166,8 @@ io.on('connection', function (socket) {
 
 		socket.on('drawListToServer', function(drawList) {
 
+			/* https://qiita.com/redshoga/items/d5afef65081b7fdf60cc */
+
 			// console.log(drawList);
 			
 			//ここでDBに入れる
