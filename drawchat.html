@@ -115,7 +115,7 @@
     //初期値（サイズ、色、アルファ値）の決定
     var size = 2;
     var color = "#555555";
-    var defoalpha = 1.0;
+    var alpha = 1.0;
  
     //マウス継続値の初期値、ここがポイント
     var mouseX = "";
@@ -169,6 +169,9 @@
         drawData.startY = mouseY;
         drawData.endX = ~~(e.clientX - rect.left);
         drawData.endY = ~~(e.clientY - rect.top);
+	drawData.size = size;
+	drawData.color = color;
+	drawData.alpha = alpha;
         //draw 関数にマウスの位置を渡す
         draw(drawData);
 				socket.emit('draw', drawData);
@@ -187,6 +190,9 @@
         drawData = {};
         mouseX = drawData.startX = drawData.endX = ~~(e.clientX - rect.left);
         mouseY = drawData.startY = drawData.endY = ~~(e.clientY - rect.top);
+	drawData.size = size;
+	drawData.color = color;
+	drawData.alpha = alpha;
         //draw 関数にマウスの位置を渡す
         draw(drawData);
 				socket.emit('draw', drawData);
@@ -202,7 +208,7 @@
 	//console.log(d);
 	drawList.push(d);
         ctx.beginPath();
-        ctx.globalAlpha = defoalpha;
+        ctx.globalAlpha = alpha;
         //マウス継続値によって場合分け、直線の moveTo（スタート地点）を決定
         //継続値が初期値ではない場合は、前回のゴール位置を次のスタート位置とする
         //lineTo（ゴール地点）の決定、現在のマウス位置をゴール地点とする
@@ -227,17 +233,17 @@
     }
 
     $('#btn-black').on('click', function() {
-    	drawData.color = '#555555';
+    	color = '#555555';
     });
 
     $('#btn-white').on('click', function() {
-    	drawData.color = '#f5f5f5';
+    	color = '#f5f5f5';
     });
 
     $('#pen-size').on('keyup', function() {
       var penSize = $('#pen-size').val();
       if (penSize!=='' && !isNaN(penSize)) {
-        drawData.size = penSize;
+        size = penSize;
       }
     });
 
@@ -283,24 +289,24 @@
 
 
 
-		// $.ajax({
-		// 	type: 'GET',
-		// 	dataType: 'JSON',
-		// 	url: 'http://54.92.8.231/get-img'
-  //   }).done(function(datas) {
-  //   	// console.log(data);
-	 //    var ctx = canvas.getContext('2d');
-	 //    /* Imageオブジェクトを生成 */
-	 //    var img = new Image();
-	 //    img.crossOrigin = "Anonymous";
-	 //    img.src = datas[0].dat;
-	 //    /* 画像が読み込まれるのを待ってから処理を続行 */
-	 //    img.onload = function() {
-	 //     ctx.drawImage(img, 0, 0);
-	 //    }
-		// }).fail(function(json) {
-	 //    console.log('get-draw failure');
-		// });
+		$.ajax({
+		 	type: 'GET',
+		 	dataType: 'JSON',
+		 	url: 'http://54.92.8.231/get-img'
+     }).done(function(datas) {
+     	 //console.log(data);
+	     var ctx = canvas.getContext('2d');
+	     /* Imageオブジェクトを生成 */
+	     var img = new Image();
+	     img.crossOrigin = "Anonymous";
+	     img.src = datas[0].dat;
+	     /* 画像が読み込まれるのを待ってから処理を続行 */
+	     img.onload = function() {
+	      ctx.drawImage(img, 0, 0);
+	     }
+	  }).fail(function(json) {
+	     console.log('get-draw failure');
+ });
 
 
     function init() {

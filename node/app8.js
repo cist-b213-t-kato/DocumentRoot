@@ -85,7 +85,7 @@ MongoClient.connect(url, (error, client) => {
 
 		db.collection('draw', (err, collection) => {
 			app.post("/add-draw", function(req, res, next) {
-				// collection.insertOne(req.body);
+				//collection.insertOne(req.body);
 				res.send();
 			});
 			app.get("/get-draw", function(req, res, next){
@@ -109,7 +109,8 @@ MongoClient.connect(url, (error, client) => {
 			imgCollection = collection;
 			app.post("/add-img", function(req, res, next) {
 				res.send();
-				// imgCollection.updateOne({}, {$set:req.body}, {upsert:true});
+				imgCollection.updateOne({}, {$set:req.body}, {upsert:true});
+				console.log(req.body);
 			});
 
 			app.get("/get-img", function(req, res, next) {
