@@ -62,41 +62,46 @@
 
   <div class="col-sm-12">
     <h2>シャトルバス</h2>
-    <p>元のpdfは<a href="https://www.chitose.ac.jp/info/pdf/shuttlebus.pdf">こちら</a>。以下のバス時刻表に間違いを見つけた人には飴ちゃんあげます。</p>
-    <p>小型版は<s><a href="./shuttlebus.html">こちら</a></s>。一旦封印。</p>
+    <div id="shuttlebus-table">
+	    <p>元のpdfは<a href="https://www.chitose.ac.jp/info/pdf/shuttlebus.pdf">こちら</a>。以下のバス時刻表に間違いを見つけた人には飴ちゃんあげます。</p>
+	    <p>小型版は<s><a href="./shuttlebus.html">こちら</a></s>。一旦封印。</p>
 
-    <div class="col-sm-12">
-    	<span class="large highlight">現在時刻: <span id="crt"></span></span>
-    </div>
+	    <div class="col-sm-12">
+	    	<span class="large highlight">現在時刻: <span id="crt"></span></span>
+	    </div>
 
-    <div class="col-sm-6">
-	    <h3>往路</h3>
-	    <table>
-	      <thead>
-	      	<tr><th>千歳駅発</th><th>南千歳駅発</th><th>研究実験棟発</th><th>本部棟着</th></tr>
-	      </thead>
-	      <tbody id="ouro">
-	      </tbody>
-	    </table>
+	    <div class="col-sm-6">
+		    <h3>往路</h3>
+		    <table>
+		      <thead>
+		      	<tr><th>千歳駅発</th><th>南千歳駅発</th><th>研究実験棟発</th><th>本部棟着</th></tr>
+		      </thead>
+		      <tbody id="ouro">
+		      </tbody>
+		    </table>
+		  </div>
+
+	    <div class="col-sm-6">
+		    <h3>復路</h3>
+		    <table>
+		      <thead>
+		      	<tr><th>本部棟発</th><th>研究実験棟発</th><th>南千歳駅発</th><th>千歳駅着</th></tr>
+		      </thead>
+		      <tbody id="fukuro">
+		      </tbody>
+		    </table>
+	  	</div>
+
+	  	<div class="col-sm-12">
+	    	<!-- <p style="font-size:40px; font-weight:bold;"><a href="https://twitter.com/kagichan_kyun">カギちゃん</a>なんか必要ねえんだよ（宣戦布告）</p> -->
+	    	<p><span class="noriba2">朱色</span>は乗り場②</p>
+
+	  		<img src="./kagichan.png" />
+	  	</div>
 	  </div>
-
-    <div class="col-sm-6">
-	    <h3>復路</h3>
-	    <table>
-	      <thead>
-	      	<tr><th>本部棟発</th><th>研究実験棟発</th><th>南千歳駅発</th><th>千歳駅着</th></tr>
-	      </thead>
-	      <tbody id="fukuro">
-	      </tbody>
-	    </table>
-  	</div>
-
-  	<div class="col-sm-12">
-    	<!-- <p style="font-size:40px; font-weight:bold;"><a href="https://twitter.com/kagichan_kyun">カギちゃん</a>なんか必要ねえんだよ（宣戦布告）</p> -->
-    	<p><span class="noriba2">朱色</span>は乗り場②</p>
-
-  		<img src="./kagichan.png" />
-  	</div>
+	  <div id="shuttlebus-dayoff">
+	  	今日は休み（誰か休日ダイヤのjson作って）
+	  </div>
 
 	</div>
 
@@ -184,9 +189,10 @@
 
   <div class="col-sm-4">
   	<h2>その他</h2>
-  	<h3>時間割</h3>
+  	<h3>学校の配布物</h3>
   	<ul>
   		<li><b><a href="./schedule.pdf">時間割.pdf</a></b></li>
+  		<li><b><a href="./guide.pdf">履修登録ガイド.pdf（主に大学行事のカレンダー用）</a></b></li>
   	</ul>
 		<h3>中央バスのダイヤ</h3>
 		<ul>
@@ -194,7 +200,7 @@
 		</ul>
 		<h3>管理人のイラスト（誰得？）</h3>
 		<ul>
-			<li><a href="./kagichan_illust.jpg">カギちゃん描いたら（24歳）って感じになった。<s>うわキッツ。</s></a></li>
+			<li><a href="./kagichan_illust.jpg">カギちゃん</a></li>
 			<li><a href="./jannechan.jpg">ジャンヌちゃん</a></li>
 			<li><a href="./YT.jpg">Y氏</a></li>
 		</ul>
@@ -260,7 +266,18 @@
 		function display( id , json ) {
 
 			var crt = new moment();
+			// var crt = new moment().add(1, 'days');
 			//var crt = toDate('16:55');
+
+			// 休日
+			var dayoff = moment("2018-07-17", "YYYY-MM-DD");
+			var dayoffTomorrow = moment("2018-07-17", "YYYY-MM-DD").add(1, 'days');
+			if ( crt.isBetween(dayoff, dayoffTomorrow) ) {
+				$('#shuttlebus-table').hide();
+				return;
+			}
+
+			$('#shuttlebus-dayoff').hide();
 
 			$(id).empty();
 
@@ -468,15 +485,15 @@
 		});
 
 		$.ajax({
-	    "url": "http://54.92.8.231/counter",
-	    "dataType": "json"
+		  "url": "http://54.92.8.231/counter",
+		  "dataType": "json"
 		}).done(function(json) {
 			$('#counter').text(json.count);
 			if ( json.count % 100 == 0 ) {
 				alert('おめでとうございます！あなたは'+json.count+'のお客様です。よろしければ管理者にキリ番報告してください。');
 			}
 		}).fail(function(data) {
-	    console.log('ajax submit error!!!');
+		  console.log('ajax submit error!!!');
 		});
 
 		socket.on('message', function (data) {
@@ -490,6 +507,8 @@
 			// emit を使うとイベント名を指定できる
 			//socket.emit('clientToServer', { my: 'client socket.emit()' });
 		});
+
+
 
 
 
