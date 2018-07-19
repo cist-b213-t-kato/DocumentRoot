@@ -62,16 +62,17 @@
 
   <div class="col-sm-12">
     <h2>シャトルバス</h2>
-	  <div id="shuttlebus-dayoff">
-	  	今日は休み（誰か休日ダイヤのjson作って）
-	  </div>
-    <p>元のpdfは<a href="https://www.chitose.ac.jp/info/pdf/shuttlebus.pdf">こちら</a>。バス時刻表に間違いを見つけた人には飴ちゃんあげます。</p>
-    <div id="shuttlebus-table">
+	  <div>
+	    <p>元のpdfは<a href="https://www.chitose.ac.jp/info/pdf/shuttlebus.pdf">こちら</a>。バス時刻表に間違いを見つけた人には飴ちゃんあげます。</p>
 	    <p>小型版は<s><a href="./shuttlebus.html">こちら</a></s>。一旦封印。</p>
+	    <p style="font-size:125%;color:#E07022;">JSONの功労者9:10氏を讃えよ</p>
+	  </div>
 
-	    <div class="col-sm-12">
-	    	<span class="large highlight">現在時刻: <span id="crt"></span></span>
-	    </div>
+    <div class="col-sm-12">
+    	<span class="large highlight">現在時刻: <span id="crt"></span></span>
+    </div>
+
+    <div id="shuttlebus-normal" class="col-sm-12">
 
 	    <div class="col-sm-6">
 		    <h3>往路</h3>
@@ -79,8 +80,7 @@
 		      <thead>
 		      	<tr><th>千歳駅発</th><th>南千歳駅発</th><th>研究実験棟発</th><th>本部棟着</th></tr>
 		      </thead>
-		      <tbody id="ouro">
-		      </tbody>
+		      <tbody id="ouro"></tbody>
 		    </table>
 		  </div>
 
@@ -90,18 +90,41 @@
 		      <thead>
 		      	<tr><th>本部棟発</th><th>研究実験棟発</th><th>南千歳駅発</th><th>千歳駅着</th></tr>
 		      </thead>
-		      <tbody id="fukuro">
-		      </tbody>
+		      <tbody id="fukuro"></tbody>
+		    </table>
+    		<p><span class="noriba2">朱色</span>は乗り場②</p>
+	  	</div>
+
+	  </div>
+
+	  <div id="shuttlebus-dayoff" class="col-sm-12">
+	  	休学期ダイヤ
+	    <div class="col-sm-6">
+		    <h3>休学期往路</h3>
+		    <table>
+		      <thead>
+		      	<tr><th>千歳駅発</th><th>南千歳駅発</th><th>研究実験棟発</th><th>本部棟着</th></tr>
+		      </thead>
+		      <tbody id="dayoff-ouro"></tbody>
+		    </table>
+		  </div>
+
+	    <div class="col-sm-6">
+		    <h3>休学期復路</h3>
+		    <table>
+		      <thead>
+		      	<tr><th>本部棟発</th><th>研究実験棟発</th><th>南千歳駅発</th><th>千歳駅着</th></tr>
+		      </thead>
+		      <tbody id="dayoff-fukuro"></tbody>
 		    </table>
 	  	</div>
+  	</div>
 
-	  	<div class="col-sm-12">
-	    	<!-- <p style="font-size:40px; font-weight:bold;"><a href="https://twitter.com/kagichan_kyun">カギちゃん</a>なんか必要ねえんだよ（宣戦布告）</p> -->
-	    	<p><span class="noriba2">朱色</span>は乗り場②</p>
+  	<div class="col-sm-12">
+    	<!-- <p style="font-size:40px; font-weight:bold;"><a href="https://twitter.com/kagichan_kyun">カギちゃん</a>なんか必要ねえんだよ（宣戦布告）</p> -->
 
-	  		<img src="./kagichan.png" />
-	  	</div>
-	  </div>
+  		<img src="./kagichan.png" />
+  	</div>
 
 	</div>
 
@@ -268,16 +291,6 @@
 			var crt = new moment();
 			// var crt = new moment().add(1, 'days');
 			//var crt = toDate('16:55');
-
-			// 休日
-			var dayoff = moment("2018-07-17", "YYYY-MM-DD");
-			var dayoffTomorrow = moment("2018-07-17", "YYYY-MM-DD").add(1, 'days');
-			if ( crt.isBetween(dayoff, dayoffTomorrow) ) {
-				$('#shuttlebus-table').hide();
-				return;
-			}
-
-			$('#shuttlebus-dayoff').hide();
 
 			$(id).empty();
 
@@ -462,13 +475,33 @@
 
 		function updates(json) {
 			//var crt = toDate('16:55').format('HH:mm');
-			var crt = new moment().format('HH:mm');
-			$('#crt').text(crt);
-			var ouro = json["ouro"];
-			var fukuro = json["fukuro"];
-			display("#ouro", ouro);
-			display("#fukuro", fukuro);
-			//viewMessage();			
+			var crt = new moment();
+			// var crt = new moment("2018-07-17 11:26:15", "YYYY-MM-DD HH:mm:ss");
+			// var crt = new moment().add(1, 'days');
+			//var crt = toDate('16:55');
+
+			$('#crt').text(crt.format('HH:mm'));
+
+			// 休日
+			var dayoff = moment("2018-07-17", "YYYY-MM-DD");
+			var dayoffTomorrow = moment("2018-07-17", "YYYY-MM-DD").add(1, 'days');
+			if ( crt.isBetween(dayoff, dayoffTomorrow) ) {
+				/* 休学期ダイヤ */
+				$('#shuttlebus-normal').hide();
+				var dayoffOuro = json["dayoff-ouro"];
+				var dayoffFukuro = json["dayoff-fukuro"];
+				display("#dayoff-ouro", dayoffOuro);
+				display("#dayoff-fukuro", dayoffFukuro);
+			} else {
+				/* 通常ダイヤ */
+				$('#shuttlebus-dayoff').hide();
+				var ouro = json["ouro"];
+				var fukuro = json["fukuro"];
+				display("#ouro", ouro);
+				display("#fukuro", fukuro);
+			}
+
+			//viewMessage();
 		}
 
 		$.ajax({
