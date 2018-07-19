@@ -474,6 +474,7 @@
 		}).done(function(json) {
 
 			var crt = new moment();
+			$('#crt').text(crt.format('HH:mm'));
 
 			// 休日
 			var dayoff = moment("2018-07-17", "YYYY-MM-DD");
