@@ -3,23 +3,25 @@ var TeaTimeTable = function(id, json) {
 	this.id = id;
 	this.json = json;
 	this.crt = new moment();
-	this.display(id, json);
+	// this.update();
+	var inst = this;
 };
 
-TeaTimeTable.prototype.display = function( id , json ) {
+TeaTimeTable.prototype.update = function() {
 
 	this.crt = new moment();
 	// var this.crt = new moment().add(1, 'days');
 	//var this.crt = toDate('16:55');
 
-	var table = $(id);
+	var table = $(this.id);
+	table.empty();
 
 	var thead = $("<thead>");
 	thead.empty();
 	var thr = $("<tr>");
-	for ( var i in json.column ) {
+	for ( var i in this.json.column ) {
 		var th = $("<th>");
-		th.text(json.column[i]);
+		th.text(this.json.column[i]);
 		thr.append(th);
 	}
 	thead.append(thr);
@@ -29,7 +31,7 @@ TeaTimeTable.prototype.display = function( id , json ) {
 
 	tbody.empty();
 
-	var list = json.times;
+	var list = this.json.times;
 
 	var late = true;
 
@@ -62,7 +64,7 @@ TeaTimeTable.prototype.display = function( id , json ) {
 				td.text(t);
 			}
 
-			if ( i == 0 && json["noriba"] && json["noriba"][j] == "2" ) {
+			if ( i == 0 && this.json["noriba"] && this.json["noriba"][j] == "2" ) {
 				td.addClass("noriba2");
 			}
 

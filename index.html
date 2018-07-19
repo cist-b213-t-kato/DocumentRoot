@@ -13,6 +13,7 @@
 
 	<!--script src="socket.io.js"></script-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+	<script src="./js/teatimetable.js"></script>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -83,22 +84,12 @@
 
 	    <div class="col-sm-6">
 		    <h3>往路</h3>
-		    <table>
-		      <thead>
-		      	<tr><th>千歳駅発</th><th>南千歳駅発</th><th>研究実験棟発</th><th>本部棟着</th></tr>
-		      </thead>
-		      <tbody id="ouro"></tbody>
-		    </table>
+		    <table id="ouro"></table>
 		  </div>
 
 	    <div class="col-sm-6">
 		    <h3>復路</h3>
-		    <table>
-		      <thead>
-		      	<tr><th>本部棟発</th><th>研究実験棟発</th><th>南千歳駅発</th><th>千歳駅着</th></tr>
-		      </thead>
-		      <tbody id="fukuro"></tbody>
-		    </table>
+		    <table id="fukuro"></table>
     		<p><span class="noriba2">朱色</span>は乗り場②</p>
 	  	</div>
 
@@ -354,7 +345,7 @@
 		var socket = io('http://54.92.8.231');
 
 		function viewMessage() {
-			console.log('called viewMessage().');
+			// console.log('called viewMessage().');
 			$.ajax({
         type : 'GET',
         url : 'http://54.92.8.231/get-message',
@@ -362,7 +353,7 @@
         	thread: crtThread 
         }
 	    }).done(function(data, dataType) {
-		    console.log('受信成功');
+		    // console.log('succeed get-message');
 				var message = $("#message");
 				message.empty();
 	    	for ( var i in data ) {
@@ -443,7 +434,7 @@
 				url: 'http://54.92.8.231/add-thread',
 				data : { name: threadName }
 	    }).done(function(json) {
-	    	console.log("success");
+	    	// console.log("success");
 			}).fail(function(json) {
 		    console.log('failure');
 			});
@@ -462,64 +453,59 @@
   		$(id).append(label);
 		}
 
-		console.log('get-thread:');
+		// console.log('get-thread:');
 		$.ajax({
 			type: 'GET',
 			url: 'http://54.92.8.231/get-thread',
 			data : { }
     }).done(function(json) {
-    	console.log("success");
+    	// console.log("success");
     	for ( var i in json ) {
     		var threadName = json[i].name;
-    		console.log(threadName);
     		appendThread('#threadList', threadName);
     	}
 		}).fail(function(json) {
 		    console.log('失敗');
 		});
 
-
-
-		function updates(json) {
-			//var crt = toDate('16:55').format('HH:mm');
-			var crt = new moment();
-			// var crt = new moment("2018-07-17 11:26:15", "YYYY-MM-DD HH:mm:ss");
-			// var crt = new moment().add(1, 'days');
-			//var crt = toDate('16:55');
-
-			$('#crt').text(crt.format('HH:mm'));
-
-			// 休日
-			var dayoff = moment("2018-07-17", "YYYY-MM-DD");
-			var dayoffTomorrow = moment("2018-07-17", "YYYY-MM-DD").add(1, 'days');
-			if ( crt.isBetween(dayoff, dayoffTomorrow) ) {
-				/* 休学期ダイヤ */
-				$('#shuttlebus-normal').hide();
-				var dayoffOuro = json["dayoff-ouro"];
-				var dayoffFukuro = json["dayoff-fukuro"];
-				display("#dayoff-ouro", dayoffOuro);
-				display("#dayoff-fukuro", dayoffFukuro);
-			} else {
-				/* 通常ダイヤ */
-				$('#shuttlebus-dayoff').hide();
-				var ouro = json["ouro"];
-				var fukuro = json["fukuro"];
-				display("#ouro", ouro);
-				display("#fukuro", fukuro);
-			}
-
-			//viewMessage();
-		}
-
 		$.ajax({
 	    "url": "http://54.92.8.231/shuttlebus",
 	    "dataType": "json"
 		}).done(function(json) {
-			updates(json);
 
-			setInterval(function() {
-				updates(json);
-			}, 1000*10);
+			var crt = new moment();
+
+			// 休日
+			var dayoff = moment("2018-07-17", "YYYY-MM-DD");
+			var dayoffTomorrow = moment("2018-07-17", "YYYY-MM-DD").add(1, 'days');
+
+			if ( crt.isBetween(dayoff, dayoffTomorrow) ) {
+				/* 休学期ダイヤ */
+				$('#shuttlebus-normal').hide();
+				var dayoffOuro = new TeaTimeTable("#dayoff-ouro", json["dayoff-ouro"]);
+				var dayoffFukuro = new TeaTimeTable("#dayoff-fukuro", json["dayoff-fukuro"]);
+				dayoffOuro.update();
+				dayoffFukuro.update();
+				setInterval(function() {
+					dayoffOuro.update();
+					dayoffFukuro.update();
+					var crt = new moment();
+					$('#crt').text(crt.format('HH:mm'));
+				}, 10*1000);
+			} else {
+				/* 通常ダイヤ */
+				$('#shuttlebus-dayoff').hide();
+				var ouro = new TeaTimeTable("#ouro", json["ouro"]);
+				var fukuro = new TeaTimeTable("#fukuro", json["fukuro"]);
+				ouro.update();
+				fukuro.update();
+				setInterval(function() {
+					ouro.update();
+					fukuro.update();
+					var crt = new moment();
+					$('#crt').text(crt.format('HH:mm'));
+				}, 10*1000);
+			}
 		}).fail(function(data) {
 	    console.log('ajax submit error!!!');
 		});
