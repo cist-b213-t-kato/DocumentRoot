@@ -86,7 +86,7 @@
 		}).done(function(json) {
 			// updates(json);
 			var ouro = new TeaTimeTable("#ouro", json["ouro"]);
-			// ouro.update();
+			ouro.whileUpdate(10);
 
 			// setInterval(function() {
 			// 	// updates(json);
