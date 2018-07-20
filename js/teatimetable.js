@@ -3,9 +3,15 @@ var TeaTimeTable = function(id, json) {
 	this.id = id;
 	this.json = json;
 	this.crt = new moment();
-	// this.update();
-	var inst = this;
 };
+
+TeaTimeTable.prototype.whileUpdate = function(sec) {
+	var inst = this;
+	inst.update();
+	setInterval(function() {
+		inst.update();
+	}, sec*1000);
+}
 
 TeaTimeTable.prototype.update = function() {
 

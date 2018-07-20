@@ -403,11 +403,9 @@
 				$('#shuttlebus-normal').hide();
 				var dayoffOuro = new TeaTimeTable("#dayoff-ouro", json["dayoff-ouro"]);
 				var dayoffFukuro = new TeaTimeTable("#dayoff-fukuro", json["dayoff-fukuro"]);
-				dayoffOuro.update();
-				dayoffFukuro.update();
+				dayoffOuro.whileUpdate(10);
+				dayoffFukuro.whileUpdate(10);
 				setInterval(function() {
-					dayoffOuro.update();
-					dayoffFukuro.update();
 					var crt = new moment();
 					$('#crt').text(crt.format('HH:mm'));
 				}, 10*1000);
@@ -416,11 +414,9 @@
 				$('#shuttlebus-dayoff').hide();
 				var ouro = new TeaTimeTable("#ouro", json["ouro"]);
 				var fukuro = new TeaTimeTable("#fukuro", json["fukuro"]);
-				ouro.update();
-				fukuro.update();
+				ouro.whileUpdate(10);
+				fukuro.whileUpdate(10);
 				setInterval(function() {
-					ouro.update();
-					fukuro.update();
 					var crt = new moment();
 					$('#crt').text(crt.format('HH:mm'));
 				}, 10*1000);

@@ -14,6 +14,8 @@
 	<!--script src="socket.io.js"></script-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 
+	<script src="./js/teatimetable.js"></script>
+
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 	<link href="./common.css" rel="stylesheet" />
@@ -70,24 +72,12 @@
 
     <div class="col-md-6">
 	    <h3>往路</h3>
-	    <table>
-	      <thead>
-	      	<tr><th>支笏湖</th><th>新星</th><th>本町2丁目</th><th>千歳駅前</th><th>南千歳駅</th><th>新千歳空港28番</th><th>国際線（タ）</th></tr>
-	      </thead>
-	      <tbody id="ouro">
-	      </tbody>
-	    </table>
+	    <table id="toAirport"></table>
 	  </div>
 
     <div class="col-md-6">
 	    <h3>復路</h3>
-	    <table>
-	      <thead>
-	      	<tr><th>国際線（タ）</th><th>新千歳空港28番</th><th>南千歳駅</th><th>千歳駅前</th><th>本町2丁目</th><th>新星</th><th>支笏湖</th></tr>
-	      </thead>
-	      <tbody id="fukuro">
-	      </tbody>
-	    </table>
+	    <table id="fromAirport"></table>
   	</div>
 
 	</div>
@@ -99,109 +89,32 @@
 
 	<script type="text/javascript">
 
-		// https://www.sejuku.net/blog/25316#Ajax
-		
-		function toDate( tStr ) {
-			var ret = moment();
-
-			var h = Number(tStr.split(":")[0]); //( "00" + tStr ).substr(-5, 2);
-			var m = Number(tStr.split(":")[1]); //( "00" + tStr ).substr(-2);
-
-			ret.hours(h);
-			ret.minute(m);
-			ret.second(0);
-
-			return ret;
-		}
-
-		function getFirst( times ) {
-			for ( var i=0; i<times.length; i++ ) {
-				if ( times[i] && times[i] != "" ) {
-					return times[i];
-				}
-			}
-			return ""; 
-		}
-
-		function getLast( times ) {
-			for ( var i=times.length-1; i>=0; i-- ) {
-				if ( times[i] && times[i] != "" ) {
-					return times[i];
-				}
-			}
-			return "";
-		}
-
-		function display( id , json ) {
-
-			var crt = new moment();
-			// var crt = toDate('15:00');
-
-			$(id).empty();
-
-			var list = json.array;
-
-			var late = true;
-
-			for ( var j in list ) {
-        
-				var tr = $("<tr>");
-
-				var times = list[j];
-
-				var first = toDate(getFirst(times));
-				var last = toDate(getLast(times));
-
-				if ( late && crt <= first ) {
-					tr.addClass("highlight");
-					tr.addClass("large");
-					late = false;
-				}
-
-				if ( crt >= first && crt <= last ) {
-					tr.addClass("highlight");
-				}
-
-				for ( var i in times ) {
-
-          var td = $("<td>");
-					var t = times[i];
-					if ( !t || t == "" ) {
-            td.text("-");
-					} else {
-						td.text(t);
-					}
-
-					if ( i == 0 && json["noriba"] && json["noriba"][j] == "2" ) {
-						td.addClass("noriba2");
-					}
-
-					tr.append(td);
-				}
-				$(id).append(tr);
-			}
-		}
-
-		function updates(json) {
-			$('#crt').text(new moment().format('HH:mm'));
-			var ouro = json["toAirport"];
-			var fukuro = json["fromAirport"];
-			display("#ouro", ouro);
-			display("#fukuro", fukuro);
-		}
 
 		$.ajax({
 	    "url": "http://54.92.8.231/shuttlebus",
 	    "dataType": "json"
 		}).done(function(json) {
-			updates(json);
 
-			setInterval(function() {
-				updates(json);
-			}, 1000*10);
+			var toAirport = new TeaTimeTable("#toAirport", json["toAirport"]);
+			toAirport.whileUpdate(10);
+
+			var fromAirport = new TeaTimeTable("#fromAirport", json["fromAirport"]);
+			fromAirport.whileUpdate(10);
+
 		}).fail(function(data) {
 	    console.log('ajax submit error!!!');
 		});
+
+		function update() {
+			var crt = new moment();
+			$('#crt').text(crt.format('HH:mm'));
+		}
+
+		update();
+
+		setInterval(function() {
+			update();
+		}, 10*1000);
 
 
 	</script>
