@@ -26,6 +26,9 @@ TeaTimeTable.prototype.update = function() {
 	thead.empty();
 	var thr = $("<tr>");
 	for ( var i in this.json.column ) {
+		if ( this.json.columnVisible && !this.json.columnVisible[i] ) {
+			continue;
+		}
 		var th = $("<th>");
 		th.text(this.json.column[i]);
 		thr.append(th);
@@ -61,6 +64,10 @@ TeaTimeTable.prototype.update = function() {
 		}
 
 		for ( var i in timeRow ) {
+
+			if ( this.json.columnVisible && !this.json.columnVisible[i] ) {
+				continue;
+			}
 
       var td = $("<td>");
 			var t = timeRow[i];
