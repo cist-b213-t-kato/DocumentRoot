@@ -96,25 +96,14 @@
 	  </div>
 
 	  <div id="shuttlebus-dayoff" class="col-sm-12">
-	  	休学期ダイヤ
 	    <div class="col-sm-6">
 		    <h3>休学期往路</h3>
-		    <table>
-		      <thead>
-		      	<tr><th>千歳駅発</th><th>南千歳駅発</th><th>研究実験棟発</th><th>本部棟着</th></tr>
-		      </thead>
-		      <tbody id="dayoff-ouro"></tbody>
-		    </table>
+		    <table id="dayoff-ouro"></table>
 		  </div>
 
 	    <div class="col-sm-6">
 		    <h3>休学期復路</h3>
-		    <table>
-		      <thead>
-		      	<tr><th>本部棟発</th><th>研究実験棟発</th><th>南千歳駅発</th><th>千歳駅着</th></tr>
-		      </thead>
-		      <tbody id="dayoff-fukuro"></tbody>
-		    </table>
+		    <table id="dayoff-fukuro"></table>
 	  	</div>
   	</div>
 
@@ -395,10 +384,10 @@
 			$('#crt').text(crt.format('HH:mm'));
 
 			// 休日
-			var dayoff = moment("2018-07-17", "YYYY-MM-DD");
-			var dayoffTomorrow = moment("2018-07-17", "YYYY-MM-DD").add(1, 'days');
+			var dayoffStart = moment("2018-08-04", "YYYY-MM-DD");
+			var dayoffEnd = moment("2018-09-07", "YYYY-MM-DD");
 
-			if ( crt.isBetween(dayoff, dayoffTomorrow) ) {
+			if ( crt.isBetween(dayoffStart, dayoffEnd) ) {
 				/* 休学期ダイヤ */
 				$('#shuttlebus-normal').hide();
 				var dayoffOuro = new TeaTimeTable("#dayoff-ouro", json["dayoff-ouro"]);
