@@ -22,12 +22,18 @@ h2 {
 	font-size: 18px;
 	border-left: 6px #1177AA solid;
 	border-bottom: 1px #AACCFF solid;
+	/*border-bottom: 1px #1177AA solid;*/
 	padding-left: 10px;
 	padding-bottom: 3px;
 }
 h3 {
 	font-size: 16px;
 }
+
+/*body {
+	color: #FFFFFF;
+	background-color: #000000;
+}*/
 
 .highlight {
 	color: #1170AA;
