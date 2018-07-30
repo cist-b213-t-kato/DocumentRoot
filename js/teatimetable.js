@@ -13,6 +13,10 @@ TeaTimeTable.prototype.whileUpdate = function(sec) {
 	}, sec*1000);
 }
 
+TeaTimeTable.prototype.rowVisible = function(rowIndex) {
+	return true;
+}
+
 TeaTimeTable.prototype.update = function() {
 
 	this.crt = new moment();
@@ -46,6 +50,10 @@ TeaTimeTable.prototype.update = function() {
 
 	for ( var j in list ) {
     
+		if ( !this.rowVisible(j) ) {
+			continue;
+		}
+
 		var tr = $("<tr>");
 
 		var timeRow = list[j];

@@ -101,9 +101,27 @@
 		}).done(function(json) {
 
 			var toAirport = new TeaTimeTable("#toAirport", json["toAirport"]);
+
+			toAirport.rowVisible = function(rowIndex) {
+				if(this.json.keito[rowIndex] == "5" || this.json.keito[rowIndex] == "4") {
+					return true;
+				} else {
+					return false;
+				}
+			};
+
 			toAirport.whileUpdate(10);
 
 			var fromAirport = new TeaTimeTable("#fromAirport", json["fromAirport"]);
+
+			fromAirport.rowVisible = function(rowIndex) {
+				if(this.json.keito[rowIndex] == "6") {
+					return false;
+				} else {
+					return true;
+				}
+			};
+
 			fromAirport.whileUpdate(10);
 
 		}).fail(function(data) {
