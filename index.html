@@ -75,34 +75,34 @@
 		}
 
 		.date-label {
+			/*font-size: 75%;*/
 			/*font-weight: lighter;*/
-			/*color: #CCCCCC;*/
+			color: #AAAAAA;
+			margin-left: 10px;
 			/*position: absolute;*/
 			/*top: -20px;*/
-			visibility: hidden;
-			margin-top: -20px;
+			/*visibility: hidden;*/
+			/*margin-top: -20px;*/
 		}
 
-		#message > li:hover {
+/*		#message > li:hover {
 			background-color: #AAAAAA;
 			transition: all 300ms 0s ease;
-		}
+		}*/
 
-		#message > li:hover .date-label {
-			/*font-weight: lighter;*/
+/*		#message > li:hover .date-label {
 			color: #FFFFFF;
 			visibility: visible;
 			transition: all 300ms 0s ease;
-			/*text-shadow: 0 0 20px #000000;*/
 			padding-left: 5px;
-		}
+		}*/
 
 		#message > li {
 			padding: 1px 0px;
 		}
 
 		#message > li .body-label {
-			margin-right: 5px;
+			/*margin-right: 5px;*/
 		}
 
 
@@ -325,13 +325,13 @@
 	      	var namebody = $("<div class=\"namebody\">");
 	      	namebody.append("<span class=\"name-label\">" + data[i].name + "</span>");
 	      	namebody.append("<span class=\"body-label\">" + data[i].body + "</span>");
-	      	li.append(namebody);
 
 	      	var date = data[i].date;
 	      	if ( date ) {
-	      		li.append("<div class=\"date-label\">" + date + "</div>");
+	      		namebody.append("<span class=\"date-label\">" + date + "</span>");
 	      	}
-			    // li.text(messageText);
+	      	li.append(namebody);
+
 			    message.append(li);
 	    	}
 		    $('#message-box').animate({scrollTop: $('#message-box')[0].scrollHeight}, 'slow');
