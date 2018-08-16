@@ -474,17 +474,17 @@
 	    console.log('ajax submit error!!!');
 		});
 
-		// $.ajax({
-		//   "url": "http://54.92.8.231/counter",
-		//   "dataType": "json"
-		// }).done(function(json) {
-		// 	$('#counter').text(json.count);
-		// 	if ( json.count % 100 == 0 ) {
-		// 		alert('おめでとうございます！あなたは'+json.count+'のお客様です。よろしければ管理者にキリ番報告してください。');
-		// 	}
-		// }).fail(function(data) {
-		//   console.log('ajax submit error!!!');
-		// });
+		$.ajax({
+		  "url": "http://54.92.8.231/counter",
+		  "dataType": "json"
+		}).done(function(json) {
+			$('#counter').text(json.count);
+			if ( json.count % 100 == 0 ) {
+				alert('おめでとうございます！あなたは'+json.count+'のお客様です。よろしければ管理者にキリ番報告してください。');
+			}
+		}).fail(function(data) {
+		  console.log('ajax submit error!!!');
+		});
 
 		socket.on('message', function (data) {
 
