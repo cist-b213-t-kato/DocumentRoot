@@ -14,6 +14,7 @@
 	<!--script src="socket.io.js"></script-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 	<script src="./js/teatimetable.js"></script>
+	<script src="./js/jquery.cookie.js"></script>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -249,6 +250,8 @@
 
 		// https://www.sejuku.net/blog/25316#Ajax
 
+		$('#name').val($.cookie("name"));
+
 		var crtThread = '';
 		function checkThread( threadId ) {
 			crtThread = threadId;
@@ -289,6 +292,7 @@
 		viewMessage();
 
 		$('#outButton').click(function() {
+	    $.cookie('name', $("#name").val(), { expires:30 });
 			var crtDate = new moment().format('YYYY/MM/DD HH:mm');
 			$.ajax({
 				type: 'POST',
@@ -299,10 +303,9 @@
 					thread : crtThread,
 					date : crtDate
 				}
-	    }).done(function(result) {
-			    console.log('送信成功');
+		  }).done(function(result) {
 			}).fail(function(result) {
-			    console.log('失敗');
+			   console.log('失敗');
 			});
 			$("#body").val('');
 
