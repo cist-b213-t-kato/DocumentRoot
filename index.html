@@ -14,6 +14,7 @@
 	<!--script src="socket.io.js"></script-->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 	<script src="./js/teatimetable.js"></script>
+	<script src="./js/jquery.cookie.js"></script>
 
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -55,6 +56,53 @@
 
 		.bold {
 			font-weight: bold;
+		}
+
+		#message {
+			list-style: none;
+			-webkit-padding-start: 10px;
+		}
+
+		.namebody {
+			/*position: relative;*/
+		}
+
+		.name-label {
+			font-weight: bold;
+			color: #666666;
+			margin-right: 10px;
+			/*float:left;*/
+		}
+
+		.date-label {
+			/*font-weight: lighter;*/
+			/*color: #CCCCCC;*/
+			/*position: absolute;*/
+			/*top: -20px;*/
+			visibility: hidden;
+			margin-top: -20px;
+		}
+
+		#message > li:hover {
+			background-color: #AAAAAA;
+			transition: all 300ms 0s ease;
+		}
+
+		#message > li:hover .date-label {
+			/*font-weight: lighter;*/
+			color: #FFFFFF;
+			visibility: visible;
+			transition: all 300ms 0s ease;
+			/*text-shadow: 0 0 20px #000000;*/
+			padding-left: 5px;
+		}
+
+		#message > li {
+			padding: 1px 0px;
+		}
+
+		#message > li .body-label {
+			margin-right: 5px;
 		}
 
 
@@ -174,9 +222,9 @@
     <h2>プロメン成果物</h2>
     <h3>b216</h3>
     <ul>
-        <!--<li><a href="./wicket-lecture">wicket-lecture</a></li>-->
-        <li><a href="./trump">trump</a></li>
-        <li><a href="./cist-cloud">cist-cloud</a></li>
+			<!--<li><a href="./wicket-lecture">wicket-lecture</a></li>-->
+			<li><a href="./trump">trump</a></li>
+			<li><a href="./cist-cloud">cist-cloud</a></li>
     </ul>
 
     <h3>b215</h3>
@@ -249,6 +297,8 @@
 
 		// https://www.sejuku.net/blog/25316#Ajax
 
+		$('#name').val($.cookie("name"));
+
 		var crtThread = '';
 		function checkThread( threadId ) {
 			crtThread = threadId;
@@ -272,13 +322,16 @@
 				message.empty();
 	    	for ( var i in data ) {
 	      	var li = $("<li>");
-	      	//console.log(data[i].name + ": " + data[i].body);
-	      	var messageText = data[i].name + ": " + data[i].body;
+	      	var namebody = $("<div class=\"namebody\">");
+	      	namebody.append("<span class=\"name-label\">" + data[i].name + "</span>");
+	      	namebody.append("<span class=\"body-label\">" + data[i].body + "</span>");
+	      	li.append(namebody);
+
 	      	var date = data[i].date;
 	      	if ( date ) {
-	      		messageText += " (" + date + ")";
+	      		li.append("<div class=\"date-label\">" + date + "</div>");
 	      	}
-			    li.text(messageText);
+			    // li.text(messageText);
 			    message.append(li);
 	    	}
 		    $('#message-box').animate({scrollTop: $('#message-box')[0].scrollHeight}, 'slow');
@@ -289,6 +342,7 @@
 		viewMessage();
 
 		$('#outButton').click(function() {
+	    $.cookie('name', $("#name").val(), { expires:30 });
 			var crtDate = new moment().format('YYYY/MM/DD HH:mm');
 			$.ajax({
 				type: 'POST',
@@ -299,10 +353,9 @@
 					thread : crtThread,
 					date : crtDate
 				}
-	    }).done(function(result) {
-			    console.log('送信成功');
+		  }).done(function(result) {
 			}).fail(function(result) {
-			    console.log('失敗');
+			   console.log('失敗');
 			});
 			$("#body").val('');
 
@@ -421,17 +474,17 @@
 	    console.log('ajax submit error!!!');
 		});
 
-		$.ajax({
-		  "url": "http://54.92.8.231/counter",
-		  "dataType": "json"
-		}).done(function(json) {
-			$('#counter').text(json.count);
-			if ( json.count % 100 == 0 ) {
-				alert('おめでとうございます！あなたは'+json.count+'のお客様です。よろしければ管理者にキリ番報告してください。');
-			}
-		}).fail(function(data) {
-		  console.log('ajax submit error!!!');
-		});
+		// $.ajax({
+		//   "url": "http://54.92.8.231/counter",
+		//   "dataType": "json"
+		// }).done(function(json) {
+		// 	$('#counter').text(json.count);
+		// 	if ( json.count % 100 == 0 ) {
+		// 		alert('おめでとうございます！あなたは'+json.count+'のお客様です。よろしければ管理者にキリ番報告してください。');
+		// 	}
+		// }).fail(function(data) {
+		//   console.log('ajax submit error!!!');
+		// });
 
 		socket.on('message', function (data) {
 
