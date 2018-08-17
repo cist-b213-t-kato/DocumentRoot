@@ -78,7 +78,6 @@
 			/*font-size: 75%;*/
 			/*font-weight: lighter;*/
 			color: #AAAAAA;
-			margin-left: 10px;
 			/*position: absolute;*/
 			/*top: -20px;*/
 			/*visibility: hidden;*/
@@ -102,7 +101,7 @@
 		}
 
 		#message > li .body-label {
-			/*margin-right: 5px;*/
+			margin-right: 10px;
 		}
 
 
@@ -195,23 +194,27 @@
 		</div>
 
 
-	  <form onsubmit="viewMessage(); return false;">
+		<div style="margin-bottom:0px;">
+		  <form onsubmit="viewMessage(); return false;">
 
-  		<div class="blind-top" ></div>
-		  <div id="message-box" style="height:300px;width:100%;overflow:scroll;">
-		  	<div class="message-top">TOP</div>
-		  	<ul id="message"></ul>
-		  </div>
-	  	<div class="form-group" style="width:28%; margin-bottom:5px; display:inline-block;">
-	  		名前: <input type="text" id="name" class="form-control" autocomplete="off">
-	  	</div>
-	  	<div class="form-group" style="width:55%; margin-bottom:5px; display:inline-block;">
-		  	本文: <input type="text" id="body" class="form-control" autocomplete="off">
-		  </div>
-		  <div class="form-group" style="width:13%; margin-bottom:5px; display:inline-block;">
-				<button id="outButton" class="text-center center-block btn btn-primary">送信</button>
-			</div>
-		</form>
+	  		<div class="blind-top" ></div>
+			  <div id="message-box" style="height:300px;width:100%;overflow:scroll;">
+			  	<div class="message-top">TOP</div>
+			  	<ul id="message"></ul>
+			  </div>
+			  <div style="width:100%;">
+			  	<div class="form-group" style="width:25%; display:inline-block;">
+			  		名前 <input type="text" id="name" class="form-control" autocomplete="off">
+			  	</div>
+			  	<div class="form-group" style="width:55%; display:inline-block;">
+				  	本文 <input type="text" id="body" class="form-control" autocomplete="off">
+				  </div>
+				  <div class="form-group" style="width:17%; display:inline-block;">
+						<button id="outButton" style="width:100%; text-align:center;" class="text-center center-block btn btn-primary">送信</button>
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
 
   <div class="col-sm-12">
@@ -401,7 +404,6 @@
 				url: 'http://54.92.8.231/add-thread',
 				data : { name: threadName }
 	    }).done(function(json) {
-	    	// console.log("success");
 			}).fail(function(json) {
 		    console.log('failure');
 			});
@@ -426,7 +428,6 @@
 			url: 'http://54.92.8.231/get-thread',
 			data : { }
     }).done(function(json) {
-    	// console.log("success");
     	for ( var i in json ) {
     		var threadName = json[i].name;
     		appendThread('#threadList', threadName);
@@ -474,17 +475,17 @@
 	    console.log('ajax submit error!!!');
 		});
 
-		$.ajax({
-		  "url": "http://54.92.8.231/counter",
-		  "dataType": "json"
-		}).done(function(json) {
-			$('#counter').text(json.count);
-			if ( json.count % 100 == 0 ) {
-				alert('おめでとうございます！あなたは'+json.count+'のお客様です。よろしければ管理者にキリ番報告してください。');
-			}
-		}).fail(function(data) {
-		  console.log('ajax submit error!!!');
-		});
+		// $.ajax({
+		//   "url": "http://54.92.8.231/counter",
+		//   "dataType": "json"
+		// }).done(function(json) {
+		// 	$('#counter').text(json.count);
+		// 	if ( json.count % 100 == 0 ) {
+		// 		alert('おめでとうございます！あなたは'+json.count+'のお客様です。よろしければ管理者にキリ番報告してください。');
+		// 	}
+		// }).fail(function(data) {
+		//   console.log('ajax submit error!!!');
+		// });
 
 		socket.on('message', function (data) {
 
