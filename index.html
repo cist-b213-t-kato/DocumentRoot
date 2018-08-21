@@ -173,21 +173,12 @@
   	<!-- <div class="btn-group" data-toggle="buttons" style="margin-bottom:10px;"> -->
   	<div style="margin-bottom:10px;">
 
-  		<span id="threadList" data-toggle="buttons">
+<!-- 			<span id="threadList" data-toggle="buttons">
 				<label class="btn btn-default active thread-button" onclick="checkThread('');" >
 					<input type="radio" autocomplete="off" checked> 未分類
 				</label>
-				<!-- <label class="btn btn-default" onclick="checkThread('アニメ');" >
-					<input type="radio" autocomplete="off"> アニメ
-				</label>
-				<label class="btn btn-default" onclick="checkThread('ゲーム');" >
-					<input type="radio" autocomplete="off"> ゲーム
-				</label>
-				<label class="btn btn-default" onclick="checkThread('お知らせ');" >
-					<input type="radio" autocomplete="off"> お知らせ
-				</label> -->
 			</span>
-			<label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label>
+			<label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label> -->
 			<form onsubmit="enterThreadSubmit(); return false;">
 				<input id="addThreadInput" type="text" class="form-control" onblur="returnAddThread();">
 			</form>
@@ -395,7 +386,6 @@
 		function enterThreadSubmit() {
 			var val = $('#addThreadInput').val();
 			$('#addThreadInput').val('')
-			console.log(val);
 			addThread(val);
   		appendThread('#threadList', val);
   		checkThread(val);
