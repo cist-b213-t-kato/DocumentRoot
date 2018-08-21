@@ -327,8 +327,12 @@
 	    	for ( var i in data ) {
 	      	var li = $("<li>");
 	      	var namebody = $("<div class=\"namebody\">");
-	      	namebody.append("<span class=\"name-label\">" + data[i].name + "</span>");
-	      	namebody.append("<span class=\"body-label\">" + data[i].body + "</span>");
+	      	var nameLabel = $("<span class=\"name-label\">");
+	      	nameLabel.text(data[i].name);
+	      	var bodyLabel = $("<span class=\"body-label\">");
+	      	bodyLabel.text(data[i].body);
+	      	namebody.append(nameLabel);
+	      	namebody.append(bodyLabel);
 
 	      	var date = data[i].date;
 	      	if ( date ) {
