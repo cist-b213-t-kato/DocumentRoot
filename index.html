@@ -178,7 +178,7 @@
 					<input type="radio" autocomplete="off" checked> 未分類
 				</label>
 			</span>
-			<label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label>
+			<!-- <label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label> -->
 			<form onsubmit="enterThreadSubmit(); return false;">
 				<input id="addThreadInput" type="text" class="form-control" onblur="returnAddThread();">
 			</form>
@@ -417,7 +417,6 @@
   		$(id).append(label);
 		}
 
-		// console.log('get-thread:');
 		$.ajax({
 			type: 'GET',
 			url: 'http://54.92.8.231/get-thread',
