@@ -173,12 +173,12 @@
   	<!-- <div class="btn-group" data-toggle="buttons" style="margin-bottom:10px;"> -->
   	<div style="margin-bottom:10px;">
 
-<!-- 			<span id="threadList" data-toggle="buttons">
+			<span id="threadList" data-toggle="buttons">
 				<label class="btn btn-default active thread-button" onclick="checkThread('');" >
 					<input type="radio" autocomplete="off" checked> 未分類
 				</label>
 			</span>
-			<label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label> -->
+			<label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label>
 			<form onsubmit="enterThreadSubmit(); return false;">
 				<input id="addThreadInput" type="text" class="form-control" onblur="returnAddThread();">
 			</form>
@@ -297,7 +297,6 @@
 		var crtThread = '';
 		function checkThread( threadId ) {
 			crtThread = threadId;
-			console.log('checked: ' + crtThread);
 			viewMessage();
 		}
 
@@ -393,7 +392,6 @@
 		}
 
 		function addThread(threadName) {
-			console.log('add-thread:');
 			$.ajax({
 				type: 'POST',
 				url: 'http://54.92.8.231/add-thread',
@@ -408,12 +406,14 @@
   		var label = $('<label>');
   		label.addClass('btn btn-default thread-button');
   		label.attr('onclick', 'checkThread(\'' + threadName + '\');');
-  		//label.html();
+  		// label.html();
   		var input = $('<input>');
   		input.attr('type', 'radio');
   		input.attr('autocomplete', 'off');
   		label.append(input);
-  		label.append(threadName);
+  		var threadNameSpan = $('<span>');
+  		threadNameSpan.text(threadName);
+  		label.append(threadNameSpan);
   		$(id).append(label);
 		}
 
