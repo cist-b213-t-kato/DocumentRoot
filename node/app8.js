@@ -139,7 +139,7 @@ MongoClient.connect(url, (error, client) => {
 					res.json(docs);
 				});
 			});
-			app.post("/add-thread", function(req, res){
+/*			app.post("/add-thread", function(req, res){
 				res.send();
 
 				collection.insertOne({
@@ -147,6 +147,7 @@ MongoClient.connect(url, (error, client) => {
 				});
 
 			});
+*/
 		});
 
 });
