@@ -120,44 +120,49 @@
 		<div><a href="http://67742ab9.ngrok.io">研究室に人がいるか？</a> by kabe</div>
   </div>
 
-  <div class="col-sm-12 shuttlebus-content">
+  <div id="shuttlebus" class="col-sm-12 shuttlebus-content">
     <h2>シャトルバス</h2>
 	  <div>
-	    <p>元のpdfは<a href="https://www.chitose.ac.jp/info/pdf/shuttlebus.pdf">こちら</a>。バス時刻表に間違いを見つけた人には飴ちゃんあげます。</p>
-	    <p>小型版は<s><a href="./shuttlebus.html">こちら</a></s>。一旦封印。</p>
+	  	<p class="large">9/17よりバスダイヤが改正されます。<span style="color:#FFFFFF">誰かjson作って。</span></p>
+	  	<p>バス時刻表に間違いを見つけた人には飴ちゃんあげます。</p>
+	    <p><a href="pdf/shuttlebus-reexam.pdf">9/10~9/15のバス時刻表</a></p>
+	    <p><a href="pdf/shuttlebus.pdf">9/17以降のバス時刻表</a></p>
+<!-- 	    <p>小型版は<s><a href="./shuttlebus.html">こちら</a></s>。一旦封印。</p> -->
 	  </div>
 
-    <div class="col-sm-12">
-    	<span class="large highlight">現在時刻: <span id="crt"></span></span>
-    </div>
+	  <div id="shuttlebus-timetable">
+	    <div class="col-sm-12">
+	    	<span class="large highlight">現在時刻: <span id="crt"></span></span>
+	    </div>
 
-    <div id="shuttlebus-normal" class="col-sm-12">
+	    <div id="shuttlebus-normal" class="col-sm-12">
 
-	    <div class="col-sm-6">
-		    <h3>往路</h3>
-		    <table id="ouro"></table>
+		    <div class="col-sm-6">
+			    <h3>往路</h3>
+			    <table id="ouro"></table>
+			  </div>
+
+		    <div class="col-sm-6">
+			    <h3>復路</h3>
+			    <table id="fukuro"></table>
+	    		<p><span class="noriba2">朱色</span>は乗り場②</p>
+		  	</div>
+
 		  </div>
 
-	    <div class="col-sm-6">
-		    <h3>復路</h3>
-		    <table id="fukuro"></table>
-    		<p><span class="noriba2">朱色</span>は乗り場②</p>
-	  	</div>
+		  <div id="shuttlebus-dayoff" class="col-sm-12">
+		    <!-- <p style="font-size:125%;color:#E07022;">JSONの功労者9:10氏を讃えよ</p> -->
+		    <div class="col-sm-6">
+			    <h3>休学期往路</h3>
+			    <table id="dayoff-ouro"></table>
+			  </div>
 
+		    <div class="col-sm-6">
+			    <h3>休学期復路</h3>
+			    <table id="dayoff-fukuro"></table>
+		  	</div>
+	  	</div>
 	  </div>
-
-	  <div id="shuttlebus-dayoff" class="col-sm-12">
-	    <p style="font-size:125%;color:#E07022;">JSONの功労者9:10氏を讃えよ</p>
-	    <div class="col-sm-6">
-		    <h3>休学期往路</h3>
-		    <table id="dayoff-ouro"></table>
-		  </div>
-
-	    <div class="col-sm-6">
-		    <h3>休学期復路</h3>
-		    <table id="dayoff-fukuro"></table>
-	  	</div>
-  	</div>
 
   	<div class="col-sm-12">
     	<!-- <p style="font-size:40px; font-weight:bold;"><a href="https://twitter.com/kagichan_kyun">カギちゃん</a>なんか必要ねえんだよ（宣戦布告）</p> -->
@@ -434,6 +439,10 @@
 	    "url": "http://54.92.8.231/shuttlebus",
 	    "dataType": "json"
 		}).done(function(json) {
+
+			// 次のバスダイヤが完成するまでのとりあえずの応急処置
+			$('#shuttlebus-timetable').hide();
+			return;
 
 			var crt = new moment();
 			$('#crt').text(crt.format('HH:mm'));
