@@ -123,10 +123,10 @@
   <div id="shuttlebus" class="col-sm-12 shuttlebus-content">
     <h2>シャトルバス</h2>
 	  <div>
-	  	<p class="large">9/17よりバスダイヤが改正されます。<span style="color:#FFFFFF">誰かjson作って。</span></p>
-	  	<p>バス時刻表に間違いを見つけた人には飴ちゃんあげます。</p>
+	  	<p class="large">9/17よりバスダイヤが改正されます。</p>
 	    <p><a href="pdf/shuttlebus-reexam.pdf">9/10~9/15のバス時刻表</a></p>
-	    <p><a href="pdf/shuttlebus.pdf">9/17以降のバス時刻表</a></p>
+	    <!-- <p><a href="pdf/shuttlebus.pdf">9/17以降のバス時刻表</a></p> -->
+	  	<p>バス時刻表に間違いを見つけた人には飴ちゃんあげます。</p>
 <!-- 	    <p>小型版は<s><a href="./shuttlebus.html">こちら</a></s>。一旦封印。</p> -->
 	  </div>
 
@@ -440,9 +440,9 @@
 	    "dataType": "json"
 		}).done(function(json) {
 
-			// 次のバスダイヤが完成するまでのとりあえずの応急処置
-			$('#shuttlebus-timetable').hide();
-			return;
+			// バスダイヤを隠す
+			// $('#shuttlebus-timetable').hide();
+			// return;
 
 			var crt = new moment();
 			$('#crt').text(crt.format('HH:mm'));
