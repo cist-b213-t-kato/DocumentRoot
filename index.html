@@ -441,8 +441,8 @@
 		}).done(function(json) {
 
 			// バスダイヤを隠す
-			// $('#shuttlebus-timetable').hide();
-			// return;
+			$('#shuttlebus-timetable').hide();
+			return;
 
 			var crt = new moment();
 			$('#crt').text(crt.format('HH:mm'));
