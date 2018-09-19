@@ -117,14 +117,14 @@
       <!--p>裏サイトだと暗いイメージがあるので改名</p-->
 		<p>アクセス数: <span id="counter"></span></p>
 		<div><a href="./drawchat.html">お絵かき</a>（通信量が多少マシになりました）</div>
-		<div><a href="http://fe9b42c5.ngrok.io">研究室に人がいるか？</a> by kabe</div>
+		<div><a href="https://sites.google.com/view/lightsensor-lab/index">研究室に人がいるか？</a> by kabe</div>
   </div>
 
   <div id="shuttlebus" class="col-sm-12 shuttlebus-content">
     <h2>シャトルバス</h2>
 	  <div>
 	  	<p class="large">9/17よりバスダイヤが改正されます。</p>
-	    <p><a href="pdf/shuttlebus-reexam.pdf">9/10~9/15のバス時刻表</a></p>
+	    <!-- <p><a href="pdf/shuttlebus-reexam.pdf">9/10~9/15のバス時刻表</a></p> -->
 	    <!-- <p><a href="pdf/shuttlebus.pdf">9/17以降のバス時刻表</a></p> -->
 	  	<p>バス時刻表に間違いを見つけた人には飴ちゃんあげます。</p>
 <!-- 	    <p>小型版は<s><a href="./shuttlebus.html">こちら</a></s>。一旦封印。</p> -->
@@ -257,7 +257,7 @@
   	<h3>学校の配布物</h3>
   	<ul>
   		<!-- <li class="large bold"><a href="examschedule.png">テストの時間割</a></li> -->
-  		<li class="large bold"><a href="./sound/kouka.mp3">校歌</a></li>
+  		<li class="large bold"><a href="./sound/kouka.mp3">校歌.mp3</a></li>
   		<li><a href="./schedule.pdf">時間割.pdf</a></li>
   		<li><a href="./guide.pdf">履修登録ガイド.pdf（主に大学行事のカレンダー用）</a></li>
   	</ul>
@@ -441,8 +441,8 @@
 		}).done(function(json) {
 
 			// バスダイヤを隠す
-			$('#shuttlebus-timetable').hide();
-			return;
+			// $('#shuttlebus-timetable').hide();
+			// return;
 
 			var crt = new moment();
 			$('#crt').text(crt.format('HH:mm'));
