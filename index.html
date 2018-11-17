@@ -21,261 +21,181 @@
 	<link href="./common.css" rel="stylesheet" />
 
 	<style>
-		.thread-button {
-			margin: 2px;
-		}
-
-		.blind-top {
-		    background: -webkit-gradient(linear, left top, left bottom, from(rgba(255,255,255,0)), color-stop(90%, #fefefe));
-		    background: -webkit-linear-gradient(top, rgba(255,255,255,0) 0%, #fefefe 90%);
-		    background: -o-linear-gradient(top, rgba(255,255,255,0) 0%, #fefefe 90%);
-		    background: linear-gradient(to top, rgba(255,255,255,0) 0%, #fefefe 90%);
-		    height: 50px;
-		    margin: 0 0 -50px;
-		    position: relative;
-		    pointer-events: none;
-		}
-
-		.message-top {
-			height:50px;
-			font-size:20px;
-			color:gray;
-			width:100%;
-			text-align:center;
-			margin-bottom:10px;
-			padding-top:20px;
-			font-family:cursive;
-			border-bottom: 1px solid lightgray;
-			vertical-align: text-bottom;
-		}
-
-		.shuttlebus-content div {
-			padding-left:5px;
-			padding-right:5px;
-		}
-
-		.bold {
-			font-weight: bold;
-		}
-
-		#message {
-			list-style: none;
-			-webkit-padding-start: 10px;
-		}
-
-		.namebody {
-			/*position: relative;*/
-		}
-
-		.name-label {
-			font-weight: bold;
-			color: #666666;
-			margin-right: 10px;
-			/*float:left;*/
-		}
-
-		.date-label {
-			/*font-size: 75%;*/
-			/*font-weight: lighter;*/
-			color: #AAAAAA;
-			/*position: absolute;*/
-			/*top: -20px;*/
-			/*visibility: hidden;*/
-			/*margin-top: -20px;*/
-		}
-
-/*		#message > li:hover {
-			background-color: #AAAAAA;
-			transition: all 300ms 0s ease;
-		}*/
-
-/*		#message > li:hover .date-label {
-			color: #FFFFFF;
-			visibility: visible;
-			transition: all 300ms 0s ease;
-			padding-left: 5px;
-		}*/
-
-		#message > li {
-			padding: 1px 0px;
-		}
-
-		#message > li .body-label {
-			margin-right: 10px;
-		}
-
-
-
 	</style>
 
 </head>
 
 <body>
 	
-  <div class="col-sm-12">
-    <h1>CIST非公式サイト</h1>
-      <!--p>裏サイトだと暗いイメージがあるので改名</p-->
-		<p>アクセス数: <span id="counter"></span></p>
-		<div><a href="./drawchat.html">お絵かき</a>（通信量が多少マシになりました）</div>
-		<div><a href="http://fe9b42c5.ngrok.io">研究室に人がいるか？</a> by kabe</div>
-  </div>
-
-  <div id="shuttlebus" class="col-sm-12 shuttlebus-content">
-    <h2>シャトルバス</h2>
-	  <div>
-	  	<!-- <p class="large">9/17よりバスダイヤが改正されます。</p> -->
-	    <!-- <p><a href="pdf/shuttlebus-reexam.pdf">9/10~9/15のバス時刻表</a></p> -->
-	  	<p><a href="pdf/shuttlebus.pdf">バス時刻表</a>に間違いを見つけた人には飴ちゃんあげます。</p>
-<!-- 	    <p>小型版は<s><a href="./shuttlebus.html">こちら</a></s>。一旦封印。</p> -->
+  <nav class="col-sm-12">
+  	<div style="margin-bottom: 5px;">
+	    <span class="bold large">CIST非公式サイト</span><span id="counter" style="margin-left:5px;"></span>
 	  </div>
 
-	  <div id="shuttlebus-timetable">
-	    <div class="col-sm-12">
-	    	<span class="large highlight">現在時刻: <span id="crt"></span></span>
-	    </div>
+	  <ul class="nav nav-tabs">
+	  	<li class="active" style="width:33%;"><a href="#shuttlebus" data-toggle="tab">bus</a></li>
+	  	<li class="" style="width:33%;"><a href="#chat" data-toggle="tab" onclick="viewMessage();">chat</a></li>
+	  	<li class="" style="width:33%;"><a href="#other" data-toggle="tab">other</a></li>
+	  </ul>
+  </nav>
 
-	    <div id="shuttlebus-normal" class="col-sm-12">
+  <div class="tab-content">
 
-		    <div class="col-sm-6">
-			    <h3>往路</h3>
-			    <table id="ouro"></table>
-			  </div>
-
-		    <div class="col-sm-6">
-			    <h3>復路</h3>
-			    <table id="fukuro"></table>
-	    		<p><span class="noriba2">朱色</span>は乗り場②</p>
-		  	</div>
-
+	  <div id="shuttlebus" class="tab-pane active col-sm-12 shuttlebus-content">
+	    <!-- <h2>シャトルバス</h2> -->
+		  <div>
+		  	<!-- <p class="large">9/17よりバスダイヤが改正されます。</p> -->
+		    <!-- <p><a href="pdf/shuttlebus-reexam.pdf">9/10~9/15のバス時刻表</a></p> -->
+		  	<!-- <p><a href="pdf/shuttlebus.pdf">バス時刻表</a>に間違いを見つけた人には飴ちゃんあげます。</p> -->
+	<!-- 	    <p>小型版は<s><a href="./shuttlebus.html">こちら</a></s>。一旦封印。</p> -->
 		  </div>
 
-		  <div id="shuttlebus-dayoff" class="col-sm-12">
-		    <!-- <p style="font-size:125%;color:#E07022;">JSONの功労者9:10氏を讃えよ</p> -->
-		    <div class="col-sm-6">
-			    <h3>休学期往路</h3>
-			    <table id="dayoff-ouro"></table>
-			  </div>
+		  <div id="shuttlebus-timetable">
+		    <!-- <div class="col-sm-12">
+		    	<span class="large highlight">現在時刻: <span id="crt"></span></span>
+		    </div> -->
 
-		    <div class="col-sm-6">
-			    <h3>休学期復路</h3>
-			    <table id="dayoff-fukuro"></table>
-		  	</div>
-	  	</div>
-	  </div>
+		    <div id="shuttlebus-normal" class="col-sm-12">
 
-  	<div class="col-sm-12">
-    	<!-- <p style="font-size:40px; font-weight:bold;"><a href="https://twitter.com/kagichan_kyun">カギちゃん</a>なんか必要ねえんだよ（宣戦布告）</p> -->
-
-  		<!-- <img src="./kagichan.png" /> -->
-  	</div>
-
-	</div>
-
-  <div class="col-sm-12">
-  	<h2>チャット</h2>
-
-  	<!-- <div class="btn-group" data-toggle="buttons" style="margin-bottom:10px;"> -->
-  	<div style="margin-bottom:10px;">
-
-			<span id="threadList" data-toggle="buttons">
-				<label class="btn btn-default active thread-button" onclick="checkThread('');" >
-					<input type="radio" autocomplete="off" checked> 未分類
-				</label>
-			</span>
-			<!-- <label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label> -->
-			<form onsubmit="enterThreadSubmit(); return false;">
-				<input id="addThreadInput" type="text" class="form-control" onblur="returnAddThread();">
-			</form>
-
-		</div>
-
-
-		<div style="margin-bottom:0px;">
-		  <form onsubmit="viewMessage(); return false;">
-
-	  		<div class="blind-top" ></div>
-			  <div id="message-box" style="height:300px;width:100%;overflow:scroll;">
-			  	<div class="message-top">TOP</div>
-			  	<ul id="message"></ul>
-			  </div>
-			  <div style="width:100%;">
-			  	<div class="form-group" style="width:25%; display:inline-block;">
-			  		名前 <input type="text" id="name" class="form-control" autocomplete="off">
-			  	</div>
-			  	<div class="form-group" style="width:55%; display:inline-block;">
-				  	本文 <input type="text" id="body" class="form-control" autocomplete="off">
+			    <div class="col-sm-6">
+				    <h3>往路</h3>
+				    <table id="ouro"></table>
 				  </div>
-				  <div class="form-group" style="width:17%; display:inline-block;">
-						<button id="outButton" style="width:100%; text-align:center;" class="text-center center-block btn btn-primary">送信</button>
+
+			    <div class="col-sm-6">
+				    <h3>復路</h3>
+				    <table id="fukuro"></table>
+		    		<p><span class="noriba2">朱色</span>は乗り場②</p>
+			  	</div>
+
+			  </div>
+
+			  <div id="shuttlebus-dayoff" class="col-sm-12">
+			    <!-- <p style="font-size:125%;color:#E07022;">JSONの功労者9:10氏を讃えよ</p> -->
+			    <div class="col-sm-6">
+				    <h3>休学期往路</h3>
+				    <table id="dayoff-ouro"></table>
+				  </div>
+
+			    <div class="col-sm-6">
+				    <h3>休学期復路</h3>
+				    <table id="dayoff-fukuro"></table>
+			  	</div>
+		  	</div>
+		  </div>
+
+		</div>
+
+	  <div id="chat" class="tab-pane col-sm-12">
+	  	<!-- <h2>チャット</h2> -->
+
+	  	<!-- <div class="btn-group" data-toggle="buttons" style="margin-bottom:10px;"> -->
+	  	<div style="margin-bottom:10px;">
+
+				<span id="threadList" data-toggle="buttons">
+					<label class="btn btn-default active thread-button" onclick="checkThread('');" >
+						<input type="radio" autocomplete="off" checked> 未分類
+					</label>
+				</span>
+				<!-- <label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label> -->
+				<form onsubmit="enterThreadSubmit(); return false;">
+					<input id="addThreadInput" type="text" class="form-control" onblur="returnAddThread();">
+				</form>
+
+			</div>
+
+
+			<div>
+			  <form onsubmit="viewMessage(); return false;">
+
+		  		<div class="blind-top" ></div>
+				  <div id="message-box" style="height:300px;width:100%;overflow:scroll;">
+				  	<div class="message-top">TOP</div>
+				  	<ul id="message"></ul>
+				  </div>
+				  <div style="width:100%;">
+				  	<div class="form-group" style="width:25%; display:inline-block;">
+				  		<input type="text" id="name" class="form-control" autocomplete="off" placeholder="name">
+				  	</div>
+				  	<div class="form-group" style="width:55%; display:inline-block;">
+					  	<input type="text" id="body" class="form-control" autocomplete="off" placeholder="message">
+					  </div>
+					  <div class="form-group" style="width:17%; display:inline-block;">
+							<button id="outButton" style="width:100%; text-align:center;" class="text-center center-block btn btn-primary">▶︎</button>
+						</div>
 					</div>
-				</div>
-			</form>
+				</form>
+			</div>
+		</div>
+
+	  <!-- <div class="col-sm-12">
+	  	<a href="./examschedule.png"></a>
+	  </div> -->
+
+	  <div id="other" class="tab-pane col-sm-12">
+
+	  	<div class="col-sm-6">
+		  	<h2>リンク</h2>
+				<div><a href="./drawchat.html">お絵かき</a>（通信量が多少マシになりました）</div>
+				<div><a href="http://fe9b42c5.ngrok.io">研究室に人がいるか？</a> by KABE こちらに移させていただきました。</div>
+	  	</div>
+
+	  	<div class="col-sm-6">
+		    <h2>プロメン成果物</h2>
+		    <h3>b216</h3>
+		    <ul>
+					<!--<li><a href="./wicket-lecture">wicket-lecture</a></li>-->
+					<li><a href="./trump">trump</a></li>
+					<li><a href="./cist-cloud">cist-cloud</a></li>
+		    </ul>
+
+		    <h3>b215</h3>
+		    <ul>
+		        <li><a href="./PMPS">PMPS</a></li>
+		    </ul>
+
+		    <h3>m217</h3>
+		    <ul>
+		        <li><a href="./wicket-handson">wicket-handson</a></li>
+		        <li><a href="./ars">ars</a></li>
+		    </ul>
+		  </div>
+
+		  <div class="col-sm-6">
+		  	<h2>授業</h2>
+		  	<h3>情報科教育法</h3>
+		  	<ul>
+		  		<li><a href="./jokyo">ファイルまとめ</a></li>
+		  	</ul>
+		  </div>
+
+		  <div class="col-sm-6">
+		  	<h2>その他</h2>
+		  	<h3>学校の配布物</h3>
+		  	<ul>
+		  		<!-- <li class="large bold"><a href="examschedule.png">テストの時間割</a></li> -->
+		  		<li><a href="./sound/kouka.mp3">校歌</a></li>
+		  		<li><a href="./pdf/schedule-autumn.pdf">時間割.pdf</a></li>
+		  		<li><a href="./guide.pdf">履修登録ガイド.pdf（主に大学行事のカレンダー用）</a></li>
+		  	</ul>
+				<h3>中央バスのダイヤ</h3>
+				<ul>
+					<li><a href="./chuobus.html">確実に俺しか使わない</a></li>
+				</ul>
+				<h3>お絵かきチャットの画像ログ</h3>
+				<ul>
+					<li><a href="drawchat">こちら</a></li>
+				</ul>
+		<!-- 
+				<h3>管理人のイラスト（誰得？）</h3>
+				<ul>
+					<li><a href="./illust">こちら</a></li>
+				</ul> -->
+		  </div>
 		</div>
 	</div>
 
-  <div class="col-sm-12">
-  	<a href="./examschedule.png"></a>
-  </div>
-
-  <div class="col-sm-4">
-    <h2>プロメン成果物</h2>
-    <h3>b216</h3>
-    <ul>
-			<!--<li><a href="./wicket-lecture">wicket-lecture</a></li>-->
-			<li><a href="./trump">trump</a></li>
-			<li><a href="./cist-cloud">cist-cloud</a></li>
-    </ul>
-
-    <h3>b215</h3>
-    <ul>
-        <li><a href="./PMPS">PMPS</a></li>
-    </ul>
-
-    <h3>m217</h3>
-    <ul>
-        <li><a href="./wicket-handson">wicket-handson</a></li>
-        <li><a href="./ars">ars</a></li>
-    </ul>
-  </div>
-
-  <div class="col-sm-4">
-  	<h2>授業</h2>
-  	<h3>情報科教育法</h3>
-  	<ul>
-  		<li><a href="./jokyo">ファイルまとめ</a></li>
-  		<!-- <li><a href="./quantization1.html">量子化（ボタンとかなし）</a></li> -->
-  	</ul>
-  	<h3>輪講</h3>
-  	<ul>
-  		<li><a href="http://a.co/5xFo4Y8">よしたかさんの輪講おすすめリスト（amazonのほしいものリスト）</a></li>
-  	</ul>
-  </div>
-
-  <div class="col-sm-4">
-  	<h2>その他</h2>
-  	<h3>学校の配布物</h3>
-  	<ul>
-  		<!-- <li class="large bold"><a href="examschedule.png">テストの時間割</a></li> -->
-  		<li class="large bold"><a href="./sound/kouka.mp3">校歌</a></li>
-  		<li><a href="./pdf/schedule-autumn.pdf">時間割.pdf</a></li>
-  		<li><a href="./guide.pdf">履修登録ガイド.pdf（主に大学行事のカレンダー用）</a></li>
-  	</ul>
-		<h3>中央バスのダイヤ</h3>
-		<ul>
-			<li><a href="./chuobus.html">確実に俺しか使わない</a></li>
-		</ul>
-		<h3>お絵かきチャットの画像ログ</h3>
-		<ul>
-			<li><a href="drawchat">こちら</a></li>
-		</ul>
-<!-- 
-		<h3>管理人のイラスト（誰得？）</h3>
-		<ul>
-			<li><a href="./illust">こちら</a></li>
-		</ul> -->
-  </div>
-
-	<div class="col-sm-12" style="margin-bottom:100px;"></div>
+	<footer class="col-sm-12" style="margin-bottom:100px;"></footer>
 
 
 
@@ -439,60 +359,66 @@
 		    console.log('失敗');
 		});
 
-		$.ajax({
-	    "url": "http://54.92.8.231/shuttlebus",
-	    "dataType": "json"
-		}).done(function(json) {
+		function getShuttleBus() {
+			$.ajax({
+		    "url": "http://54.92.8.231/shuttlebus",
+		    "dataType": "json"
+			}).done(function(json) {
 
-			// バスダイヤを隠す
-			// $('#shuttlebus-timetable').hide();
-			// return;
+				// バスダイヤを隠す
+				// $('#shuttlebus-timetable').hide();
+				// return;
 
-			var crt = new moment();
-			$('#crt').text(crt.format('HH:mm'));
+				var crt = new moment();
+				$('#crt').text(crt.format('HH:mm'));
 
-			// 休日
-			var dayoffStart = moment("2018-08-04", "YYYY-MM-DD");
-			var dayoffEnd = moment("2018-09-07", "YYYY-MM-DD");
+				// 休日
+				var dayoffStart = moment("2018-08-04", "YYYY-MM-DD");
+				var dayoffEnd = moment("2018-09-07", "YYYY-MM-DD");
 
-			if ( crt.isBetween(dayoffStart, dayoffEnd) ) {
-				/* 休学期ダイヤ */
-				$('#shuttlebus-normal').hide();
-				var dayoffOuro = new TeaTimeTable("#dayoff-ouro", json["dayoff-ouro"]);
-				var dayoffFukuro = new TeaTimeTable("#dayoff-fukuro", json["dayoff-fukuro"]);
-				dayoffOuro.whileUpdate(10);
-				dayoffFukuro.whileUpdate(10);
-				setInterval(function() {
-					var crt = new moment();
-					$('#crt').text(crt.format('HH:mm'));
-				}, 10*1000);
-			} else {
-				/* 通常ダイヤ */
-				$('#shuttlebus-dayoff').hide();
-				var ouro = new TeaTimeTable("#ouro", json["ouro"]);
-				var fukuro = new TeaTimeTable("#fukuro", json["fukuro"]);
-				ouro.whileUpdate(10);
-				fukuro.whileUpdate(10);
-				setInterval(function() {
-					var crt = new moment();
-					$('#crt').text(crt.format('HH:mm'));
-				}, 10*1000);
-			}
-		}).fail(function(data) {
-	    console.log('ajax submit error!!!');
-		});
+				if ( crt.isBetween(dayoffStart, dayoffEnd) ) {
+					/* 休学期ダイヤ */
+					$('#shuttlebus-normal').hide();
+					var dayoffOuro = new TeaTimeTable("#dayoff-ouro", json["dayoff-ouro"]);
+					var dayoffFukuro = new TeaTimeTable("#dayoff-fukuro", json["dayoff-fukuro"]);
+					dayoffOuro.whileUpdate(10);
+					dayoffFukuro.whileUpdate(10);
+					setInterval(function() {
+						var crt = new moment();
+						$('#crt').text(crt.format('HH:mm'));
+					}, 10*1000);
+				} else {
+					/* 通常ダイヤ */
+					$('#shuttlebus-dayoff').hide();
+					var ouro = new TeaTimeTable("#ouro", json["ouro"]);
+					var fukuro = new TeaTimeTable("#fukuro", json["fukuro"]);
+					ouro.whileUpdate(10);
+					fukuro.whileUpdate(10);
+					setInterval(function() {
+						var crt = new moment();
+						$('#crt').text(crt.format('HH:mm'));
+					}, 10*1000);
+				}
+			}).fail(function(data) {
+		    console.log('ajax submit error!!!');
+			});
+		}
+		getShuttleBus();
 
-		$.ajax({
-		  "url": "http://54.92.8.231/counter",
-		  "dataType": "json"
-		}).done(function(json) {
-			$('#counter').text(json.count);
-			if ( json.count % 100 == 0 ) {
-				alert('おめでとうございます！あなたは'+json.count+'のお客様です。よろしければ管理者にキリ番報告してください。');
-			}
-		}).fail(function(data) {
-		  console.log('ajax submit error!!!');
-		});
+		function countAccess() {
+			$.ajax({
+			  "url": "http://54.92.8.231/counter",
+			  "dataType": "json"
+			}).done(function(json) {
+				$('#counter').text(json.count);
+				if ( json.count % 100 == 0 ) {
+					alert('おめでとうございます！あなたは'+json.count+'のお客様です。よろしければ管理者にキリ番報告してください。');
+				}
+			}).fail(function(data) {
+			  console.log('ajax submit error!!!');
+			});
+		}
+		countAccess();
 
 		socket.on('message', function (data) {
 
