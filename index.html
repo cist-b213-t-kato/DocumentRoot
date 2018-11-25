@@ -98,9 +98,9 @@
 					</label>
 				</span>
 				<!-- <label id='addThread' class="btn btn-default btn-primary" onclick="popAddThread();" > + </label> -->
-				<form onsubmit="enterThreadSubmit(); return false;">
+				<!-- <form onsubmit="enterThreadSubmit(); return false;">
 					<input id="addThreadInput" type="text" class="form-control" onblur="returnAddThread();">
-				</form>
+				</form> -->
 
 			</div>
 
@@ -410,9 +410,12 @@
 			  "url": "http://54.92.8.231/counter",
 			  "dataType": "json"
 			}).done(function(json) {
+
 				$('#counter').text(json.count);
 				if ( json.count % 100 == 0 ) {
-					alert('おめでとうございます！あなたは'+json.count+'のお客様です。よろしければ管理者にキリ番報告してください。');
+					alert('おめでとうございます！あなたは'+json.count+'のお客様です。キリ番報告はしなくても結構です。');
+				} else if ( json.count == 10000 ) {
+					location.href = './yorokobi/yorokobi.html';
 				}
 			}).fail(function(data) {
 			  console.log('ajax submit error!!!');
