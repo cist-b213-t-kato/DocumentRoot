@@ -246,11 +246,19 @@
 	    	for ( var i in data ) {
 	      	var li = $("<li>");
 	      	var namebody = $("<div class=\"namebody\">");
+	      	var nameView = data[i].name;
+	      	nameView = nameView
+								            .replace(/\\/g, '\\\\')
+								            .replace(/'/g, "\\'")
+								            .replace(/"/g, '\\"')
+								            .replace(/\//g, '\\/');
+	      	var clickable = $("<a onclick=\"$(\'#body\').val(\'@" + nameView + "\')\">");
 	      	var nameLabel = $("<span class=\"name-label\">");
 	      	nameLabel.text(data[i].name);
 	      	var bodyLabel = $("<span class=\"body-label\">");
 	      	bodyLabel.text(data[i].body);
-	      	namebody.append(nameLabel);
+	      	namebody.append(clickable);
+	      	clickable.append(nameLabel);
 	      	namebody.append(bodyLabel);
 
 	      	var date = data[i].date;
