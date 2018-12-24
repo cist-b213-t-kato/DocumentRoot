@@ -84,6 +84,10 @@
 		  	</div>
 		  </div>
 
+		  <p>pdfは<a href="./pdf/shuttlebus.pdf">こちら</a></p>
+
+		  <p>平成30年12月25日～12月28日、平成31年1月7日～1月11日 それ以外の日走ってない。。。(絶望)</p>
+
 		</div>
 
 	  <div id="chat" class="tab-pane col-sm-12">
@@ -381,8 +385,8 @@
 				$('#crt').text(crt.format('HH:mm'));
 
 				// 休日
-				var dayoffStart = moment("2018-08-04", "YYYY-MM-DD");
-				var dayoffEnd = moment("2018-09-07", "YYYY-MM-DD");
+				var dayoffStart = moment("2018-12-24", "YYYY-MM-DD");
+				var dayoffEnd = moment("2019-01-11", "YYYY-MM-DD");
 
 				if ( crt.isBetween(dayoffStart, dayoffEnd) ) {
 					/* 休学期ダイヤ */
