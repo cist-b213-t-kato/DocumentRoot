@@ -29,7 +29,7 @@
 	
   <nav class="col-sm-12">
   	<div style="margin-bottom: 5px;">
-	    <span class="bold large">CIST非公式サイト</span><span id="counter" style="margin-left:5px;"></span>
+	    <span class="bold large">CIST非公式サイト</span><span id="counter" style="margin-left:5px;"></span><span style="margin-left:10px"><a href="http://www.kklab.tk/">www.kklab.tk</a></span>
 	  </div>
 
 	  <ul class="nav nav-tabs">
@@ -57,12 +57,12 @@
 
 		    <div id="shuttlebus-normal" class="col-sm-12">
 
-			    <div class="col-sm-6">
+			    <div class="col-sm-6" style="padding-bottom:10px;">
 				    <h3>往路</h3>
 				    <table id="ouro"></table>
 				  </div>
 
-			    <div class="col-sm-6">
+			    <div class="col-sm-6" style="padding-bottom:10px;">
 				    <h3>復路</h3>
 				    <table id="fukuro"></table>
 		    		<p><span class="noriba2">朱色</span>は乗り場②</p>
@@ -72,21 +72,23 @@
 
 			  <div id="shuttlebus-dayoff" class="col-sm-12">
 			    <!-- <p style="font-size:125%;color:#E07022;">JSONの功労者9:10氏を讃えよ</p> -->
-			    <div class="col-sm-6">
+			    <div class="col-sm-6" style="padding-bottom:10px;">
 				    <h3>休学期往路</h3>
 				    <table id="dayoff-ouro"></table>
 				  </div>
 
-			    <div class="col-sm-6">
+			    <div class="col-sm-6" style="padding-bottom:10px;">
 				    <h3>休学期復路</h3>
 				    <table id="dayoff-fukuro"></table>
 			  	</div>
 		  	</div>
 		  </div>
-
-		  <p>pdfは<a href="./pdf/shuttlebus.pdf">こちら</a></p>
-
-		  <p>平成30年12月25日～12月28日、平成31年1月7日～1月11日 それ以外の日走ってない。。。(絶望)</p>
+		  <div class="col-sm-12">
+		  	<p>pdfは<a href="./pdf/shuttlebus.pdf">こちら</a></p>
+		 	<p><a href="https://chi-navi.net/user/map/chitose">ち〜なび</a></p>
+		  	<p><a href="./chuobus.html">中央バスのダイヤ</a></p>
+		  </div>
+		  <!--<p>平成30年12月25日～12月28日、平成31年1月7日～1月11日 それ以外の日走ってない。。。(絶望)</p>-->
 
 		</div>
 
@@ -183,10 +185,6 @@
 		  		<li><a href="./pdf/schedule-autumn.pdf">時間割.pdf</a></li>
 		  		<li><a href="./guide.pdf">履修登録ガイド.pdf（主に大学行事のカレンダー用）</a></li>
 		  	</ul>
-				<h3>中央バスのダイヤ</h3>
-				<ul>
-					<li><a href="./chuobus.html">確実に俺しか使わない</a></li>
-				</ul>
 				<h3>お絵かきチャットの画像ログ</h3>
 				<ul>
 					<li><a href="drawchat">こちら</a></li>
@@ -386,8 +384,8 @@
 				$('#crt').text(crt.format('HH:mm'));
 
 				// 休日
-				var dayoffStart = moment("2018-12-24", "YYYY-MM-DD");
-				var dayoffEnd = moment("2019-01-11", "YYYY-MM-DD");
+				var dayoffStart = moment("2019-02-04 00:00:00", "YYYY-MM-DD HH:mm:ss");
+				var dayoffEnd = moment("2019-03-31 00:00:00", "YYYY-MM-DD HH:mm:ss");
 
 				if ( crt.isBetween(dayoffStart, dayoffEnd) ) {
 					/* 休学期ダイヤ */
