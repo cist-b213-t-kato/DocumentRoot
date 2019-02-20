@@ -1,0 +1,54 @@
+<html>
+
+<head>
+
+	<meta charset="UTF-8"/>
+
+	<title>食券</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://momentjs.com/downloads/moment.min.js"></script>
+
+	<!--script src="socket.io.js"></script-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+	<script src="./js/teatimetable.js"></script>
+	<script src="./js/jquery.cookie.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="./common.css" rel="stylesheet" />
+
+	<style>
+	</style>
+
+</head>
+
+<body>
+	
+	<div style="font-size:72px;" id="number">number</div>
+
+	<script type="text/javascript">
+
+		// https://www.sejuku.net/blog/25316#Ajax
+		var socket = io('http://54.92.8.231');
+
+		function emit(value) {
+			socket.emit('shokken', { my: value });
+		}
+
+		socket.on('shokkenEmit', function (data) {
+			$('#number').text(data.my);
+		});
+
+	</script>
+
+	<button onclick="emit(1);">1</button>
+	<button onclick="emit(2);">2</button>
+	<button onclick="emit(3);">3</button>
+
+
+</body>
+
+</html>
