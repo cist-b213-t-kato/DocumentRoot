@@ -227,6 +227,10 @@ io.on('connection', function (socket) {
 
 		});
 
+		socket.on('shokken', function(data) {
+			scoket.broadcast.emit('shokkenEmit', data);
+		})
+
 });
 
 
