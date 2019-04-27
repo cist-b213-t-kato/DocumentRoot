@@ -223,6 +223,9 @@
 	<script type="text/javascript">
 
 		// https://www.sejuku.net/blog/25316#Ajax
+		// var myUrl = 'http://13.230.254.47';
+		var myUrl = 'http://' + location.host;
+		console.log(myUrl);
 
 		$('#name').val($.cookie("name"));
 
@@ -232,13 +235,13 @@
 			viewMessage();
 		}
 
-		var socket = io('http://54.92.8.231');
+		var socket = io(myUrl);
 
 		function viewMessage() {
 			// console.log('called viewMessage().');
 			$.ajax({
         type : 'GET',
-        url : 'http://54.92.8.231/get-message',
+        url : myUrl + '/get-message',
         data : { 
         	thread: crtThread 
         }
@@ -266,7 +269,9 @@
 
 	      	var date = data[i].date;
 	      	if ( date ) {
-	      		namebody.append("<span class=\"date-label\">" + date + "</span>");
+			var dateLabel = $("<span class=\"date-label\">")
+			dateLabel.text(date);
+			namebody.append(dateLabel);
 	      	}
 	      	li.append(namebody);
 
@@ -284,7 +289,7 @@
 			var crtDate = new moment().format('YYYY/MM/DD HH:mm');
 			$.ajax({
 				type: 'POST',
-				url: 'http://54.92.8.231/add-message',
+				url: myUrl + '/add-message',
 				data : {
 					name : $("#name").val(),
 					body : $("#body").val(),
@@ -334,7 +339,7 @@
 		function addThread(threadName) {
 			$.ajax({
 				type: 'POST',
-				url: 'http://54.92.8.231/add-thread',
+				url: myUrl + '/add-thread',
 				data : { name: threadName }
 	    }).done(function(json) {
 			}).fail(function(json) {
@@ -359,7 +364,7 @@
 
 		$.ajax({
 			type: 'GET',
-			url: 'http://54.92.8.231/get-thread',
+			url: myUrl + '/get-thread',
 			data : { }
     }).done(function(json) {
     	for ( var i in json ) {
@@ -372,7 +377,7 @@
 
 		function getShuttleBus() {
 			$.ajax({
-		    "url": "http://54.92.8.231/shuttlebus",
+		    "url": myUrl + "/shuttlebus",
 		    "dataType": "json"
 			}).done(function(json) {
 
@@ -418,7 +423,7 @@
 
 		function countAccess() {
 			$.ajax({
-			  "url": "http://54.92.8.231/counter",
+			  "url": myUrl + "/counter",
 			  "dataType": "json"
 			}).done(function(json) {
 

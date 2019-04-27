@@ -228,7 +228,9 @@ io.on('connection', function (socket) {
 		});
 
 		socket.on('shokken', function(data) {
-			scoket.broadcast.emit('shokkenEmit', data);
+			console.log(data);
+			socket.emit('shokkenEmit', data);
+			socket.broadcast.emit('shokkenEmit', data);
 		})
 
 });
