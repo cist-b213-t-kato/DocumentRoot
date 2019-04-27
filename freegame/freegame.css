@@ -1,0 +1,11 @@
+@import url(http://fonts.googleapis.com/earlyaccess/notosansjp.css);
+@import url(https://fonts.googleapis.com/css?family=Pacifico);
+
+body{
+	font: 14px/1.9 'Noto Sans JP', Arial, Verdana, 貂ｸ繧ｴ繧ｷ繝�け, YuGothic,'繝偵Λ繧ｮ繝手ｧ偵ざ ProN W3', 'Hiragino Kaku Gothic ProN', 繝｡繧､繝ｪ繧ｪ, Meiryo,sans-serif;
+	font-weight: 300;
+	-webkit-text-size-adjust:100%;
+	overflow-x: hidden;
+	color: #000;
+	background: #000;
+}
