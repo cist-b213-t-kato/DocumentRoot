@@ -224,7 +224,8 @@
 
 		// https://www.sejuku.net/blog/25316#Ajax
 		// var myUrl = 'http://13.230.254.47';
-		var myUrl = 'http://' + location.host;
+		var myUrl = 'http://www.kklab.tk/';
+		// var myUrl = 'http://' + location.host;
 		console.log(myUrl);
 
 		$('#name').val($.cookie("name"));
@@ -236,6 +237,31 @@
 		}
 
 		var socket = io(myUrl);
+
+		/**
+		 * html文字列を通常テキストに変換する
+		 */
+		function toText(str) {
+			return str
+					.replace(/&/g, '&amp;')
+					.replace(/\\/g, '\\')
+					.replace(/'/g, "\\'")
+					.replace(/"/g, '\\"')
+					.replace(/\//g, '\/')
+					.replace(/</g, '&lt;')
+					.replace(/>/g, '&gt;');
+		}
+
+		function toBodyText(str) {
+			/* こっちの方がいいかも 
+			 * https://www.bhnt.co.jp/blog/%E9%96%8B%E7%99%BA%E8%A8%80%E8%AA%9E/javascript/javascript-%E6%96%87%E5%AD%97%E5%88%97%E3%81%8B%E3%82%89url%E3%82%92%E6%8A%BD%E5%87%BA%E3%81%97a%E3%82%BF%E3%82%B0%E3%82%92%E5%BC%B5%E3%82%8B%E9%96%A2%E6%95%B0%E3%80%82/
+			 * http://weble.org/2010/11/28/javascript-url-link
+			 */
+			var text = toText(str);
+			var match = text.match(/http\S*/g);
+			var ret = text.replace(match, '<a href=\"' + match + '\" target=\"_blank\">' + match + '</a>');
+			return ret;
+		}
 
 		function viewMessage() {
 			// console.log('called viewMessage().');
@@ -253,25 +279,23 @@
 	      	var li = $("<li>");
 	      	var namebody = $("<div class=\"namebody\">");
 	      	var nameView = data[i].name;
-	      	nameView = nameView
-								            .replace(/\\/g, '\\\\')
-								            .replace(/'/g, "\\'")
-								            .replace(/"/g, '\\"')
-								            .replace(/\//g, '\\/');
+	      	nameView = toText(nameView);
 	      	var clickable = $("<a onclick=\"$(\'#body\').val(\'@" + nameView + "\')\">");
 	      	var nameLabel = $("<span class=\"name-label\">");
 	      	nameLabel.text(data[i].name);
 	      	var bodyLabel = $("<span class=\"body-label\">");
-	      	bodyLabel.text(data[i].body);
+	      	// bodyLabel.text(data[i].body);
+	      	var bodyHtml = toBodyText(data[i].body);
+	      	bodyLabel.html(bodyHtml);
 	      	namebody.append(clickable);
 	      	clickable.append(nameLabel);
-	      	namebody.html(bodyLabel);
+	      	namebody.append(bodyLabel);
 
 	      	var date = data[i].date;
 	      	if ( date ) {
-			var dateLabel = $("<span class=\"date-label\">")
-			dateLabel.text(date);
-			namebody.append(dateLabel);
+						var dateLabel = $("<span class=\"date-label\">")
+						dateLabel.text(date);
+						namebody.append(dateLabel);
 	      	}
 	      	li.append(namebody);
 
