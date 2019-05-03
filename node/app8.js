@@ -159,11 +159,16 @@ io.on('connection', function (socket) {
 		//console.log('socket.emit()');
 		socket.on('clientToServer', function (data) {
 			// クライアントから受け取ったデータを出力する
+/*
 			console.log('client: ' + data);
+			for (var i in data) {
+				console.log(data[i]);
+			} 
+*/
 			// 全員に送信
-			socket.emit('message', {message:'hello'});
-			socket.broadcast.emit('message', {message:'world'});
-			console.log('socket.emit()');
+//			socket.emit('message', data);
+			socket.broadcast.emit('message', data);
+//			console.log('socket.emit()');
 		});
 
 		socket.on('drawListToServer', function(drawList) {

@@ -225,8 +225,8 @@
 		// https://www.sejuku.net/blog/25316#Ajax
 		// var myUrl = 'http://13.230.254.47';
 		var myUrl = 'http://www.kklab.tk/';
-		// var myUrl = 'http://' + location.host;
-		console.log(myUrl);
+		//var myUrl = 'http://' + location.host;
+		// console.log(myUrl);
 
 		$('#name').val($.cookie("name"));
 
@@ -311,23 +311,23 @@
 		$('#outButton').click(function() {
 	    $.cookie('name', $("#name").val(), { expires:30 });
 			var crtDate = new moment().format('YYYY/MM/DD HH:mm');
+			var newData = {
+				name : $("#name").val(),
+				body : $("#body").val(),
+				thread : crtThread,
+				date : crtDate
+			};
 			$.ajax({
 				type: 'POST',
 				url: myUrl + '/add-message',
-				data : {
-					name : $("#name").val(),
-					body : $("#body").val(),
-					thread : crtThread,
-					date : crtDate
-				}
+				data : newData
 		  }).done(function(result) {
 			}).fail(function(result) {
 			   console.log('失敗');
 			});
 			$("#body").val('');
 
-			socket.emit('clientToServer', { my: 'client socket.emit()' });
-
+			socket.emit('clientToServer', newData);
 
 			viewMessage();
 		});
@@ -464,10 +464,9 @@
 		countAccess();
 
 		socket.on('message', function (data) {
-
-			console.log('server to client');
-
-			console.log('server: ' + data.message);
+//			console.log('server to client');
+//			console.log('server : ' + data.name + ' : ' + data.body);
+			alert('[' + data.thread + 'スレッド]\n' + data.name + ' \n' + data.body);
 			viewMessage();
 
 			// サーバへデータ送信
