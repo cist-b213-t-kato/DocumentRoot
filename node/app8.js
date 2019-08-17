@@ -6,7 +6,7 @@ var io = require('socket.io')(app2);
 var fs = require('fs');
 var MongoClient = require("mongodb").MongoClient;
 var bodyParser = require("body-parser");
-var Canvas = require('canvas');
+// var Canvas = require('canvas');
 
 
 
@@ -83,6 +83,7 @@ MongoClient.connect(url, (error, client) => {
 		
 		});
 
+/*
 		db.collection('draw', (err, collection) => {
 			app.post("/add-draw", function(req, res, next) {
 				//collection.insertOne(req.body);
@@ -120,7 +121,7 @@ MongoClient.connect(url, (error, client) => {
 			});
 
 		});
-
+*/
 		db.collection('counter', (err, collection) => {
 			app.get("/counter", function(req, res, next){
 				collection.find().toArray((err, docs) => {
@@ -171,9 +172,11 @@ io.on('connection', function (socket) {
 //			console.log('socket.emit()');
 		});
 
+/*
+
 		socket.on('drawListToServer', function(drawList) {
 
-			/* https://qiita.com/redshoga/items/d5afef65081b7fdf60cc */
+			// https://qiita.com/redshoga/items/d5afef65081b7fdf60cc
 
 			// console.log(drawList);
 			
@@ -231,6 +234,8 @@ io.on('connection', function (socket) {
 
 
 		});
+
+*/
 
 		socket.on('shokken', function(data) {
 			console.log(data);
