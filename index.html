@@ -33,9 +33,10 @@
 	  </div>
 
 	  <ul class="nav nav-tabs">
-	  	<li class="active" style="width:33%;"><a href="#shuttlebus" data-toggle="tab">bus</a></li>
-	  	<li class="" style="width:33%;"><a href="#chat" data-toggle="tab" onclick="viewMessage();">chat</a></li>
-	  	<li class="" style="width:33%;"><a href="#other" data-toggle="tab">other</a></li>
+	  	<li class="active" style="width:25%;"><a href="#shuttlebus" data-toggle="tab">bus</a></li>
+	  	<li class="" style="width:25%;"><a href="#chat" data-toggle="tab" onclick="viewMessage();">chat</a></li>
+	  	<li class="" style="width:25%;"><a href="#weather" data-toggle="tab">weather</a></li>
+	  	<li class="" style="width:25%;"><a href="#other" data-toggle="tab">other</a></li>
 	  </ul>
   </nav>
 
@@ -138,6 +139,58 @@
 	  	<a href="./examschedule.png"></a>
 	  </div> -->
 
+	<div id="weather" class="tab-pane col-sm-12">
+		<div>千歳:<span id="chitose-weather"></span></div>
+		<div>札幌:<span id="sapporo-weather"></span></div>
+		<div>名護:<span id="nago-weather"></span></div>
+		<div>那覇:<span id="naha-weather"></span></div>
+		<div>東京:<span id="tokyo-weather"></span></div>
+		<script>
+			/* 使ってない */
+			function showCurrentPositionWeather(id, lat, lon) {
+				$.ajax({
+					type : "GET",
+					url : "https://api.openweathermap.org/data/2.5/forecast",
+					data : {
+						appid : "e05e46b737f61fc74ae643acd502b3eb",
+						lat : lat,
+						lon : lon,
+						units : "metric",
+						lang : "ja"
+					}
+				}).done(function(data, dataType) {
+					$(id).text(data.list[0].weather[0].description);
+				});
+			}
+
+			function showWeather(id, place) {
+				$.ajax({
+					type : "GET",
+					url : "https://api.openweathermap.org/data/2.5/forecast",
+					data : {
+						appid : "e05e46b737f61fc74ae643acd502b3eb",
+						q : place,
+						units : "metric",
+						lang : "ja"
+					}
+				}).done(function(data, dataType) {
+					var img = $("<img>");
+					img.attr("src", data.list[0].weather[0].main + ".jpg");
+					img.attr("width", "40%");
+					$(id).append(data.list[0].weather[0].description);
+					// $(id).append(img);
+					// $(id).text(data.list[0].weather[0].description);
+				});
+			}
+
+			showWeather('#chitose-weather', 'Chitose,jp');
+			showWeather('#sapporo-weather', 'Sapporo,jp');
+			showWeather('#nago-weather', 'Nago,jp');
+			showWeather('#naha-weather', 'Naha-shi,jp');
+			showWeather('#tokyo-weather', 'Tokyo,jp');
+
+		</script>
+	</div>
 	  <div id="other" class="tab-pane col-sm-12">
 
 	  	<div class="col-sm-6">
@@ -245,7 +298,7 @@
 			return str
 					.replace(/&/g, '&amp;')
 					.replace(/\\/g, '\\')
-					.replace(/'/g, "\\'")
+					.replace(/'/g, "\'")
 					.replace(/"/g, '\\"')
 					.replace(/\//g, '\/')
 					.replace(/</g, '&lt;')
@@ -253,12 +306,13 @@
 		}
 
 		function toBodyText(str) {
-			/* こっちの方がいいかも 
-			 * https://www.bhnt.co.jp/blog/%E9%96%8B%E7%99%BA%E8%A8%80%E8%AA%9E/javascript/javascript-%E6%96%87%E5%AD%97%E5%88%97%E3%81%8B%E3%82%89url%E3%82%92%E6%8A%BD%E5%87%BA%E3%81%97a%E3%82%BF%E3%82%B0%E3%82%92%E5%BC%B5%E3%82%8B%E9%96%A2%E6%95%B0%E3%80%82/
+			/* 
 			 * http://weble.org/2010/11/28/javascript-url-link
 			 */
 			var text = toText(str);
-			var match = text.match(/http\S*/g);
+			// var match = text.match(/http\S*/g);
+			var match = text.match(/(h?)(ttps?:\/\/[a-zA-Z0-9.\-_@:\/~?%;=+#',()*!+]+)/g);
+			// var match = text.match(/((h?)(ttps?:\/\/[a-zA-Z0-9.\-_@:/~?%;=+#',()*!]+))/g);
 			var ret = text.replace(match, '<a href=\"' + match + '\" target=\"_blank\">' + match + '</a>');
 			return ret;
 		}
@@ -272,34 +326,34 @@
         	thread: crtThread 
         }
 	    }).done(function(data, dataType) {
-		    // console.log('succeed get-message');
-				var message = $("#message");
-				message.empty();
+		var message = $("#message");
+		message.empty();
 	    	for ( var i in data ) {
-	      	var li = $("<li>");
-	      	var namebody = $("<div class=\"namebody\">");
-	      	var nameView = data[i].name;
-	      	nameView = toText(nameView);
-	      	var clickable = $("<a onclick=\"$(\'#body\').val(\'@" + nameView + "\')\">");
-	      	var nameLabel = $("<span class=\"name-label\">");
-	      	nameLabel.text(data[i].name);
-	      	var bodyLabel = $("<span class=\"body-label\">");
-	      	// bodyLabel.text(data[i].body);
-	      	var bodyHtml = toBodyText(data[i].body);
-	      	bodyLabel.html(bodyHtml);
-	      	namebody.append(clickable);
-	      	clickable.append(nameLabel);
-	      	namebody.append(bodyLabel);
+		      	var li = $("<li>");
+		      	var namebody = $("<div class=\"namebody\">");
+		      	const nameView = toText(data[i].name);
+			const clickable = $("<a>").on("click", () => {
+				$("#body").val("@" + nameView);
+			});
+		      	var nameLabel = $("<span class=\"name-label\">");
+		      	nameLabel.text(data[i].name);
+		      	var bodyLabel = $("<span class=\"body-label\">");
+		      	// bodyLabel.text(data[i].body);
+		      	var bodyHtml = toBodyText(data[i].body);
+		      	bodyLabel.html(bodyHtml);
+		      	namebody.append(clickable);
+		      	clickable.append(nameLabel);
+		      	namebody.append(bodyLabel);
 
-	      	var date = data[i].date;
-	      	if ( date ) {
+	      		var date = data[i].date;
+	      		if ( date ) {
 						var dateLabel = $("<span class=\"date-label\">")
 						dateLabel.text(date);
 						namebody.append(dateLabel);
-	      	}
-	      	li.append(namebody);
+	      		}
+		      	li.append(namebody);
 
-			    message.append(li);
+			message.prepend(li);
 	    	}
 		    $('#message-box').animate({scrollTop: $('#message-box')[0].scrollHeight}, 'slow');
 			}).fail(function(result) {
@@ -310,7 +364,7 @@
 
 		$('#outButton').click(function() {
 	    $.cookie('name', $("#name").val(), { expires:30 });
-			var crtDate = new moment().format('YYYY/MM/DD HH:mm');
+			var crtDate = new moment().format('YYYY/MM/DD HH:mm:ss');
 			var newData = {
 				name : $("#name").val(),
 				body : $("#body").val(),

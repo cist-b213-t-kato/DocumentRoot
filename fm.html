@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8">
+    <title>ファイルのアップロードとダウンロード</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+    <div>
+        <input type="file" id="upload-file" />
+    </div>
+    <div>
+        <button id="upload">upload</button>
+    </div>
+    <div id="download"></div>
+    <div id="list">
+    </div>
+    <script>
+
+    function toBlob(base64) {
+        var bin = atob(base64.replace(/^.*,/, ''));
+        var buffer = new Uint8Array(bin.length);
+        for (var i = 0; i < bin.length; i++) {
+            buffer[i] = bin.charCodeAt(i);
+        }
+        // Blobを作成
+        const type = base64.slice(base64.indexOf(':') + 1, base64.indexOf(';'));
+        try {
+            var blob = new Blob([buffer.buffer], {
+                type: type
+            });
+        } catch (e){
+            return false;
+        }
+        return blob;
+    }
+
+    function showFileList() {
+        $.ajax({
+            type : "GET",
+            url : "http://35.239.62.121/file",
+            data : {}
+        }).done(function(data, dataType) {
+            $("#list").empty();
+            for (var i in data) {
+                const id = data[i]._id;
+                const f = $("<div>");
+                const a = $('<a>');
+                a.on("click", () => {
+                    $.ajax({
+                        type : "GET",
+                        url : "http://35.239.62.121/file/id/" + id
+                    }).done(function(data, dataType) {
+                        // console.log(data[0].body);
+                        // window.open(data[0].body, "_blank");
+                        // window.open(data[0].body);
+                        // window.location.href = data[0].body;
+                        var blob = toBlob(data[0].body);
+                        var url = URL.createObjectURL(blob);
+                        window.location.href = url;
+  //                      window.open(url);
+                    });
+                });
+                a.attr("href", "#");
+//                a.attr("download", data[i].name);
+                a.append(data[i].name);
+                f.append(a);
+                $("#list").append(f);
+            }
+        });
+    }
+
+    showFileList();
+
+        $("#upload").on('click', function () {
+            var uploadFile = document.getElementById('upload-file');
+            var file = uploadFile.files[0];
+            if (!file) alert('ファイルを選択してください。');
+
+            var reader = new FileReader();
+            reader.onload = function () {
+                // console.log(reader.result);
+                // var img = $("<img>");
+                // img.attr("src", reader.result);
+                // $("#download").append(img);
+
+                // var a = $('<a>');
+                // a.attr("href", reader.result);
+                // a.attr("download", file.name);
+                // a.attr("target", "_blank");
+                // a.append(file.name);
+                // $("#download").append(a);
+
+                $.ajax({
+                    type : "POST",
+                    url : "http://35.239.62.121/file",
+                    data : {
+                        name:file.name,
+                        body:reader.result
+                    }
+                }).done(function(data, dataType) {
+                    showFileList();
+                });
+
+            }
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>
+
