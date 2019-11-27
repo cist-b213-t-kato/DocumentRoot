@@ -146,23 +146,6 @@
 		<div>那覇:<span id="naha-weather"></span></div>
 		<div>東京:<span id="tokyo-weather"></span></div>
 		<script>
-			/* 使ってない */
-			function showCurrentPositionWeather(id, lat, lon) {
-				$.ajax({
-					type : "GET",
-					url : "https://api.openweathermap.org/data/2.5/forecast",
-					data : {
-						appid : "e05e46b737f61fc74ae643acd502b3eb",
-						lat : lat,
-						lon : lon,
-						units : "metric",
-						lang : "ja"
-					}
-				}).done(function(data, dataType) {
-					$(id).text(data.list[0].weather[0].description);
-				});
-			}
-
 			function showWeather(id, place) {
 				$.ajax({
 					type : "GET",
@@ -174,12 +157,7 @@
 						lang : "ja"
 					}
 				}).done(function(data, dataType) {
-					var img = $("<img>");
-					img.attr("src", data.list[0].weather[0].main + ".jpg");
-					img.attr("width", "40%");
 					$(id).append(data.list[0].weather[0].description);
-					// $(id).append(img);
-					// $(id).text(data.list[0].weather[0].description);
 				});
 			}
 
