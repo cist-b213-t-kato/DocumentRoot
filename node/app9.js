@@ -9,6 +9,15 @@ var MongoClient = mongo.MongoClient;
 var bodyParser = require("body-parser");
 // var Canvas = require('canvas');
 
+var mysql      = require('mysql');
+var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : 'K/tPexcel57',
+  database : 'ygg'
+});
+
+
 
 
 /* 2. listen()メソッドを実行して3000番ポートで待ち受け。*/
@@ -65,21 +74,28 @@ MongoClient.connect(url, (error, client) => {
 
 		// コレクションの取得
 		db.collection('message', (err, collection) => {
-				app.get("/get-message", function(req, res, next) {
-						// console.log(req.query);
-						collection.find({thread:req.query.thread, date:{$exists: true}}).sort({date: -1}).limit(100).toArray((err, docs) => {
-								// console.log(docs);
-								res.json(docs);
-							});
+			app.get("/get-message", function(req, res, next) {
+				// console.log(req.query);
+			//	collection.find({thread:req.query.thread, date:{$exists: true}}).sort({date: -1}).limit(100).toArray((err, docs) => {
+			//		// console.log(docs);
+			//		res.json(docs);
+			//	});
+				var sql = "SELECT name, body, created_at AS date, thread FROM message WHERE thread = ? AND created_at IS NOT NULL ORDER BY created_at DESC LIMIT 100";
+				connection.query(sql, [req.query.thread], function(error, results, fields) {
+					res.json(results);
 				});
-				
-				app.post("/add-message", function(req, res){
-						// console.log(req.body);
-						res.send();
+			});
+			
+			app.post("/add-message", function(req, res){
+				// console.log(req.body);
+				res.send();
 
-						collection.insertOne(req.body);
-
-				});
+				collection.insertOne(req.body);
+                                // insert using mysql
+                                connection.query("insert into message values(default, ?, ?, ?, ?)",
+                                    [req.body.name, req.body.body, req.body.date, req.body.thread], function (error, results, fields) {
+                                });
+			});
 
 		
 		});
