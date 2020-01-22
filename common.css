@@ -166,13 +166,16 @@ nav span, nav a {
 }
 
 #other > div {
-//	background-color: #F0F6FF;
-	height: 400px;
-	padding: 20px;
-	border: white 10px solid;
+  padding: 20px;
 }
 
-#other > div > h2 {
+#other .box {
+	height: 400px;
+	padding: 20px 50px;
+  box-shadow: 1px 6px 10px gray;
+}
+
+#other h2 {
 	text-align: center;
 }
 
