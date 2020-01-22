@@ -1,0 +1,82 @@
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>el</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://momentjs.com/downloads/moment.min.js"></script>
+</head>
+
+<style>
+
+	body {
+		font-size: 16px;
+	}
+
+	a {
+		cursor: pointer;
+		cursor: hand;
+	}
+
+	.asset-option {
+		padding: 4px;
+	}
+
+</style>
+
+<body>
+
+<div id="asset-list" class="col-sm-12"></div>
+<div id="content" class="col-sm-12"></div>
+<style id="css"></style>
+<script id="script" type="text/javascript"></script>
+<script>
+	const assetList = $.ajax({
+		type : "GET",
+		url : "http://35.239.62.121/asset/list",
+		data : {},
+		async : false
+	}).done(function(data, dataType) {
+	}).responseJSON;
+
+	const getAsset = function(id) {
+		const asset = $.ajax({
+			type : "GET",
+			url : "http://35.239.62.121/asset/get",
+			data : {
+				id : id
+			},
+			async : false
+		}).done(function(data, dataType) {
+		}).responseJSON;
+	}
+
+	// @see "https://pisuke-code.com/jquery-load-outer-js-dynamically/"
+	const showAsset = function(a) {
+		$('#content').html(a.html);
+		const script = $("<script>").attr({
+			'type': 'text/javascript'
+		}).html(a.script);
+		$('#script').empty()[0].appendChild(script[0]);
+		$('#css').html(a.css);
+	};
+
+	for (const i in assetList) {
+		const div = $("<div>").attr('class', 'asset-option').css('display', 'inline-block');
+		const link = $("<a>")//.attr('href', '#id=' + assetList[i].id)
+			.text((parseInt(i) + 1));
+		link.on('click', function() {
+			showAsset(assetList[i]);
+		});
+		div.append(link);
+		$("#asset-list").append(div);
+	};
+
+	showAsset(assetList[0]);
+
+</script>
+
+</body>
+
+</html>

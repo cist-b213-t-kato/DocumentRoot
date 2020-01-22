@@ -1,0 +1,89 @@
+<html>
+<head>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>el</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://momentjs.com/downloads/moment.min.js"></script>
+</head>
+
+<body>
+<div class="col-sm-12">
+	id: <select id="asset-id" name="asset-id"></select>
+	
+	<div><textarea id="content" rows="10" cols="100"></textarea></div>
+	<div><textarea id="script" rows="10" cols="100"></textarea></div>
+	<div><textarea id="css" rows="5" cols="100"></textarea></div>
+	
+	<button id="update-button">更新</button>
+	
+	<div id="message"></div>
+
+</div>
+<script>
+        const assetList = $.ajax({
+                type : "GET",
+                url : "http://35.239.62.121/asset/list",
+                data : {},
+                async : false
+        }).done(function(data, dataType) {
+        }).responseJSON;
+
+	const loadAsset = function(id) {
+		$.ajax({
+			type : "GET",
+			url : "http://35.239.62.121/asset/get",
+			data : {
+				id : id
+			}
+		}).done(function(data, dataType) {
+			$('#content').val(data[0].html);
+			$('#script').val(data[0].script);
+			$('#css').val(data[0].css);
+		});
+	};
+
+	const createAssetSelect = function() {
+		for (const i in assetList) {
+			const opt = $("<option>").attr("value", assetList[i].id).text(assetList[i].id);
+			$("#asset-id").append(opt);
+		}
+		$("#asset-id").on("change", function() {
+			const id = $("select[name='asset-id']").val();
+			loadAsset(id);
+		});
+	};
+	createAssetSelect();
+
+	loadAsset(assetList[0].id);
+
+	var update = function(id) {
+		$.ajax({
+			type : "POST",
+			url : "http://35.239.62.121/asset/update",
+			data : {
+				id: id,
+				html: $('#content').val(),
+				script: $('#script').val(),
+				css: $('#css').val()
+			}
+		}).done(function(data, dataType) {
+			alert("更新に成功しました。");
+		}).fail(() => {
+			console.log("更新に失敗しました。");
+		});
+	};
+
+	$('#update-button').on('click', () => {
+		const id = $("select[name='asset-id']").val();
+		update(id);
+	});
+
+
+</script>
+
+</body>
+
+</html>

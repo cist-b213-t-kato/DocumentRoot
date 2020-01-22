@@ -31,8 +31,10 @@
 
 	<script type="text/javascript">
 
+    const url = "http://35.239.62.121";
+
 		// https://www.sejuku.net/blog/25316#Ajax
-		var socket = io('http://54.92.8.231');
+		var socket = io(url);
 
 		function emit(value) {
 			socket.emit('shokken', { my: value });

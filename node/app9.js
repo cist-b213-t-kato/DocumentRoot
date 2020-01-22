@@ -65,6 +65,38 @@ var url = "mongodb://localhost:27017/sampledb";
 
 var imgCollection;
 
+
+app.get("/asset/list", function(req, res, next) {
+	var sql = "SELECT * FROM asset";
+	connection.query(sql, [], function(error, results, fields) {
+		res.json(results);
+	});
+});
+
+app.get("/asset/get", function(req, res, next) {
+	var sql = "SELECT * FROM asset WHERE id = ?";
+	connection.query(sql, [req.query.id], function(error, results, fields) {
+		res.json(results);
+	});
+});
+
+app.post("/asset/create", function(req, res, next) {
+	var sql = "INSERT INTO asset (html, script, answer, css) VALUES (?, ?, ?, ?)";
+	console.log(req.body);
+	// connection.query(sql, [req.body.html, req.body.script, req.body.answer, req.body.css], function(error, results, fields) {
+	connection.query(sql, [req.body.html, req.body.script, "{}", req.body.css], function(error, results, fields) {
+	});
+});
+
+
+app.post("/asset/update", function(req, res, next) {
+	var sql = "UPDATE asset SET html = ?, script = ?, css = ? WHERE id = ?";
+	connection.query(sql, [req.body.html, req.body.script, req.body.css, req.body.id], function(error, results, fields) {
+		res.json({});
+	});
+});
+
+
 // MongoDB へ 接続
 MongoClient.connect(url, (error, client) => {
 
@@ -194,7 +226,10 @@ MongoClient.connect(url, (error, client) => {
 		});
 });
 
+const pp_hash = {};
 
+io.set('heartbeat interval', 5000);
+io.set('heartbeat timeout', 15000);
 io.on('connection', function (socket) {
 		//socket.emit('message', {message:'hello'});
 		//socket.broadcast.emit('message', {message:'world'});
@@ -278,11 +313,60 @@ io.on('connection', function (socket) {
 
 */
 
+    socket.on('disconnect', function (data) {
+      console.log("disconnected: " + socket.conn.id);
+      if (socket.conn.id in pp_hash) {
+        delete pp_hash[socket.conn.id];
+        res_output();
+      }
+    });
+
+    function res_output() {
+      const keys = Object.keys(pp_hash);
+      const uninput = keys.filter(key => pp_hash[key] == '').length;
+      if (keys.length != 0 && uninput == 0) {
+        // 公開
+		  	socket.emit('res-pp-open', {});
+		  	socket.broadcast.emit('res-pp-open', {});
+        setTimeout(function() {
+		  	  socket.emit('res-pp-open', pp_hash);
+		  	  socket.broadcast.emit('res-pp-open', pp_hash);
+        }, 5 * 1000);
+      } else {
+        const pp_hidden_hash = {};
+        keys.forEach(key => {
+          if (pp_hash[key] != '') {
+            pp_hidden_hash[key] = {
+              name: pp_hash[key].name,
+              value: "OK"
+            };
+          }
+        });
+        console.log("pp_hidden_hash");
+        console.log(pp_hidden_hash);
+		    socket.emit('res-pp-wait', pp_hidden_hash);
+		    socket.broadcast.emit('res-pp-wait', pp_hidden_hash);
+      }
+    }
+
+    socket.on('req-pp-output', function(data) {
+      pp_hash[socket.conn.id] = data;
+			console.log(pp_hash);
+      res_output();
+    });
+
+    socket.on('req-pp-login', function(data) {
+      console.log("pp-login: " + socket.conn.id);
+      pp_hash[socket.conn.id] = '';
+      res_output();
+    });
+
 		socket.on('shokken', function(data) {
 			console.log(data);
 			socket.emit('shokkenEmit', data);
 			socket.broadcast.emit('shokkenEmit', data);
-		})
+		});
+
 
 });
 

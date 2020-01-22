@@ -1,0 +1,96 @@
+<html>
+
+<head>
+
+	<meta charset="UTF-8"/>
+
+	<title>ぷらんにんぐ</title>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script src="https://momentjs.com/downloads/moment.min.js"></script>
+
+	<!--script src="socket.io.js"></script-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+	<script src="./js/teatimetable.js"></script>
+	<script src="./js/jquery.cookie.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link href="./common.css" rel="stylesheet" />
+
+	<style>
+    #list {
+      font-size: 22px;
+    }
+	</style>
+
+</head>
+
+<body>
+
+  <div style="margin-bottom: 5px;">名前: <input id="name" type="text" /></div>
+	<button class="btn btn-default" onclick="req_output(1);">1</button>
+	<button class="btn btn-default" onclick="req_output(2);">2</button>
+	<button class="btn btn-default" onclick="req_output(3);">3</button>
+	<button class="btn btn-default" onclick="req_output(4);">4</button>
+	<button class="btn btn-default" onclick="req_output(5);">5</button>
+	<button class="btn btn-default" onclick="req_output(6);">6</button>
+	<button class="btn btn-default" onclick="reset();">リセット</button>
+
+	<div id="list"></div>
+
+	<script type="text/javascript">
+
+    const url = "http://35.239.62.121";
+
+		// https://www.sejuku.net/blog/25316#Ajax
+		var socket = io(url);
+
+    // 送信
+	  socket.emit('req-pp-login', {});
+    // 受信
+		socket.on('res-pp-login', function (data) {
+      console.log(data.id);
+		});
+
+		function req_output(value) {
+      const name = $("#name").val();
+      // 送信
+			socket.emit('req-pp-output', { name: name, value: value });
+		}
+
+    function reset() {
+			socket.emit('req-pp-output', '');
+    }
+
+    // 受信
+		socket.on('res-pp-open', function (data) {
+      console.log(data);
+      const $list = $('#list').empty();
+      const entries = Object.entries(data);
+      for (let i in entries) {
+        const $div = $("<div>").append(entries[i][1].name + ": " +entries[i][1].value);
+        $list.append($div);
+      }
+      if (entries.length == 0) {
+        $list.append("全員が出し終わりました！数秒後に公開されます。");
+      }
+		});
+
+    // 受信
+		socket.on('res-pp-wait', function (data) {
+      const $list = $('#list').empty();
+      const entries = Object.entries(data);
+      for (let i in entries) {
+        const $div = $("<div>").append(entries[i][1].name + ": " +entries[i][1].value);
+        $list.append($div);
+      }
+    });
+	</script>
+
+
+</body>
+
+</html>
