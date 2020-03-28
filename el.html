@@ -1,4 +1,5 @@
 <html>
+<meta charset="UTF-8">
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>el</title>
@@ -23,15 +24,40 @@
 		padding: 4px;
 	}
 
+  #asset-list td {
+    font-size: 20px;
+    height: 30px;
+    padding: 4px 12px;
+    border: 1px solid black;
+  }
+
+  img {
+    width: 100%;    /* 横幅を割合で指定 */
+    height: auto;  /* 高さは自動指定 */
+  }
+
+  body {
+    font-size: 20px;
+  }
+
 </style>
 
 <body>
 
-<div id="asset-list" class="col-sm-12"></div>
+<div id="asset-list" class="col-sm-12">
+  <table>
+    <tr id="asset-number"></tr>
+    <tr id="asset-status"></tr>
+  </table>
+</div>
 <div id="content" class="col-sm-12"></div>
 <style id="css"></style>
 <script id="script" type="text/javascript"></script>
+<script src="./js/jquery.cookie.js"></script>
 <script>
+
+  let currentId;
+
 	const assetList = $.ajax({
 		type : "GET",
 		url : "http://35.239.62.121/asset/list",
@@ -52,8 +78,27 @@
 		}).responseJSON;
 	}
 
+  const submitAnswer = function(answer) {
+    $.ajax({
+      url: "http://35.239.62.121/asset/answer",
+      data: {
+        id: currentId,
+        answer: answer
+      }
+    }).done(function(data) {
+      $.cookie("" + currentId, data.status);
+      renderAssetList();
+      if (data.status === "correct") {
+        alert("正解!");
+      } else if (data.status === "incorrect") {
+        alert("不正解");
+      }
+    });
+  };
+
 	// @see "https://pisuke-code.com/jquery-load-outer-js-dynamically/"
 	const showAsset = function(a) {
+    currentId = a.id;
 		$('#content').html(a.html);
 		const script = $("<script>").attr({
 			'type': 'text/javascript'
@@ -62,16 +107,30 @@
 		$('#css').html(a.css);
 	};
 
-	for (const i in assetList) {
-		const div = $("<div>").attr('class', 'asset-option').css('display', 'inline-block');
-		const link = $("<a>")//.attr('href', '#id=' + assetList[i].id)
-			.text((parseInt(i) + 1));
-		link.on('click', function() {
-			showAsset(assetList[i]);
-		});
-		div.append(link);
-		$("#asset-list").append(div);
-	};
+  const renderAssetList = function() {
+    const numberRow = $("#asset-number").empty();
+    const statusRow = $("#asset-status").empty();
+  	for (const i in assetList) {
+  		const link = $("<a>")//.attr('href', '#id=' + assetList[i].id)
+  			.text((parseInt(i) + 1));
+  		link.on('click', function() {
+  			showAsset(assetList[i]);
+  		});
+      const numberTd = $("<td>").html(link);
+      numberRow.append(numberTd);
+      const statusTd = $("<td>");
+      const statusLog = $.cookie("" + assetList[i].id);
+      if (statusLog === "correct") {
+        statusTd.html("o");
+      } else if (statusLog === "incorrect") {
+        statusTd.html("x");
+      } else {
+        statusTd.html(" ");
+      }
+      statusRow.append(statusTd);
+  	}
+  };
+  renderAssetList();
 
 	showAsset(assetList[0]);
 

@@ -88,10 +88,54 @@ app.post("/asset/create", function(req, res, next) {
 	});
 });
 
+const compareJson = function(a, b) {
+  for (let key in a) {
+    if (!compareArr(a[key], b[key])) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const compareArr = function(a, b) {
+  if (a.length !== b.length) {
+    return false;
+  }
+  for (let i in a) {
+    if (a.indexOf(b[i]) === -1) {
+      return false;
+    }
+  }
+  return true;
+};
+
+app.get("/asset/answer", function(req, res, next) {
+////  const json = {hoge: "piyo"};
+//  const json = [["piyo", "hoge"], ["fuga"]];
+//  const jsonStr = JSON.stringify(json);
+//  res.send(jsonStr);
+	const sql = "SELECT * FROM asset WHERE id = ?";
+	connection.query(sql, [req.query.id], function(error, results, fields) {
+    const correct = JSON.parse(results[0].answer);
+    const answer = req.query.answer;
+    let status;
+    if (compareJson(correct, answer)) {
+      status = "correct"
+    } else {
+      status = "incorrect"
+    }
+    const json = {
+      "id": req.query.id,
+      "status": status
+    };
+    res.json(json);
+	});
+});
 
 app.post("/asset/update", function(req, res, next) {
-	var sql = "UPDATE asset SET html = ?, script = ?, css = ? WHERE id = ?";
-	connection.query(sql, [req.body.html, req.body.script, req.body.css, req.body.id], function(error, results, fields) {
+	var sql = "UPDATE asset SET html = ?, script = ?, css = ?, answer = ? WHERE id = ?";
+  console.log(req.body.answer);
+	connection.query(sql, [req.body.html, req.body.script, req.body.css, req.body.answer, req.body.id], function(error, results, fields) {
 		res.json({});
 	});
 });
